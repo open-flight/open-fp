@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+app/data/
+tools/sim/.data/
+.DS_Store
+build/
