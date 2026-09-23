@@ -1,4 +1,4 @@
-OpenFlight force plates - print files
+open-fp - print files
 Per plate: 4x 01_corner_cradle, 4x 02_cradle_retainer, 3x 07_edge_ramp_left, 3x 07_edge_ramp_right, 4x 10_hub_foot_tpu (TPU 95A)
 Once: 1x 03_centre_enclosure_base, 1x 04_centre_enclosure_lid, 1x 09_drill_template_a, 1x 09_drill_template_b
 Material: PETG or ABS (cradles carry load - no PLA). Cradles: 5 walls, 40% gyroid. Everything else: 3 walls, 20%. Hub feet: TPU 95A, 100% infill.
