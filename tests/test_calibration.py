@@ -15,28 +15,14 @@ from open_fp.calibration import (
     solve_plate_gains,
 )
 from open_fp.config import Config
+from synth import corner_forces
 
 TRUE_GAINS = np.array([4.1e-4, 4.6e-4, 5.0e-4, 4.4e-4, 4.8e-4, 4.2e-4, 4.5e-4, 4.9e-4])
 TARES = np.array([1200, -3400, 560, 88000, -12000, 4000, 0, 250], dtype=float)
 
 
-def _corner_forces(cfg, plate, xy, total_n):
-    """Bilinear split of a point load over a plate's 4 cells (exact CoP)."""
-    idx = cfg.plate_channels(plate)
-    pos = np.asarray(cfg.positions())[idx]
-    x0, x1 = pos[:, 0].min(), pos[:, 0].max()
-    y0, y1 = pos[:, 1].min(), pos[:, 1].max()
-    u = (xy[0] - x0) / (x1 - x0)
-    v = (xy[1] - y0) / (y1 - y0)
-    wx = np.where(np.isclose(pos[:, 0], x1), u, 1 - u)
-    wy = np.where(np.isclose(pos[:, 1], y1), v, 1 - v)
-    return idx, total_n * wx * wy
-
-
 def _counts_for_load(cfg, plate, xy, mass_kg, signs, rng=None, noise=0.0):
-    f = np.zeros(8)
-    idx, fc = _corner_forces(cfg, plate, xy, mass_kg * G)
-    f[idx] = fc
+    f = corner_forces(cfg, plate, xy, mass_kg * G)
     counts = TARES + np.asarray(signs) * f / TRUE_GAINS
     if rng is not None:
         counts += rng.normal(0, noise, 8)
