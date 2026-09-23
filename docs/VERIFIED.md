@@ -5,14 +5,14 @@ This file records the answer to every **VERIFY** item in [`PROJECT_INIT.md`](PRO
 | # | Item | Answer | Checked against | Date |
 |---|---|---|---|---|
 | 1 | Arduino_RouterBridge: binary arg support in `notify()`, blocking behavior, max message size | | | |
-| 2 | Router baud default (`arduino-router.service`); can it be raised on both sides? | | | |
+| 2 | Router baud default (`arduino-router.service`); can it be raised on both sides? | **115200** on `/dev/ttyHS1`, set via `--serial-baudrate` in `/run/systemd/generator/arduino-router.service.d/10-imola.conf`. Whether it can be raised is still open. | `systemctl cat arduino-router` | 2026-09-23 |
 | 3 | Zephyr core: `attachInterrupt` on D2, SPI on D11–D13 at 2 MHz, `micros()` resolution | | | |
-| 4 | WebUI brick: Socket.IO event naming, `expose_api` path params + POST bodies, bind address, static asset path | | | |
-| 5 | App container: persistent data path, `requirements.txt` support, numpy preinstalled? | | | |
-| 6 | `arduino-app-cli`: start/stop/logs/autostart commands; App Lab app dir on the board | | | |
+| 4 | WebUI brick: Socket.IO event naming, `expose_api` path params + POST bodies, bind address, static asset path | Binds `0.0.0.0:7000`; assets from `/app/assets` (needs `index.html`). `expose_api(method, path, fn)` = FastAPI `add_api_route`, so path params and body models work the standard FastAPI way; `ui.app` is the FastAPI instance. `send_message(event, dict\|str, room=None)` → `sio.emit(event, …)`; browser uses `libs/arduino.js` `WebUI.on_message(event, cb)` on raw socket.io. Server started only when `WebUI()` is instantiated in `main.py`. | `python-apps-base:0.12.0`, `arduino/app_bricks/web_ui/web_ui.py` | 2026-09-23 |
+| 5 | App container: persistent data path, `requirements.txt` support, numpy preinstalled? | numpy 2.5.1, fastapi 0.141.1, uvicorn 0.52.1, msgpack 1.2.1 preinstalled (CPython 3.13.14). App venv lives in `<app>/.cache/.venv`. Persistence and `requirements.txt` handling are still open. | `docker run python-apps-base:0.12.0` | 2026-09-23 |
+| 6 | `arduino-app-cli`: start/stop/logs/autostart commands; App Lab app dir on the board | App dir `/home/arduino/ArduinoApps/open-fp`. `app start\|stop\|restart <path>`, `app logs <path> [--follow] [--tail N] [--all]`, `monitor` (MCU serial). Autostart candidate: `properties set default <path>` (boot behavior untested). **No `rsync` on board**: deploy uses tar. | `arduino-app-cli` 0.13.0 | 2026-09-23 |
 | 7 | ADS1220 module: exposed pins (CLK, REFP0/REFN0, AVDD/DVDD), onboard regulator, hole spacing | | | |
 | 8 | Load cell wire colors (per cell, see `wiring.md`) | | | |
-| 9 | App Lab first-boot steps (§11.1) | | | |
+| 9 | App Lab first-boot steps (§11.1) | Board name, Wi-Fi, `arduino` password, updates, exactly as in §11.1. Board reachable at `open-fp.local`. OS: Debian 13 (trixie), kernel 6.16.7, aarch64. | App Lab (owner), `uname -a` | 2026-09-23 |
 
 ## Bench measurements (M1/M2)
 
@@ -37,5 +37,7 @@ Achieved loop rate: — · `drdyMissed` over 10 min: —
 | Board ports | USB serial `/dev/cu.usbmodem*` and network port (mDNS `open-fp.local`), both detected as Arduino UNO Q | `arduino-cli board list` | 2026-09-23 |
 
 ## Notes found during scaffolding
+
+- App Lab's generated skeleton puts the web client libs in `app/assets/libs/` (`arduino.js`, `socket.io.min.js`), not `assets/vendor/` as §2 planned. Keep `libs/` from the brick and put uPlot in `vendor/`.
 
 - **CAD sources are not runnable as committed.** The scripts in `hardware/cad/src/` write to hard-coded output paths (`/home/claude`, `/home/claude/extras`). `assembly.py` also imports `cairosvg`. `forceplate_parts.py` exports `03_enclosure_base` and `04_enclosure_lid`, but the committed files are named `03_centre_enclosure_base` and `04_centre_enclosure_lid`. The sources are unchanged for now; ask the owner before editing them.

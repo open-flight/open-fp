@@ -39,23 +39,16 @@ tools/      deploy scripts, desktop simulator, offline analysis
 tests/      pytest suite, runs without hardware
 ```
 
-## Quickstart (development, no hardware)
+## Setup
+
+Full walkthrough from a fresh clone and an unboxed board: **[`docs/SETUP.md`](docs/SETUP.md)**. The short version:
 
 ```bash
-git lfs install && git lfs pull          # fetch CAD files
-python -m venv .venv && . .venv/bin/activate
-pip install fastapi uvicorn python-socketio numpy pytest
-python tools/sim/sim_server.py           # (M5) open http://localhost:7000
-pytest
-```
-
-## Deploy to the board
-
-See [`docs/PROJECT_INIT.md` §11](docs/PROJECT_INIT.md#11-install-and-deploy-on-a-fresh-uno-q). In short:
-
-```bash
-tools/board_setup.sh open-fp.local   # once: SSH key and sanity checks
-tools/deploy.sh open-fp.local        # sync and start; UI at http://open-fp.local:7000
+tools/dev_setup.sh          # dev machine: git-lfs, arduino-cli + UNO Q core, CAD files, .venv
+# App Lab: first-boot the board as "open-fp", then create app "open-fp" with the WebUI - HTML brick
+tools/board_setup.sh        # install your SSH key on the board
+tools/deploy.sh             # push app/ and restart; UI at http://open-fp.local:7000
+tools/logs.sh               # follow the app's Python logs
 ```
 
 ## License
