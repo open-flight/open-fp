@@ -36,6 +36,12 @@ Achieved loop rate: — · `drdyMissed` over 10 min: —
 | FQBN for `arduino-cli` | `arduino:zephyr:unoq` (core `arduino:zephyr`, "Arduino Q Boards") | arduino-cli 1.5.1, arduino:zephyr 1.0.0, `arduino-cli board list` | 2026-09-23 |
 | Board ports | USB serial `/dev/cu.usbmodem*` and network port (mDNS `open-fp.local`), both detected as Arduino UNO Q | `arduino-cli board list` | 2026-09-23 |
 
+## Performance
+
+| Item | Result | Checked against | Date |
+|---|---|---|---|
+| Pipeline and SwingDetector CPU cost on the board | 41.9 s of synthetic 200 Hz data (5 swings, all captured) processed in 6.35 s, about 15 % of one core | `python-apps-base:0.12.0` on the UNO Q (Python 3.13.14, numpy 2.5.1) | 2026-09-23 |
+
 ## Notes found during scaffolding
 
 - App Lab's generated skeleton puts the web client libs in `app/assets/libs/` (`arduino.js`, `socket.io.min.js`), not `assets/vendor/` as §2 planned. Keep `libs/` from the brick and put uPlot in `vendor/`.
