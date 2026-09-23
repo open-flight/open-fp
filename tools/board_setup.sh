@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # One-time: install SSH key, sanity-check the board.
 set -euo pipefail
-HOST="${1:-forceplates.local}"
+HOST="${1:-open-fp.local}"
 ssh-copy-id "arduino@${HOST}"
 ssh "arduino@${HOST}" '
   set -e

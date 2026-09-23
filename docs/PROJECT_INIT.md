@@ -1,4 +1,4 @@
-# OpenFlight Force Plates — Project Initialization
+# open-fp — Project Initialization
 
 Handoff document for bootstrapping a fresh git repository. Two low-profile golf force plates (one per foot) measuring vertical ground reaction force at 8 load cells, driven by a single Arduino UNO Q, with a LAN-accessible web dashboard for live weight shift and swing replay.
 
@@ -42,7 +42,7 @@ Handoff document for bootstrapping a fresh git repository. Two low-profile golf 
 ## 2. Repository layout
 
 ```
-openflight-forceplates/
+open-fp/
 ├── README.md                   # user-facing overview, photos, quickstart
 ├── LICENSE                     # match OpenFlight's license (ask owner)
 ├── .gitignore
@@ -68,7 +68,7 @@ openflight-forceplates/
 │   ├── python/
 │   │   ├── main.py             # entrypoint: Bridge + WebUI glue only
 │   │   ├── requirements.txt    # VERIFY App Lab installs this
-│   │   └── forceplates/        # pure-Python processing package (§9)
+│   │   └── open_fp/        # pure-Python processing package (§9)
 │   │       ├── __init__.py
 │   │       ├── protocol.py     # binary frame decode
 │   │       ├── config.py       # channel map, geometry, handedness
@@ -103,7 +103,7 @@ openflight-forceplates/
 ### Init commands
 
 ```bash
-git init openflight-forceplates && cd openflight-forceplates
+git init open-fp && cd open-fp
 git lfs install
 cat > .gitattributes <<'EOF'
 *.stl filter=lfs diff=lfs merge=lfs -text
@@ -119,7 +119,7 @@ tools/sim/.data/
 .DS_Store
 build/
 EOF
-mkdir -p docs hardware/cad/{stl,step,src} app/{sketch,python/forceplates,assets/{css,js,vendor},data} bench tools/{sim,analysis} tests
+mkdir -p docs hardware/cad/{stl,step,src} app/{sketch,python/open_fp,assets/{css,js,vendor},data} bench tools/{sim,analysis} tests
 ```
 
 Then unzip `openflight_force_plate_prints.zip` (supplied by the owner alongside this doc): `*.stl` → `hardware/cad/stl/`, `*.step` → `hardware/cad/step/`, `*.py` → `hardware/cad/src/`, `README.txt` → `hardware/cad/`.
@@ -508,11 +508,11 @@ import time
 from arduino.app_utils import App, Bridge
 from arduino.app_bricks.web_ui import WebUI
 
-from forceplates.config import load_config
-from forceplates.protocol import decode_batch
-from forceplates.pipeline import Pipeline
-from forceplates.swing import SwingDetector
-from forceplates.store import SwingStore
+from open_fp.config import load_config
+from open_fp.protocol import decode_batch
+from open_fp.pipeline import Pipeline
+from open_fp.swing import SwingDetector
+from open_fp.store import SwingStore
 
 cfg = load_config("data/config.json")
 pipe = Pipeline(cfg)                     # loads data/calibration.json if present
@@ -717,12 +717,12 @@ Model the interaction patterns of mainstream golf pressure/force products (BodiT
 
 ### 11.1 First boot (owner, once)
 1. Install **Arduino App Lab** on the development computer.
-2. Connect the UNO Q by USB-C. App Lab runs first-time setup: board name (use `forceplates`), Wi-Fi network, password for user `arduino`, and system/software updates. Accept all updates. **VERIFY** exact steps against the current App Lab release.
-3. After setup, the board should be reachable on the LAN as `forceplates.local`. From the dev machine: `ssh arduino@forceplates.local`. If SSH isn't reachable, use `adb shell` over USB to enable it and check networking.
+2. Connect the UNO Q by USB-C. App Lab runs first-time setup: board name (use `open-fp`), Wi-Fi network, password for user `arduino`, and system/software updates. Accept all updates. **VERIFY** exact steps against the current App Lab release.
+3. After setup, the board should be reachable on the LAN as `open-fp.local`. From the dev machine: `ssh arduino@open-fp.local`. If SSH isn't reachable, use `adb shell` over USB to enable it and check networking.
 
 ### 11.2 Create the app skeleton once in App Lab
-1. In App Lab: create a new app named `forceplates`, add the **WebUI - HTML** brick.
-2. Copy the generated `app.yaml` and `sketch/sketch.yaml` from the board (`~/ArduinoApps/forceplates/`, **VERIFY** path) into `app/` in the repo and commit. From then on the repo is the source of truth.
+1. In App Lab: create a new app named `open-fp`, add the **WebUI - HTML** brick.
+2. Copy the generated `app.yaml` and `sketch/sketch.yaml` from the board (`~/ArduinoApps/open-fp/`, **VERIFY** path) into `app/` in the repo and commit. From then on the repo is the source of truth.
 3. Check whether `python/requirements.txt` is honored for extra packages (numpy). **VERIFY**; if not, fall back to pure Python (200 Hz × 8 channels is light) or use a package already in the image.
 
 ### 11.3 `tools/board_setup.sh`
@@ -731,7 +731,7 @@ Model the interaction patterns of mainstream golf pressure/force products (BodiT
 #!/usr/bin/env bash
 # One-time: install SSH key, sanity-check the board.
 set -euo pipefail
-HOST="${1:-forceplates.local}"
+HOST="${1:-open-fp.local}"
 ssh-copy-id "arduino@${HOST}"
 ssh "arduino@${HOST}" '
   set -e
@@ -749,8 +749,8 @@ ssh "arduino@${HOST}" '
 # Sync the app to the board and (re)start it. First start compiles + flashes the MCU sketch
 # and pulls brick containers, so the board needs internet access on the first run.
 set -euo pipefail
-HOST="${1:-forceplates.local}"
-APP=forceplates
+HOST="${1:-open-fp.local}"
+APP=open-fp
 REMOTE="/home/arduino/ArduinoApps/${APP}"      # VERIFY path App Lab uses
 rsync -az --delete --exclude 'data/' app/ "arduino@${HOST}:${REMOTE}/"
 ssh "arduino@${HOST}" "
@@ -775,7 +775,7 @@ arduino-cli upload  --fqbn arduino:zephyr:unoq -p <port> bench/ads1220_single
 
 - serves `app/assets/` on `:7000`,
 - implements the same REST routes and Socket.IO messages as the board,
-- imports `app/python/forceplates` directly, feeding `synth.py` output through the real `Pipeline` and `SwingDetector`.
+- imports `app/python/open_fp` directly, feeding `synth.py` output through the real `Pipeline` and `SwingDetector`.
 
 `synth.py` generates realistic 8-channel counts: quiet address (55/45), backswing shift to ~70 % trail, transition, rapid shift to ~85–90 % lead with a vertical force peak ~1.4 BW on the lead foot, finish; plus noise, a slow drift, and random swing tempo. This is also the fixture generator for `tests/`.
 

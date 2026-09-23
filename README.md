@@ -1,4 +1,4 @@
-# OpenFlight Force Plates
+# open-fp
 
 Two low-profile golf force plates, one per foot. Each plate has four load cells, eight in total. A single Arduino UNO Q reads them, and a web dashboard on the LAN shows live weight shift and swing replay.
 
@@ -54,8 +54,8 @@ pytest
 See [`docs/PROJECT_INIT.md` §11](docs/PROJECT_INIT.md#11-install-and-deploy-on-a-fresh-uno-q). In short:
 
 ```bash
-tools/board_setup.sh forceplates.local   # once: SSH key and sanity checks
-tools/deploy.sh forceplates.local        # sync and start; UI at http://forceplates.local:7000
+tools/board_setup.sh open-fp.local   # once: SSH key and sanity checks
+tools/deploy.sh open-fp.local        # sync and start; UI at http://open-fp.local:7000
 ```
 
 ## License
