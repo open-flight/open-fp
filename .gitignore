@@ -6,3 +6,4 @@ app/data/
 tools/sim/.data/
 .DS_Store
 build/
+app/.cache/
