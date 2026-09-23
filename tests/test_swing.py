@@ -5,7 +5,7 @@ import pytest
 
 from open_fp.calibration import Calibration
 from open_fp.config import Config
-from open_fp.pipeline import Pipeline, Samples
+from open_fp.pipeline import Pipeline
 from open_fp.swing import SwingDetector, lateral_speed
 from synth import RATE_HZ, Scenario, generate, to_batches
 

@@ -8,7 +8,7 @@ APP=open-fp
 REMOTE="/home/arduino/ArduinoApps/${APP}"
 cd "$(dirname "$0")/.."
 # Replace everything except runtime data and App Lab's cache, like rsync --delete --exclude.
-COPYFILE_DISABLE=1 tar cf - --exclude '.gitkeep' --exclude '.DS_Store' --exclude 'data' --exclude '.cache' -C app . \
+COPYFILE_DISABLE=1 tar cf - --no-xattrs --exclude '.gitkeep' --exclude '.DS_Store' --exclude 'data' --exclude '.cache' -C app . \
   | ssh "arduino@${HOST}" "
       set -e
       mkdir -p ${REMOTE} && cd ${REMOTE}

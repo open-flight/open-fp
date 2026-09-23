@@ -2,7 +2,7 @@
 
 Two low-profile golf force plates, one per foot. Each plate has four load cells, eight in total. A single Arduino UNO Q reads them, and a web dashboard on the LAN shows live weight shift and swing replay.
 
-> **Status:** M0, scaffold only. The firmware, Python pipeline, and web UI are not written yet. See the milestone plan in [`docs/PROJECT_INIT.md` §12](docs/PROJECT_INIT.md#12-milestones-and-acceptance-checks).
+> **Status:** The pure-Python processing (`app/python/open_fp/`) is written and tested: protocol, clock, pipeline, calibration, swing detection, and storage. Run it with `pytest`; it needs no hardware. The firmware, the `main.py` glue, the simulator server, and the web UI are not written yet. See the milestone plan in [`docs/PROJECT_INIT.md` §12](docs/PROJECT_INIT.md#12-milestones-and-acceptance-checks).
 
 ## What it measures
 
