@@ -194,7 +194,7 @@ class Pipeline:
         }
 
 
-def _clean(a: np.ndarray, digits: int) -> list:
+def json_list(a: np.ndarray, digits: int) -> list:
     """Round and turn NaN into None so the result is strict JSON. Rows with NaN -> None."""
     a = np.round(np.asarray(a, dtype=float), digits)
     if a.ndim == 1:
@@ -220,9 +220,9 @@ class UiBuffer:
         s = Samples.concat(parts)
         return {
             "t": np.round(s.t, 4).tolist(),
-            "fz": {k: _clean(s.fz[k], 1) for k in ("L", "R")},
-            "cop": {k: _clean(s.cop[k], 1) for k in ("L", "R", "C")},
-            "lead_pct": _clean(s.lead_pct, 2),
+            "fz": {k: json_list(s.fz[k], 1) for k in ("L", "R")},
+            "cop": {k: json_list(s.cop[k], 1) for k in ("L", "R", "C")},
+            "lead_pct": json_list(s.lead_pct, 2),
             "flags": s.flags,
             **extra,
         }

@@ -1,6 +1,6 @@
 """Synthetic 8-channel force plate data for the simulator and tests (§11.5).
 
-A session is a list of Scenario segments (empty, step_on, stance, swing, sway, shuffle).
+A session is a list of Scenario segments (empty, step_on, stance, swing, sway, shuffle, press).
 Each segment is described as lead % of total load, total load in bodyweights, and a CoP
 offset from each foot's plate centre; that is turned into per-cell forces (bilinear split,
 so CoP is exact), then into ADC counts with a calibration, noise, and slow tare drift.
@@ -41,7 +41,7 @@ def corner_forces(cfg: Config, plate: str, xy, total_n) -> np.ndarray:
 
 @dataclass
 class Scenario:
-    kind: str                     # empty | step_on | stance | swing | sway | shuffle
+    kind: str                     # empty | step_on | stance | swing | sway | shuffle | press
     duration: float | None = None
     params: dict = field(default_factory=dict)
 
@@ -113,7 +113,7 @@ def _seg_swing(duration, rng, address_s=2.0, tempo=None, **_):
     t_fin = t_ml + 1.0
     duration = duration or t_fin + 1.5
     t = _times(duration)
-    lead = _keyframes(t, [(0, 55), (t_ms, 55), (t_mt, 30), (t_ml, 88), (t_fin, 90)])
+    lead = _keyframes(t, [(0, 55), (t_ms, 55), (t_mt, 30), (t_ml, 88), (t_fin, 86)])
     peak_t = t_mt + 0.32 * tempo
     total = 1.0 + 0.62 * np.exp(-0.5 * ((t - peak_t) / 0.07) ** 2)
     lead_y = _keyframes(t, [(0, 0), (t_mt, 10), (t_ml, -30), (t_fin, -25)])
@@ -139,9 +139,30 @@ def _seg_shuffle(duration, rng, **_):
     return _Seg(lead, np.ones(len(t)), _zeros2(len(t)), _zeros2(len(t)))
 
 
+def _seg_press(duration, rng, **_):
+    """Fast shift onto the lead foot with no backswing first (e.g. leaning forward)."""
+    t = _times(duration)
+    lead = _keyframes(t, [(0, 55), (0.5, 55), (0.7, 85), (1.5, 85), (2.5, 55)])
+    return _Seg(lead, np.ones(len(t)), _zeros2(len(t)), _zeros2(len(t)))
+
+
+def _blend_from(prev: _Seg, seg: _Seg, blend_s: float = 0.5) -> None:
+    """Ease the start of `seg` from where `prev` ended, so people don't teleport."""
+    n = min(len(seg.lead), int(blend_s * RATE_HZ))
+    if n == 0 or np.isnan(prev.lead[-1]) or np.isnan(seg.lead[0]):
+        return
+    p = np.arange(n) / n
+    w = 1 - (3 * p**2 - 2 * p**3)
+    seg.lead[:n] += (prev.lead[-1] - seg.lead[0]) * w
+    seg.total[:n] += (prev.total[-1] - seg.total[0]) * w
+    seg.lead_off[:n] += (prev.lead_off[-1] - seg.lead_off[0]) * w[:, None]
+    seg.trail_off[:n] += (prev.trail_off[-1] - seg.trail_off[0]) * w[:, None]
+
+
 _SEGMENTS = {
     "empty": (_seg_empty, 2.0), "step_on": (_seg_step_on, 1.0), "stance": (_seg_stance, 3.0),
     "swing": (_seg_swing, None), "sway": (_seg_sway, 8.0), "shuffle": (_seg_shuffle, 4.0),
+    "press": (_seg_press, 3.0),
 }
 
 
@@ -153,6 +174,8 @@ def generate(scenarios: list[Scenario], cfg: Config, *, cal: Calibration | None 
     for sc in scenarios:
         fn, default_dur = _SEGMENTS[sc.kind]
         seg = fn(sc.duration or default_dur, rng, **sc.params)
+        if segs:
+            _blend_from(segs[-1], seg)
         swings += [{k: (v + t0 if k != "tempo" else v) for k, v in s.items()} for s in seg.swings]
         t0 += len(seg.lead) / RATE_HZ
         segs.append(seg)
