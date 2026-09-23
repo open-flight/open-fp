@@ -161,8 +161,12 @@ class Pipeline:
 
     # -- control -----------------------------------------------------------
 
+    def recent_counts(self, seconds: float) -> np.ndarray:
+        """Raw counts (k, 8) from the last `seconds`; empty before any data."""
+        return self._history.last(int(seconds * self.RATE_HZ))
+
     def mean_counts(self, seconds: float = 2.0) -> np.ndarray:
-        rows = self._history.last(int(seconds * self.RATE_HZ))
+        rows = self.recent_counts(seconds)
         if len(rows) == 0:
             raise RuntimeError("no samples yet")
         return rows.mean(axis=0)
