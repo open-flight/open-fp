@@ -125,3 +125,9 @@ def test_summary_lists_failures():
 def test_returned_to_baseline():
     assert returned_to_baseline(1_000, [S(i, 1_800) for i in range(10)], press_delta=-150_000)
     assert not returned_to_baseline(1_000, [S(i, 60_000) for i in range(10)], press_delta=-150_000)
+
+
+def test_summary_without_data_says_so_plainly():
+    text = summarize(Readback(True, (0x0E, 0xC4, 0x40, 0x00)), check_baseline([]), None, None)
+    assert "no data from the sketch" in text
+    assert "headroom" not in text and "mean 0" not in text

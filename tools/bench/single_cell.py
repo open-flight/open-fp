@@ -188,7 +188,9 @@ def summarize(
                 regs + ("" if readback.ok else " (expected 0E C4 40 00)"),
             )
         )
-    if base is not None:
+    if base is not None and base.rate_hz == 0:
+        out.append(line(False, "unloaded baseline", "no data from the sketch"))
+    elif base is not None:
         out.append(
             line(
                 base.ok,
@@ -244,9 +246,11 @@ class Monitor:
         threading.Thread(target=self._pump, args=(source,), daemon=True).start()
 
     def _pump(self, stream):
+        seen: set[str] = set()
         for raw in stream:
             item = parse_line(raw)
-            if isinstance(item, SketchError):
+            if isinstance(item, SketchError) and item.message not in seen:
+                seen.add(item.message)  # the sketch repeats errors; show each one once
                 print(f"  sketch: {item.message}")
             if item is not None:
                 self.q.put(item)
@@ -297,6 +301,14 @@ def run_live(args) -> int:
                 "and is the board on the network?"
             )
             return 2
+        if readback is None or not readback.ok:
+            print(summarize(readback, None, None, None))
+            print(
+                "\nStopping: the ADC must read back its registers before the other steps mean "
+                "anything.\nCheck the wiring against docs/bench-single-cell.md (step 4 and "
+                "Troubleshooting), then rerun."
+            )
+            return 1
 
         countdown(
             "Step 1/3 - baseline. Take everything off the cell and don't touch it or its wires."

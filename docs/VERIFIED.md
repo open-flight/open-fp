@@ -42,7 +42,7 @@ Achieved loop rate: — · `drdyMissed` over 10 min: —
 |---|---|---|---|
 | `Monitor` for bench sketches | `Arduino_RouterBridge` 0.4.3 `Monitor` (a `Stream`) sends output to the Linux side as `mon/write` RPCs; read it with `arduino-app-cli monitor` | library source `src/monitor.h` | 2026-09-24 |
 | `bench/ads1220_single` builds | compiles for `arduino:zephyr:unoq` (89 KB flash, 36 KB RAM) | arduino-cli 1.5.1, arduino:zephyr 1.0.0, Arduino_RouterBridge 0.4.3 | 2026-09-24 |
-| USB upload | `arduino-cli upload` for the UNO Q goes through `adb` using the port's serial number, so it needs the board's USB port (`tools/bench/flash.sh` finds it). **Not yet run end to end:** the board was unplugged | arduino-cli upload error output | 2026-09-24 |
+| USB upload + monitor | **Works end to end.** `tools/bench/flash.sh` uploads over USB: arduino-cli → adb → OpenOCD on the Linux side, which flashes the STM32U585 (2 MB, dual-bank, RDP 0). `ssh arduino@open-fp.local arduino-app-cli monitor` streams the sketch's `Monitor` output, including without a TTY (what `single_cell.py` uses), and keystrokes sent to it reach the sketch (`r` re-runs the readback). With no ADC wired: `R,0,00,00,00,00` (D12 floats low), then `E,no DRDY` every 500 ms. | arduino-cli 1.5.1, UNO Q over USB | 2026-09-24 |
 
 ## Performance
 
