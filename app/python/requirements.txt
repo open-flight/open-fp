@@ -1,0 +1,2 @@
+# Everything open_fp needs (numpy, fastapi) is already in the App Lab python-apps-base image
+# (see docs/VERIFIED.md). Nothing extra to install.

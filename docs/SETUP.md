@@ -89,7 +89,7 @@ Find the port with `arduino-cli board list`.
 
 ```bash
 . .venv/bin/activate
-python tools/sim/sim_server.py    # (M5) http://localhost:7000
+python tools/sim/sim_server.py    # http://localhost:7070 (7000 is taken by macOS AirPlay)
 pytest
 ```
 

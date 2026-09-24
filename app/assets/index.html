@@ -1,22 +1,106 @@
-<!--
-SPDX-FileCopyrightText: Copyright (C) Arduino s.r.l. and/or its affiliated companies
-
-SPDX-License-Identifier: MPL-2.0
--->
-
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0B0F14" />
     <title>open-fp</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" href="vendor/uPlot.min.css" />
+    <link rel="stylesheet" href="css/app.css" />
   </head>
   <body>
-    <!-- Add your HTML here -->
+    <header class="bar">
+      <div class="brand">open-fp</div>
+      <div class="link" id="link" aria-live="polite"><span class="dot"></span><span id="link-text">Connecting…</span></div>
+      <div class="readout"><span class="label">BW</span> <span id="bw" class="num">—</span></div>
+      <div class="seg" role="group" aria-label="Golfer handedness">
+        <button type="button" data-golfer="RH" aria-pressed="true">RH</button>
+        <button type="button" data-golfer="LH" aria-pressed="false">LH</button>
+      </div>
+      <button type="button" id="zero" class="btn" title="Zero the plates. Step off first.">Zero</button>
+      <button type="button" id="capture" class="btn" title="Capture a swing now">Capture</button>
+      <div class="state" id="state" data-state="idle"><span class="dot"></span><span id="state-text">Idle</span></div>
+      <nav class="tabs" aria-label="View">
+        <button type="button" data-view="live" aria-pressed="true">Live</button>
+        <button type="button" data-view="diag" aria-pressed="false">Diagnostics</button>
+      </nav>
+    </header>
+
+    <main id="view-live" class="live">
+      <section class="panel stance-panel" aria-label="Stance view">
+        <div class="panel-head">
+          <span class="label" id="stance-title">Stance</span>
+          <span class="legend">
+            <i class="sw lead"></i>Lead <i class="sw trail"></i>Trail <i class="sw comb"></i>Combined
+          </span>
+        </div>
+        <canvas id="stance" role="img" aria-label="Top-down view of both plates with centre of pressure"></canvas>
+        <div class="replay" id="replay" hidden>
+          <div class="replay-row">
+            <button type="button" class="btn icon" id="play" aria-label="Play">▶</button>
+            <div class="seg small" role="group" aria-label="Playback speed">
+              <button type="button" data-speed="0.25" aria-pressed="false">¼×</button>
+              <button type="button" data-speed="0.5" aria-pressed="true">½×</button>
+              <button type="button" data-speed="1" aria-pressed="false">1×</button>
+            </div>
+            <input type="range" id="scrub" min="0" max="1000" value="0" aria-label="Replay position" />
+            <span class="num time" id="scrub-time">0.00 s</span>
+          </div>
+          <div class="chips" id="event-chips" aria-label="Jump to event"></div>
+          <div class="replay-row end">
+            <a class="btn ghost" id="csv" download>Export CSV</a>
+            <button type="button" class="btn ghost danger" id="delete">Delete swing</button>
+            <button type="button" class="btn" id="back-live">Back to live</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel balance-panel" aria-label="Weight distribution">
+        <div class="balance">
+          <div class="side lead"><span class="label">Lead</span><span class="big num" id="lead-pct">—</span></div>
+          <div class="side trail"><span class="label">Trail</span><span class="big num" id="trail-pct">—</span></div>
+        </div>
+        <div class="bar-track" aria-hidden="true"><div class="bar-lead" id="bar-lead"></div><div class="bar-mid"></div></div>
+      </section>
+
+      <section class="panel trace-panel" aria-label="Vertical force trace">
+        <div class="panel-head">
+          <span class="label" id="trace-title">Vertical force · last 5 s</span>
+          <span class="legend"><i class="sw lead"></i>Lead <i class="sw trail"></i>Trail <i class="sw comb"></i>Total <span class="unit">%BW</span></span>
+        </div>
+        <div id="trace" class="trace"></div>
+      </section>
+
+      <section class="panel metrics-panel" aria-label="Swing metrics">
+        <div class="panel-head"><span class="label" id="metrics-title">Last swing</span></div>
+        <dl class="metrics" id="metrics"><div class="empty">Take a swing. Metrics appear here once it's captured.</div></dl>
+      </section>
+
+      <section class="panel library-panel" aria-label="Swing library">
+        <div class="panel-head"><span class="label">Swings</span><span class="count num" id="swing-count"></span></div>
+        <ol class="cards" id="cards"></ol>
+      </section>
+    </main>
+
+    <main id="view-diag" class="diag" hidden>
+      <section class="panel">
+        <div class="panel-head"><span class="label">Link</span></div>
+        <dl class="kv" id="link-stats"></dl>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><span class="label">Channels</span><span class="legend">refreshes every second</span></div>
+        <table class="channels">
+          <thead><tr><th scope="col">Cell</th><th scope="col">Raw counts</th><th scope="col">Tare</th><th scope="col" title="Standard deviation over the last second. Only means sensor noise while the plates are still.">Spread (1 s)</th><th scope="col">Force</th><th scope="col" class="barcol">Load / 50 kg</th></tr></thead>
+          <tbody id="channel-rows"></tbody>
+        </table>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" hidden></div>
 
     <script src="libs/socket.io.min.js"></script>
     <script src="libs/arduino.js"></script>
-    <script src="app.js"></script>
+    <script src="vendor/uPlot.iife.min.js"></script>
+    <script type="module" src="js/main.js"></script>
   </body>
 </html>

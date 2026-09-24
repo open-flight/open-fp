@@ -167,5 +167,6 @@ def test_ui_buffer_drain_is_json_safe_and_empties():
     assert len(msg["t"]) == 20
     assert msg["cop"]["L"][0] is None
     assert set(msg["fz"]) == {"L", "R"} and msg["state"] == "idle"
+    assert len(msg["forces"]) == 20 and len(msg["forces"][0]) == 8
     assert "NaN" not in text
     assert pipe.ui_buffer.drain()["t"] == []
