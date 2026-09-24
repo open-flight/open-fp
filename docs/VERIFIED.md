@@ -50,7 +50,7 @@ Achieved loop rate: — · `drdyMissed` over 10 min: —
 
 - **2026-09-23, cell rattles vertically under the retainer.** The raised centre strap faces out, so the frame's outer edge sits a few mm below the rim and the flat retainer doesn't touch it. Added a TPU shim ring (`11_cell_shim_tpu`, from `hardware/cad/src/cell_shim.py`): 34 mm outside, 28.6 mm inside, so it rests only on the frame and stays clear of the tongue and strap, with a 9 mm gap at the cable notch. It comes as a tuning set of 1.5–3.5 mm; record the thickness that works here: ___ mm.
 
-- **2026-09-23, relief too small for the cell's tongue.** The Ø24 relief didn't clear the tongue, which is about 21 × 19 mm with a ~28 mm diagonal (estimated from a photo, frame = 34 mm). Anything touching the tongue carries load around the strain gauges and the reading comes out low. Replaced it with a 28 × 28 mm rounded-square relief (r 3), same 1.5 mm depth: 485.8 mm³ removed, still a single valid solid. The frame now bears on a 3 mm band all round, directly opposite the shim ring and retainer lip.
+- **2026-09-23, relief too small for the cell's tongue.** The Ø24 relief didn't clear the tongue, which is about 21 × 19 mm with a ~28 mm diagonal (estimated from a photo, frame = 34 mm). Anything touching the tongue carries load around the strain gauges and the reading comes out low. Replaced it with a 28 × 28 mm rounded-square relief (r 3), same 1.5 mm depth: 485.8 mm³ removed, still a single valid solid. The frame now bears on a 3 mm band all round, directly opposite the shim ring and retainer lip. **Confirmed by the owner:** the tongue does reach the old Ø24 cradle, so that print is retired and all 8 cradles are being printed from the new file.
 
 ## Notes found during scaffolding
 
