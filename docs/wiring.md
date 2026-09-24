@@ -168,29 +168,33 @@ Full wiring for one corner (repeat ×8):
 5. If step 5 found REFP0/REFN0 not tied on the board, jumper **REFP0 to 3V3** and **REFN0 to GND** at the board. This makes the measurement ratiometric, so supply drift cancels out.
 6. Leave AIN2 and AIN3 unconnected.
 
-## 8. Wire the shared bus to the UNO Q
+## 8. Build the two ADC carriers and the harness
 
-All 8 boards share power and three SPI lines. Each board gets its own CS wire, and **only L1** has DRDY wired.
+![Harness: UNO Q to two ADC carriers to 8 load cells](img/harness.svg)
 
-The enclosure has two ADC pads: toe (+y) with L1, L2, R1, R2, and heel (−y) with L3, L4, R3, R4. The UNO Q sits between them. Run one short bundle from the UNO Q header to each pad and daisy-chain the shared lines across the 4 boards on that pad:
+All 8 boards share power and three SPI lines. Each board gets its own CS wire, and **only L1** has DRDY wired. That's 14 UNO Q pins, **one wire per pin**. The job is fanning the 5 shared lines out to 8 boards, which is what the carriers are for.
 
-```
-            toe pad (+y)                             heel pad (−y)
-   ┌──────┬──────┬──────┬──────┐            ┌──────┬──────┬──────┬──────┐
-   │  L1  │  L2  │  R1  │  R2  │            │  L3  │  L4  │  R3  │  R4  │
-   └──┬───┴──┬───┴──┬───┴──┬───┘            └──┬───┴──┬───┴──┬───┴──┬───┘
-      └──────┴──────┴──────┴── 3V3 GND SCK MOSI MISO ──┴──────┴──────┴──────┘
-      │  │      │      │      │                   │      │      │      │
-     D2 D3     D4     D7     D8                  D5     D6     D9     A2
-   (DRDY)                                                        (R4 CS)
-                               UNO Q header
-```
+**Carriers.** The enclosure has two ADC pads: toe (+y) for L1, L2, R1, R2, and heel (−y) for L3, L4, R3, R4. Build one perfboard (2.54 mm protoboard) carrier per pad. Each carrier holds:
 
-1. **Power:** 3V3 and GND from the UNO Q to every board. Use 22 AWG for these two runs. The total draw is about 30 mA, so size isn't critical, but a solid ground matters.
-2. **SPI:** D13 goes to every SCLK, D11 to every DIN, and D12 to every DOUT. Keep these runs short: about 15 cm total per pad is fine at 2 MHz.
-3. **Chip selects:** one wire from each UNO Q pin to its board's CS, per the pin map. **R4 goes to A2. Nothing goes to D10.**
-4. **DRDY:** wire **L1's DRDY to D2**. Leave the other seven boards' DRDY pads unconnected. **Never tie DRDY pins together.** They are push-pull outputs and would fight each other.
-5. **Optional CS pull-ups:** a 10 kΩ resistor from each CS to 3V3 keeps every board deselected while the MCU boots. The firmware also drives every CS high as its very first action.
+- its 4 ADS1220 modules, soldered down
+- 5 bus rails across the board (3V3, GND, SCLK, MOSI, MISO), with each module tapped onto them with short wires
+- each module's R1/R2 pair, right at its pins (step 6)
+- a JST-XH header per cell cable, with the cable shield soldered to the GND rail (step 7)
+
+Don't use a solderless breadboard in the plates. A swing shakes the floor, and a loose contact on CS or MISO corrupts readings in ways that are hard to find. A breadboard is fine for the one-cell bench test.
+
+**Harness.**
+
+1. **Q → toe carrier, 10 wires:** 3V3, GND, D13 → SCLK rail, D11 → MOSI rail, D12 → MISO rail, CS for L1 (D3), L2 (D4), R1 (D7), R2 (D8), and L1's DRDY → D2.
+2. **Toe carrier → heel carrier, 5 wires:** the same five bus rails, chained across.
+3. **Q → heel carrier, 4 wires:** CS for L3 (D5), L4 (D6), R3 (D9), R4 (**A2**).
+4. **Power:** use 22 AWG for 3V3 and GND. The total draw is about 30 mA, so size isn't critical, but a solid ground matters.
+5. **SPI length:** keep the Q-to-carrier runs short. About 15–30 cm total per line is comfortable at 2 MHz.
+6. **DRDY:** only **L1's DRDY goes to D2**. Leave the other seven DRDY pads unconnected. **Never tie DRDY pins together.** They are push-pull outputs and would fight each other.
+7. **Nothing goes to D10, D0 or D1.**
+8. **Optional CS pull-ups:** a 10 kΩ resistor from each CS to 3V3 keeps every board deselected while the MCU boots. The firmware also drives every CS high as its very first action.
+
+Whether 4 modules fit side by side on a pad depends on the module's size, which is still open (VERIFIED item 7). If they don't fit, mount them in two stacked pairs, as §6.7 of the spec allows.
 
 ## 9. Check before power
 
