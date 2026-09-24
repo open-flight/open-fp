@@ -15,7 +15,7 @@ M2_X, M2_R, M2_D = 22.5, 1.6, 4.0
 NOTCH_HALF, NOTCH_D = 3.5, 7.2
 CELL_HALF, CELL_T = 17.0, 7.8
 BOSS_R, BOSS_H = 5.0, 1.0
-FOOT_R, FOOT_T = 8.0, 3.5
+FOOT_R, FOOT_T = 9.0, 3.5          # Ø18 foot; 3.5 mm below the load point
 RET_T, WIN_HALF = 1.6, 14.0
 AL_T, NEO_T = 6.35, 1.6
 
@@ -226,7 +226,7 @@ label(504, 300, [("Neoprene on 1/4\" aluminum plate", {"weight": 600}), ("counte
 label(435, 380, [("Cradle, pocket facing DOWN", {"weight": 600}), ("M4 heat-set inserts in the top face;", {"fill": MUTED}), ("Ø24 relief above the cell lets its centre flex", {"fill": MUTED})], LX, 360)
 label(321, 425, [("Cable notch (in the pocket's back wall)", {"weight": 600, "fill": ACCENT}), ("must break through into the pocket", {"fill": ACCENT})], LX, 424)
 label(402, 500, [("Load cell, centre boss facing DOWN", {"weight": 600}), ("frame presses up against the pocket ceiling;", {"fill": MUTED}), ("wires lie on the bottom face", {"fill": MUTED})], LX, 490)
-label(348, 572, [("TPU hub foot", {"weight": 600}), ("CA-glue centred on the boss", {"fill": MUTED})], LX, 564)
+label(348, 572, [("TPU hub foot", {"weight": 600}), ("strap sits in its channel, dome in the dimple; CA", {"fill": MUTED})], LX, 564)
 label(420, 634, [("Retainer, countersinks facing the floor", {"weight": 600}), ("notch lines up with the cradle notch", {"fill": MUTED})], LX, 628)
 label(394, 684, [("M2 × 5 countersunk ×4", {"weight": 600}), ("one per corner (two shown)", {"fill": MUTED})], LX, 686)
 label(470, 755, [("3/8\" rubber flooring", {"weight": 600})], LX, 760)

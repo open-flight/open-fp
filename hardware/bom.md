@@ -37,7 +37,7 @@ Print on the Bambu H2D. The STL files are in `cad/stl/`, the STEP files in `cad/
 | `07_edge_ramp_right` | 6 | PETG/ABS | 3 walls, 20 % | flat bottom down |
 | `09_drill_template_a` | 1 | any | 100 % | lips up |
 | `09_drill_template_b` | 1 | any | 100 % | lips up |
-| `10_hub_foot_tpu` | 8 | TPU 95A | 100 % | flat |
+| `10_hub_foot_tpu` | 8 | TPU 95A | 100 % | flat, channel up. Ø18 × 4.7 mm, locates on the cell's centre strap; parametric source `cad/src/hub_foot.py` |
 | `08_assembly_two_plates.step` | — | reference only | | |
 
 **Cradle orientation:** print pocket side up, with the plate-mounting face on the bed. This changes the original plan of pocket side down. Pocket-up prints with no supports and no bridges. The only overhang is the blind end of the two M4 insert holes. The pocket seat, which carries the cell's frame and all the load, prints as a solid top surface instead of a 35 mm bridge that can sag. The plate-mounting face also comes out bed-flat. Use elephant-foot compensation so the M4 insert holes stay Ø5.6. After heat-setting the inserts, scrape the plate face flush.

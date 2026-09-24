@@ -46,6 +46,8 @@ Achieved loop rate: — · `drdyMissed` over 10 min: —
 
 - **2026-09-23, cable notch didn't break through.** The test print showed a wall in the cradle's cable notch. Measured from the STL: the notch spanned y −28…−18 and the pocket wall is at y −17.3, leaving a 0.7 mm wall through the notch's full 7.2 mm depth. The retainer's notch (y −28…−18) also stopped 4 mm short of its window (y −14), so it would clamp the wires against the cell. The owner confirmed the wall shouldn't be there. Fixed by loading the STEP files in CadQuery 2.8 and cutting 7 mm wide slots to join each notch to the pocket or window. Removed 35.3 mm³ (cradle) and 44.8 mm³ (retainer), both still single valid solids. STL and STEP re-exported.
 
+- **2026-09-23, locating hub foot.** The owner asked for a foot that locates on the cell. The cell's load point is a riveted strap across the centre tongue with a dome in the middle, and it faces the floor. The new `10_hub_foot_tpu` (from `hardware/cad/src/hub_foot.py`) is Ø18 × 4.7 mm with an 11.4 × 1.2 mm channel for the strap and a Ø6 × 0.6 mm dimple for the dome. It keeps 3.5 mm of foot below the load point, so floor clearance is unchanged. The strap width (11.0) and dome diameter (5.5) are **estimated from photos**; measure them with calipers and regenerate.
+
 ## Notes found during scaffolding
 
 - App Lab's generated skeleton puts the web client libs in `app/assets/libs/` (`arduino.js`, `socket.io.min.js`), not `assets/vendor/` as §2 planned. Keep `libs/` from the brick and put uPlot in `vendor/`.
