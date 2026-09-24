@@ -28,7 +28,7 @@ Two low-profile golf force plates, one per foot. Each plate has four load cells,
 - 2 × 12" × 12" × 1/4" 6061 aluminum plates, 8 × 50 kg half-bridge load cells, 8 × ADS1220 24-bit ADCs, 1 × Arduino UNO Q
 - Bill of materials: [`hardware/bom.md`](hardware/bom.md)
 - Print files: [`hardware/cad/`](hardware/cad/) (STL, STEP, and the CadQuery sources)
-- Assembly: [`docs/assembly.md`](docs/assembly.md) · Wiring: [`docs/wiring.md`](docs/wiring.md) · Calibration: [`docs/calibration.md`](docs/calibration.md)
+- Assembly: [`docs/assembly.md`](docs/assembly.md) · Wiring: [`docs/wiring.md`](docs/wiring.md) · One-cell bench test: [`docs/bench-single-cell.md`](docs/bench-single-cell.md) · Calibration: [`docs/calibration.md`](docs/calibration.md)
 
 ## Repository layout
 
