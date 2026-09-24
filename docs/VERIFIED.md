@@ -42,6 +42,10 @@ Achieved loop rate: — · `drdyMissed` over 10 min: —
 |---|---|---|---|
 | Pipeline and SwingDetector CPU cost on the board | 41.9 s of synthetic 200 Hz data (5 swings, all captured) processed in 6.35 s, about 15 % of one core | `python-apps-base:0.12.0` on the UNO Q (Python 3.13.14, numpy 2.5.1) | 2026-09-23 |
 
+## Mechanical fixes
+
+- **2026-09-23, cable notch didn't break through.** The test print showed a wall in the cradle's cable notch. Measured from the STL: the notch spanned y −28…−18 and the pocket wall is at y −17.3, leaving a 0.7 mm wall through the notch's full 7.2 mm depth. The retainer's notch (y −28…−18) also stopped 4 mm short of its window (y −14), so it would clamp the wires against the cell. The owner confirmed the wall shouldn't be there. Fixed by loading the STEP files in CadQuery 2.8 and cutting 7 mm wide slots to join each notch to the pocket or window. Removed 35.3 mm³ (cradle) and 44.8 mm³ (retainer), both still single valid solids. STL and STEP re-exported.
+
 ## Notes found during scaffolding
 
 - App Lab's generated skeleton puts the web client libs in `app/assets/libs/` (`arduino.js`, `socket.io.min.js`), not `assets/vendor/` as §2 planned. Keep `libs/` from the brick and put uPlot in `vendor/`.
