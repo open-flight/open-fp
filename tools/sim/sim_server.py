@@ -6,7 +6,7 @@ same FastAPI/fastapi_socketio setup as the WebUI brick (Socket.IO at /socket.io,
 routes unprefixed). Streams 200 Hz frames in real time through Pipeline + SwingDetector,
 and sends launch-monitor shot events for some swings so impact labelling can be seen.
 
-    python tools/sim/sim_server.py            # http://localhost:7000
+    python tools/sim/sim_server.py            # http://localhost:7070
 """
 from __future__ import annotations
 
@@ -92,7 +92,8 @@ async def stream(core: Core, ui: SimWebUI, args) -> None:
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--port", type=int, default=7000)
+    ap.add_argument("--port", type=int, default=7070,
+                    help="default 7070: macOS AirPlay Receiver already uses 7000")
     ap.add_argument("--host", default="0.0.0.0")
     ap.add_argument("--data", default=str(Path(__file__).parent / ".data"))
     ap.add_argument("--seed", type=int, default=None)

@@ -220,13 +220,14 @@ class UiBuffer:
         parts, self._parts = self._parts, []
         if not parts:
             return {"t": [], "fz": {"L": [], "R": []}, "cop": {"L": [], "R": [], "C": []},
-                    "lead_pct": [], "flags": 0, **extra}
+                    "lead_pct": [], "forces": [], "flags": 0, **extra}
         s = Samples.concat(parts)
         return {
             "t": np.round(s.t, 4).tolist(),
             "fz": {k: json_list(s.fz[k], 1) for k in ("L", "R")},
             "cop": {k: json_list(s.cop[k], 1) for k in ("L", "R", "C")},
             "lead_pct": json_list(s.lead_pct, 2),
+            "forces": np.round(s.forces, 0).tolist(),
             "flags": s.flags,
             **extra,
         }
