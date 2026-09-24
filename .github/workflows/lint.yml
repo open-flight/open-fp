@@ -1,0 +1,57 @@
+name: Lint
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    name: Ruff + Pylint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+      - name: Ruff
+        run: ruff check app/python tools tests docs/img
+      - name: Pylint
+        env:
+          PYTHONPATH: app/python:tools/sim
+        run: pylint app/python/open_fp tools/sim --fail-under=9
+
+  generated:
+    name: Generated files up to date
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - name: Corner assembly diagram matches its generator
+        run: |
+          python docs/img/make_corner_diagram.py
+          git diff --exit-code docs/img/corner-assembly.svg || {
+            echo "::error::docs/img/corner-assembly.svg is stale. Run python docs/img/make_corner_diagram.py and commit the result."
+            exit 1
+          }
+
+  shell:
+    name: ShellCheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: ShellCheck tools/*.sh
+        # SC2029 (info) flags intentional client-side expansion in ssh commands.
+        run: shellcheck --severity=warning tools/*.sh

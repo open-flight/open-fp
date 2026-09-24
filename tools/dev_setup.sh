@@ -16,7 +16,7 @@ arduino-cli core list | grep -q '^arduino:zephyr ' || arduino-cli core install a
 
 if [ ! -d .venv ]; then python3 -m venv .venv; fi
 .venv/bin/pip install -q --upgrade pip
-.venv/bin/pip install -q fastapi uvicorn python-socketio fastapi-socketio httpx numpy pytest pyflakes
+.venv/bin/pip install -q -r requirements-dev.txt
 
 echo
 echo "Dev machine ready. Boards currently visible:"
