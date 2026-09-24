@@ -60,7 +60,8 @@ def solve_plate_gains(delta_counts: np.ndarray, mass_kg: float) -> tuple[np.ndar
     return gains, a @ gains - b
 
 
-def placement_spots(cfg: Config, plate: str, inboard_mm: float = 40.0) -> list[tuple[str, tuple[float, float]]]:
+def placement_spots(cfg: Config, plate: str,
+                    inboard_mm: float = 40.0) -> list[tuple[str, tuple[float, float]]]:
     """Centre of the plate, then a spot `inboard_mm` in from each cell (x and y)."""
     idx = cfg.plate_channels(plate)
     pos = np.asarray(cfg.positions())[idx]
@@ -99,7 +100,8 @@ class CalibrationSession:
         for plate in ("L", "R"):
             caps = self._placements[plate]
             if len(caps) < MIN_PLACEMENTS:
-                raise CalibrationError(f"plate {plate}: need {MIN_PLACEMENTS} placements, have {len(caps)}")
+                raise CalibrationError(
+                    f"plate {plate}: need {MIN_PLACEMENTS} placements, have {len(caps)}")
             idx = self.cfg.plate_channels(plate)
             delta = np.array([(c[idx] - self.zero[idx]) * signs[idx] for c in caps.values()])
             g, r = solve_plate_gains(delta, self.mass_kg)
@@ -120,15 +122,15 @@ def save_calibration(cal: Calibration, path: str | Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     text = json.dumps(dataclasses.asdict(cal), indent=2)
     tmp = path.with_suffix(".tmp")
-    tmp.write_text(text)
+    tmp.write_text(text, encoding="utf-8")
     tmp.replace(path)
     if cal.created:
         stamp = datetime.fromisoformat(cal.created).strftime("%Y%m%d-%H%M")
-        (path.parent / f"{path.stem}-{stamp}.json").write_text(text)
+        (path.parent / f"{path.stem}-{stamp}.json").write_text(text, encoding="utf-8")
 
 
 def load_calibration(path: str | Path) -> Calibration:
     path = Path(path)
     if not path.exists():
         return Calibration.default()
-    return Calibration(**json.loads(path.read_text()))
+    return Calibration(**json.loads(path.read_text(encoding="utf-8")))

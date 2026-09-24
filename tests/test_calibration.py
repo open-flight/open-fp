@@ -4,11 +4,11 @@ import numpy as np
 import pytest
 
 from open_fp.calibration import (
-    G,
     NOMINAL_GAIN_N_PER_COUNT,
     Calibration,
     CalibrationError,
     CalibrationSession,
+    G,
     load_calibration,
     placement_spots,
     save_calibration,

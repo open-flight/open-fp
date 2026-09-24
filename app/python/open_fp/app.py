@@ -65,7 +65,8 @@ class Core:
     def _handle_event(self, ev) -> None:
         if ev.kind in ("swing_complete", "swing_updated"):
             self.store.save(ev.swing)
-            self._outbox.append(("swing" if ev.kind == "swing_complete" else "swing_updated", ev.swing.summary()))
+            kind = "swing" if ev.kind == "swing_complete" else "swing_updated"
+            self._outbox.append((kind, ev.swing.summary()))
 
     def tick(self, now_s: float) -> list[tuple[str, dict]]:
         """Messages to push to browsers now: queued events, `live` (30 Hz), `status` (1 Hz)."""
@@ -162,7 +163,8 @@ class Core:
             steps = [{"kind": "zero"}]
             for plate in ("L", "R"):
                 for name, xy in placement_spots(self.cfg, plate):
-                    steps.append({"kind": "place", "plate": plate, "spot": name, "xy": [xy[0], xy[1]]})
+                    steps.append({"kind": "place", "plate": plate, "spot": name,
+                                  "xy": [xy[0], xy[1]]})
             return {"mass_kg": float(mass_kg), "steps": steps}
 
     def calib_capture(self, step: dict, seconds: float = 2.0) -> dict:
