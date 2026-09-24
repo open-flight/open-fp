@@ -55,4 +55,4 @@ tools/logs.sh               # follow the app's Python logs
 
 ## License
 
-TBD: to match OpenFlight's license.
+[AGPL-3.0](LICENSE), the same license as [OpenFlight](https://github.com/open-flight/openflight).
