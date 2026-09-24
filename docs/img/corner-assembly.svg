@@ -27,7 +27,7 @@
 <polygon points="410.4,289.7 459.6,289.7 448.5,300.8 448.5,327.8 421.5,327.8 421.5,300.8" fill="#FFFFFF" stroke="#6E7B88" stroke-width="1" stroke-linejoin="round" />
 <rect x="196.2" y="385.8" width="207.6" height="49.2" fill="#E4DDD1" stroke="none" stroke-width="1.2" />
 <rect x="279.0" y="391.8" width="42.0" height="43.2" fill="#FFFFFF" stroke="#C2410C" stroke-width="1.2" stroke-dasharray="4 3"/>
-<polygon points="138.0,367.8 148.2,367.8 148.2,406.8 181.8,406.8 181.8,367.8 418.2,367.8 418.2,406.8 451.8,406.8 451.8,367.8 462.0,367.8 462.0,435.0 403.8,435.0 403.8,385.8 372.0,385.8 372.0,376.8 228.0,376.8 228.0,385.8 196.2,385.8 196.2,435.0 138.0,435.0" fill="url(#hatch)" stroke="#7A7063" stroke-width="1.4" stroke-linejoin="round" />
+<polygon points="138.0,367.8 148.2,367.8 148.2,406.8 181.8,406.8 181.8,367.8 418.2,367.8 418.2,406.8 451.8,406.8 451.8,367.8 462.0,367.8 462.0,435.0 403.8,435.0 403.8,385.8 384.0,385.8 384.0,376.8 216.0,376.8 216.0,385.8 196.2,385.8 196.2,435.0 138.0,435.0" fill="url(#hatch)" stroke="#7A7063" stroke-width="1.4" stroke-linejoin="round" />
 <rect x="150.6" y="367.8" width="28.8" height="37.2" fill="#C9A227" stroke="#8A6D12" stroke-width="0.8" />
 <rect x="420.6" y="367.8" width="28.8" height="37.2" fill="#C9A227" stroke="#8A6D12" stroke-width="0.8" />
 <rect x="155.4" y="411.0" width="19.2" height="24.0" fill="none" stroke="#7A7063" stroke-width="0.9" stroke-dasharray="3 2"/>
@@ -61,7 +61,7 @@
 <circle cx="435.0" cy="380.0" r="2" fill="#5F6B78"/>
 <text x="530.0" y="360.0" font-size="13" font-weight="600" fill="#1F2933" text-anchor="start" >Cradle, pocket facing DOWN</text>
 <text x="530.0" y="376.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >M4 heat-set inserts in the top face;</text>
-<text x="530.0" y="392.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >Ø24 relief above the cell lets its centre flex</text>
+<text x="530.0" y="392.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >28 mm relief: only the frame ring touches</text>
 <line x1="321.0" y1="425.0" x2="524.0" y2="420.0" stroke="#5F6B78" stroke-width="0.8" />
 <circle cx="321.0" cy="425.0" r="2" fill="#5F6B78"/>
 <text x="530.0" y="424.0" font-size="13" font-weight="600" fill="#C2410C" text-anchor="start" >Cable notch (in the pocket's back wall)</text>
@@ -96,7 +96,7 @@
 <polygon points="1160.2,185.9 1212.2,185.9 1199.2,198.9 1199.2,263.9 1173.2,263.9 1173.2,198.9" fill="#4A5563" stroke="#4A5563" stroke-width="1" stroke-linejoin="round" />
 <rect x="927.5" y="246.7" width="224.9" height="53.3" fill="#E4DDD1" stroke="none" stroke-width="1.2" />
 <rect x="1017.2" y="253.2" width="45.5" height="46.8" fill="#FFFFFF" stroke="#C2410C" stroke-width="1.2" stroke-dasharray="4 3"/>
-<polygon points="864.5,227.2 875.5,227.2 875.5,269.4 912.0,269.4 912.0,227.2 1168.0,227.2 1168.0,269.4 1204.5,269.4 1204.5,227.2 1215.5,227.2 1215.5,300.0 1152.5,300.0 1152.5,246.7 1118.0,246.7 1118.0,236.9 962.0,236.9 962.0,246.7 927.5,246.7 927.5,300.0 864.5,300.0" fill="url(#hatch)" stroke="#7A7063" stroke-width="1.4" stroke-linejoin="round" />
+<polygon points="864.5,227.2 875.5,227.2 875.5,269.4 912.0,269.4 912.0,227.2 1168.0,227.2 1168.0,269.4 1204.5,269.4 1204.5,227.2 1215.5,227.2 1215.5,300.0 1152.5,300.0 1152.5,246.7 1131.0,246.7 1131.0,236.9 949.0,236.9 949.0,246.7 927.5,246.7 927.5,300.0 864.5,300.0" fill="url(#hatch)" stroke="#7A7063" stroke-width="1.4" stroke-linejoin="round" />
 <rect x="878.1" y="227.2" width="31.2" height="40.3" fill="#C9A227" stroke="#8A6D12" stroke-width="0.8" />
 <rect x="1170.7" y="227.2" width="31.2" height="40.3" fill="#C9A227" stroke="#8A6D12" stroke-width="0.8" />
 <rect x="883.4" y="274.0" width="20.8" height="26.0" fill="none" stroke="#7A7063" stroke-width="0.9" stroke-dasharray="3 2"/>
