@@ -23,11 +23,13 @@ For each of the 8 corners:
 
 1. **Heat-set the inserts** in the cradle: 2 × M4 in the plate face and 4 × M2 in the pocket face. Scrape any ridge around the M4 holes flush, or the cradle will rock against the plate.
 2. **Glue the TPU foot** onto the cell's centre strap, the raised riveted strip with the dome in the middle. The strap drops into the foot's channel and the dome clicks into the dimple, which centres the foot. Glue it with CA. The strap is the load point and faces the floor.
-3. **Seat the cell** in the pocket, boss and foot facing out of the pocket. Lay the wires flat on the cell's face and route them out through the **cable notch**.
-4. **Add the shim ring** (`11_cell_shim_tpu`) on top of the cell's frame, with its gap lined up with the cable notch so the wires pass through it. It presses only on the frame's outer edge and stops the cell rattling. The first time, try the tuning set with the retainer screwed down and keep the thinnest ring that removes all play, then print 8 of that thickness. Rings with 1–5 edge nicks are 1.5, 2.0, 2.5, 3.0 and 3.5 mm.
+3. **Seat the cell** in the pocket, strap and foot facing out of the pocket. Its frame rests on the 3.5 mm ledge around the relief. Lay the wires flat on the cell's face and route them out through the **cable notch**.
+4. **Add the 1.5 mm shim ring** (`11_cell_shim_tpu_1.5mm`) on top of the cell's frame, with its gap lined up with the cable notch so the wires pass through. It presses only on the frame's outer edge and stops the cell rattling.
 5. **Screw on the retainer** with 4 × M2 × 5 countersunk screws, countersinks facing away from the cradle. Line its notch up with the cradle's notch so the wires aren't pinched. The foot must stick out through the 28 mm window, and the retainer must not touch a flat surface when the corner is set down.
 6. **Put the JST-XH plug on** and label the corner (L1…R4). See [wiring.md §3](wiring.md#3-put-jst-xh-plugs-on-the-cells).
 7. **Mount it on the plate** with 2 × M4 × 12 flat-heads from the top and blue threadlocker, **notch facing the enclosure** (panel 4 of the drawing).
+
+> **Ledge (2026-09-23).** The cell's frame is only about 3.2 mm thick; its 7.8 mm height includes the raised strap. So the pocket now has a 3.5 mm PETG ledge the frame rests on, and a 1.5 mm TPU shim on top takes up the rest. This came from the owner's fit test: the tightest stack was 3.5 mm under the cell and 1.5 mm over it. The ledge makes the part under the cell rigid PETG rather than TPU, because that part carries every corner's full load.
 
 > **Relief fix (2026-09-23).** The recess in the pocket floor (the ceiling once installed) is now a 28 mm rounded square instead of a Ø24 circle. Only the cell's outer frame ring may touch the cradle. The tongue and the strain-gauge beams inside it move under load, and the tongue's corners reached past the old circle. To check an old cradle: lay the cell strap-side up on a flat table. If the tongue's corners touch the table, they'll touch the old Ø24 cradle too, so reprint it.
 

@@ -13,8 +13,10 @@ RELIEF_R, RELIEF_TOP = 14.0, 9.7   # 28 mm rounded-square relief (half-width)
 M4_X, M4_R, M4_D = 22.5, 2.8, 6.5
 M2_X, M2_R, M2_D = 22.5, 1.6, 4.0
 NOTCH_HALF, NOTCH_D = 3.5, 7.2
-CELL_HALF, CELL_T = 17.0, 7.8
-BOSS_R, BOSS_H = 5.0, 1.0
+CELL_HALF, CELL_T = 17.0, 7.8       # cell footprint, total height including the raised strap
+FRAME_T, TONGUE_HALF, STRAP_HALF = 3.2, 10.5, 5.5   # frame ~3.2 thick (from the shim fit)
+LEDGE_T, SHIM_T = 3.5, 1.5          # PETG ledge the frame rests on; TPU shim on top
+BOSS_R, BOSS_H = 5.0, 0.0
 FOOT_R, FOOT_T = 9.0, 3.5          # Ø18 foot; 3.5 mm below the load point
 RET_T, WIN_HALF = 1.6, 14.0
 AL_T, NEO_T = 6.35, 1.6
@@ -90,6 +92,10 @@ class Section:
         nx1, ny1 = P(NOTCH_HALF, 0)
         rect(nx0, ny0, nx1 - nx0, ny1 - ny0, "#FFFFFF", ACCENT, 1.2, 'stroke-dasharray="4 3"')
         poly(pts, "url(#hatch)", PETG_S, 1.4)
+        for sx in (-1, 1):                           # 3.5 mm bearing ledge for the frame
+            x0, y0 = P(sx * RELIEF_R, POCKET_D)
+            x1, y1 = P(sx * POCKET_HALF, POCKET_D - LEDGE_T)
+            rect(min(x0, x1), y0, abs(x1 - x0), y1 - y0, "url(#hatch)", PETG_S, 1.2)
         # M4 heat-set inserts
         for sx in (-1, 1):
             x0, y0 = P(sx * M4_X - M4_R + 0.4, CR_H)
@@ -126,22 +132,30 @@ class Section:
 
     def cell(self, dz=0.0):
         P = lambda x, z: self.P(x, z, dz)
-        z0 = POCKET_D - CELL_T                       # cell pressed up against the pocket ceiling
-        x0, y0 = P(-CELL_HALF, POCKET_D)
-        x1, y1 = P(CELL_HALF, z0)
-        rect(x0, y0, x1 - x0, y1 - y0, STEEL, STEEL_S, 1.3, 'rx="2"')
-        for sx in (-1, 1):                           # slots between frame and centre beam
-            a, b = P(sx * 9.5, POCKET_D - 1.0)
-            c, d = P(sx * 9.5, z0 + 1.0)
+        zb = POCKET_D - LEDGE_T                      # frame back rests on the ledge
+        zf = zb - FRAME_T                            # frame face (strap side)
+        x0, y0 = P(-CELL_HALF, zb)
+        x1, y1 = P(CELL_HALF, zf)
+        rect(x0, y0, x1 - x0, y1 - y0, STEEL, STEEL_S, 1.3, 'rx="1.5"')
+        for sx in (-1, 1):                           # slots between frame and tongue
+            a, b = P(sx * TONGUE_HALF, zb - 0.4)
+            c, d = P(sx * TONGUE_HALF, zf + 0.4)
             line(a, b, c, d, STEEL_S, 1.2)
-        bx0, by0 = P(-BOSS_R, z0)
-        bx1, by1 = P(BOSS_R, z0 - BOSS_H)
-        rect(bx0, by0, bx1 - bx0, by1 - by0, STEEL, STEEL_S, 1.2)
+        sx0, sy0 = P(-STRAP_HALF, zf)                # riveted strap, the load point
+        sx1, sy1 = P(STRAP_HALF, zb - CELL_T)
+        rect(sx0, sy0, sx1 - sx0, sy1 - sy0, STEEL, STEEL_S, 1.3, 'rx="1.5"')
         return P
+
+    def shim(self, dz=0.0):
+        P = lambda x, z: self.P(x, z, dz)
+        for sx in (-1, 1):
+            x0, y0 = P(sx * 14.3, SHIM_T)
+            x1, y1 = P(sx * CELL_HALF, 0)
+            rect(min(x0, x1), y0, abs(x1 - x0), y1 - y0, TPU, TPU_S, 1.1)
 
     def foot(self, dz=0.0):
         P = lambda x, z: self.P(x, z, dz)
-        zt = POCKET_D - CELL_T - BOSS_H
+        zt = POCKET_D - LEDGE_T - CELL_T
         x0, y0 = P(-FOOT_R, zt)
         x1, y1 = P(FOOT_R, zt - FOOT_T)
         rect(x0, y0, x1 - x0, y1 - y0, TPU, TPU_S, 1.3, 'rx="2"')
@@ -199,14 +213,15 @@ text(40, 116, "1 · Exploded, as installed", 16, weight=700)
 text(40, 136, "Cutaway through the two plate screws. Plate on top, floor at the bottom. Parts move along the dashed line.", 13, MUTED)
 A = Section(cx=300, y0=0, s=6)
 # vertical placement of each part (y of the cradle's open face for that part)
-ys = {"m4": 280, "plate": 395, "cradle": 435, "cell": 525, "foot": 560, "retainer": 630, "m2": 690, "floor": 745}
-line(300, 165, 300, 790, "#B8C0C8", 1, 'stroke-dasharray="6 5"')
+ys = {"m4": 280, "plate": 395, "cradle": 435, "cell": 520, "foot": 548, "shim": 632, "retainer": 668, "m2": 722, "floor": 790}
+line(300, 165, 300, 815, "#B8C0C8", 1, 'stroke-dasharray="6 5"')
 
 A.y0 = ys["m4"]; A.m4()
 A.y0 = ys["plate"]; A.plate(half=34)
 A.y0 = ys["cradle"]; A.cradle()
 A.y0 = ys["cell"]; A.cell()
 A.y0 = ys["foot"]; A.foot()
+A.y0 = ys["shim"]; A.shim()
 A.y0 = ys["retainer"]; A.retainer()
 A.y0 = ys["m2"]; A.m2()
 A.y0 = ys["floor"]; A.floor(0, half=34, depth=4)
@@ -214,33 +229,36 @@ A.y0 = ys["floor"]; A.floor(0, half=34, depth=4)
 # assembly arrows
 arrow(206, 236, 262)                     # screws down into plate
 arrow(394, 236, 262)
-arrow(300, 474, 440)                     # cell up into pocket
-arrow(252, 578, 545)                     # foot up onto boss
-arrow(470, 622, 594)                     # retainer up onto cradle
-arrow(206, 676, 646)                     # M2 screws up
-arrow(394, 676, 646)
+arrow(470, 500, 462)                     # cell up onto the ledge
+arrow(225, 596, 570)                     # foot up onto the strap
+arrow(480, 624, 596)                     # shim up onto the frame
+arrow(470, 660, 640)                     # retainer up onto cradle
+arrow(206, 706, 680)                     # M2 screws up
+arrow(394, 706, 680)
 
 LX = 530
 label(419, 205, [("M4 × 12 flat-head ×2", {"weight": 600}), ("down through the plate, blue threadlocker", {"fill": MUTED})], LX, 196)
 label(504, 300, [("Neoprene on 1/4\" aluminum plate", {"weight": 600}), ("countersunk so the screw heads sit flush", {"fill": MUTED})], LX, 288)
-label(435, 380, [("Cradle, pocket facing DOWN", {"weight": 600}), ("M4 heat-set inserts in the top face;", {"fill": MUTED}), ("28 mm relief: only the frame ring touches", {"fill": MUTED})], LX, 360)
+label(435, 380, [("Cradle, pocket facing DOWN", {"weight": 600}), ("M4 inserts in the top face; frame rests on a", {"fill": MUTED}), ("3.5 mm ledge; 28 mm relief clears the tongue", {"fill": MUTED})], LX, 360)
 label(321, 425, [("Cable notch (in the pocket's back wall)", {"weight": 600, "fill": ACCENT}), ("must break through into the pocket", {"fill": ACCENT})], LX, 424)
-label(402, 500, [("Load cell, centre boss facing DOWN", {"weight": 600}), ("frame presses up against the pocket ceiling;", {"fill": MUTED}), ("wires lie on the bottom face", {"fill": MUTED})], LX, 490)
-label(348, 572, [("TPU hub foot", {"weight": 600}), ("strap sits in its channel, dome in the dimple; CA", {"fill": MUTED})], LX, 564)
-label(420, 634, [("Retainer, countersinks facing the floor", {"weight": 600}), ("notch lines up with the cradle notch", {"fill": MUTED})], LX, 628)
-label(394, 684, [("M2 × 5 countersunk ×4", {"weight": 600}), ("one per corner (two shown)", {"fill": MUTED})], LX, 686)
-label(470, 755, [("3/8\" rubber flooring", {"weight": 600})], LX, 760)
+label(402, 494, [("Load cell, strap facing DOWN", {"weight": 600}), ("frame rests on the ledge; the strap is the", {"fill": MUTED}), ("load point; wires lie on the strap side", {"fill": MUTED})], LX, 486)
+label(354, 590, [("TPU hub foot", {"weight": 600}), ("strap sits in its channel, dome in the dimple; CA", {"fill": MUTED})], LX, 566)
+label(402, 627, [("1.5 mm TPU shim ring", {"weight": 600}), ("on the frame edge only; gap over the notch", {"fill": MUTED})], LX, 620)
+label(420, 672, [("Retainer, countersinks facing the floor", {"weight": 600}), ("notch lines up with the cradle notch", {"fill": MUTED})], LX, 666)
+label(394, 716, [("M2 × 5 countersunk ×4", {"weight": 600}), ("one per corner (two shown)", {"fill": MUTED})], LX, 716)
+label(470, 800, [("3/8\" rubber flooring", {"weight": 600})], LX, 804)
 
 # ---------------- Panel B: assembled ----------------
 text(840, 116, "2 · Assembled", 16, weight=700)
 text(840, 136, "Only the TPU foot touches the floor.", 13, MUTED)
 B = Section(cx=1040, y0=300, s=6.5)
-z_floor = POCKET_D - CELL_T - BOSS_H - FOOT_T
+z_floor = POCKET_D - LEDGE_T - CELL_T - FOOT_T
 B.plate(half=34)
 B.m4()
 B.cradle()
 B.cell()
 B.foot()
+B.shim()
 B.retainer()
 B.m2()
 B.floor(z_floor, half=34, depth=4)
@@ -249,13 +267,13 @@ gx, gy_top = B.P(-22.5 - 6, -RET_T)
 _, gy_bot = B.P(0, z_floor)
 line(gx, gy_top, gx, gy_bot, ACCENT, 1.2, 'marker-start="url(#arrowA)" marker-end="url(#arrowA)"')
 text(gx - 8, (gy_top + gy_bot) / 2 + 4, "gap", 12, ACCENT, 600, "end")
-text(840, 384, "The retainer must clear the floor. If it touches, it carries", 13, INK)
-text(840, 401, "load around the cell and the reading drops.", 13, INK)
+text(840, 404, "The retainer must clear the floor. If it touches, it carries", 13, INK)
+text(840, 421, "load around the cell and the reading drops.", 13, INK)
 
 # ---------------- Panel C: bottom view ----------------
-text(840, 456, "3 · From below (looking up at the retainer)", 16, weight=700)
-text(840, 476, "Line up the cradle notch, the retainer notch, and the cell's wires.", 13, MUTED)
-cx3, cy3, s3 = 985, 640, 4.4
+text(840, 470, "3 · From below (looking up at the retainer)", 16, weight=700)
+text(840, 490, "Line up the cradle notch, the retainer notch, and the cell's wires.", 13, MUTED)
+cx3, cy3, s3 = 985, 650, 4.4
 def Q(x, y):
     return (cx3 + x * s3, cy3 - y * s3)
 # cradle behind (same outline), hidden pocket edge
@@ -299,8 +317,8 @@ text(1130, 640, "dashed: pocket", 12, MUTED)
 text(1130, 656, "edge (hidden)", 12, MUTED)
 
 # ---------------- Panel D: plate plan ----------------
-text(40, 870, "4 · Which way the notches point (plate L and R from above)", 16, weight=700)
-text(40, 890, "Cradles are under the plates. Every notch faces the centre enclosure, so the cables run inward.", 13, MUTED)
+text(40, 880, "4 · Which way the notches point (plate L and R from above)", 16, weight=700)
+text(40, 900, "Cradles are under the plates. Every notch faces the centre enclosure, so the cables run inward.", 13, MUTED)
 sd = 0.72
 spacing = 369.6
 ox, oy = 640, 1060        # stance origin on the page
