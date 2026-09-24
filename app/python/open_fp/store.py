@@ -33,23 +33,24 @@ class SwingStore:
         np.savez_compressed(tmp_npz, **{k: sw.arrays[k] for k in ARRAY_KEYS})
         tmp_npz.replace(npz_path)
         tmp = meta_path.with_suffix(".tmp")
-        tmp.write_text(json.dumps(meta, allow_nan=False))
+        tmp.write_text(json.dumps(meta, allow_nan=False), encoding="utf-8")
         tmp.replace(meta_path)
 
     def _meta(self, swing_id: str) -> dict:
         meta_path, _ = self._paths(swing_id)
         if not meta_path.exists():
             raise KeyError(swing_id)
-        return json.loads(meta_path.read_text())
+        return json.loads(meta_path.read_text(encoding="utf-8"))
 
     def load_swing(self, swing_id: str) -> Swing:
         meta = self._meta(swing_id)
         _, npz_path = self._paths(swing_id)
         with np.load(npz_path) as z:
             arrays = {k: z[k] for k in ARRAY_KEYS}
-        return Swing(id=meta["id"], created=meta["created"], golfer=meta["golfer"], bw_n=meta["bw_n"],
-                     t0_host=meta["t0_host"], arrays=arrays, events=meta["events"],
-                     metrics=meta["metrics"], impact_source=meta.get("impact_source"))
+        return Swing(id=meta["id"], created=meta["created"], golfer=meta["golfer"],
+                     bw_n=meta["bw_n"], t0_host=meta["t0_host"], arrays=arrays,
+                     events=meta["events"], metrics=meta["metrics"],
+                     impact_source=meta.get("impact_source"))
 
     def get(self, swing_id: str) -> dict:
         return self.load_swing(swing_id).to_dict()
@@ -60,7 +61,7 @@ class SwingStore:
             if not ID_RE.match(p.stem):
                 continue
             try:
-                out.append(json.loads(p.read_text()))
+                out.append(json.loads(p.read_text(encoding="utf-8")))
             except (OSError, ValueError):
                 continue
         out.sort(key=lambda m: (m.get("created") or "", m["id"]), reverse=True)
@@ -86,5 +87,9 @@ class SwingStore:
         w = csv.writer(buf, lineterminator="\n")
         w.writerow(header)
         for row in cols:
-            w.writerow(["" if np.isnan(v) else f"{v:.4f}" if i == 0 else f"{v:.2f}" for i, v in enumerate(row)])
+            w.writerow([_csv_cell(v, 4 if i == 0 else 2) for i, v in enumerate(row)])
         return buf.getvalue()
+
+
+def _csv_cell(v: float, digits: int) -> str:
+    return "" if np.isnan(v) else f"{v:.{digits}f}"

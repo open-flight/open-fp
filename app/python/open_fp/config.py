@@ -55,8 +55,6 @@ class Config:
     swing: SwingThresholds = field(default_factory=SwingThresholds)
 
     def __post_init__(self):
-        if isinstance(self.swing, dict):
-            self.swing = SwingThresholds(**self.swing)
         if self.golfer not in ("RH", "LH"):
             raise ValueError(f"golfer must be 'RH' or 'LH', got {self.golfer!r}")
         if len(self.signs) != N_CH or any(s not in (1, -1) for s in self.signs):
@@ -124,12 +122,12 @@ def load_config(path: str | Path) -> Config:
     path = Path(path)
     if not path.exists():
         return Config()
-    return Config().updated(json.loads(path.read_text()))
+    return Config().updated(json.loads(path.read_text(encoding="utf-8")))
 
 
 def save_config(cfg: Config, path: str | Path) -> None:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(".tmp")
-    tmp.write_text(json.dumps(cfg.to_dict(), indent=2))
+    tmp.write_text(json.dumps(cfg.to_dict(), indent=2), encoding="utf-8")
     tmp.replace(path)

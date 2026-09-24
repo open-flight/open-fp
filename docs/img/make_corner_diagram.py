@@ -4,6 +4,7 @@
 Dimensions (mm) are measured from the STL files in hardware/cad/stl (see VERIFIED.md).
 The load cell's centre boss height isn't in the CAD, so it is drawn at ~1 mm.
 """
+import functools
 from pathlib import Path
 
 # -- geometry (mm) ----------------------------------------------------------------
@@ -78,7 +79,7 @@ class Section:
         return (self.cx + x * self.s, self.y0 - (z + dz) * self.s)
 
     def cradle(self, dz=0.0):
-        P = lambda x, z: self.P(x, z, dz)
+        P = functools.partial(self.P, dz=dz)
         pts = [P(-27, CR_H), P(-M4_X - M4_R, CR_H), P(-M4_X - M4_R, CR_H - M4_D), P(-M4_X + M4_R, CR_H - M4_D),
                P(-M4_X + M4_R, CR_H), P(M4_X - M4_R, CR_H), P(M4_X - M4_R, CR_H - M4_D), P(M4_X + M4_R, CR_H - M4_D),
                P(M4_X + M4_R, CR_H), P(27, CR_H), P(27, 0), P(POCKET_HALF, 0), P(POCKET_HALF, POCKET_D),
@@ -109,7 +110,7 @@ class Section:
         return P
 
     def plate(self, dz=0.0, half=34.0):
-        P = lambda x, z: self.P(x, z, dz)
+        P = functools.partial(self.P, dz=dz)
         x0, ya = P(-half, CR_H + AL_T)
         x1, yb = P(half, CR_H)
         rect(x0, ya, x1 - x0, yb - ya, ALU, ALU_S, 1.2)
@@ -123,7 +124,7 @@ class Section:
         return P
 
     def m4(self, dz=0.0):
-        P = lambda x, z: self.P(x, z, dz)
+        P = functools.partial(self.P, dz=dz)
         top = CR_H + AL_T
         for sx in (-1, 1):
             cx = sx * M4_X
@@ -131,7 +132,7 @@ class Section:
                   P(cx - 2.0, top - 12), P(cx - 2.0, top - 2.0)], SCREW, SCREW, 1)
 
     def cell(self, dz=0.0):
-        P = lambda x, z: self.P(x, z, dz)
+        P = functools.partial(self.P, dz=dz)
         zb = POCKET_D - LEDGE_T                      # frame back rests on the ledge
         zf = zb - FRAME_T                            # frame face (strap side)
         x0, y0 = P(-CELL_HALF, zb)
@@ -147,14 +148,14 @@ class Section:
         return P
 
     def shim(self, dz=0.0):
-        P = lambda x, z: self.P(x, z, dz)
+        P = functools.partial(self.P, dz=dz)
         for sx in (-1, 1):
             x0, y0 = P(sx * 14.3, SHIM_T)
             x1, y1 = P(sx * CELL_HALF, 0)
             rect(min(x0, x1), y0, abs(x1 - x0), y1 - y0, TPU, TPU_S, 1.1)
 
     def foot(self, dz=0.0):
-        P = lambda x, z: self.P(x, z, dz)
+        P = functools.partial(self.P, dz=dz)
         zt = POCKET_D - LEDGE_T - CELL_T
         x0, y0 = P(-FOOT_R, zt)
         x1, y1 = P(FOOT_R, zt - FOOT_T)
@@ -162,7 +163,7 @@ class Section:
         return P
 
     def retainer(self, dz=0.0):
-        P = lambda x, z: self.P(x, z, dz)
+        P = functools.partial(self.P, dz=dz)
         for a, b in ((-27, -WIN_HALF), (WIN_HALF, 27)):
             x0, y0 = P(a, 0)
             x1, y1 = P(b, -RET_T)
@@ -170,7 +171,7 @@ class Section:
         return P
 
     def m2(self, dz=0.0):
-        P = lambda x, z: self.P(x, z, dz)
+        P = functools.partial(self.P, dz=dz)
         for sx in (-1, 1):
             cx = sx * M2_X
             poly([P(cx - 2.2, -RET_T), P(cx + 2.2, -RET_T), P(cx + 1.0, -RET_T + 1.2), P(cx + 1.0, -RET_T + 5),
@@ -216,15 +217,24 @@ A = Section(cx=300, y0=0, s=6)
 ys = {"m4": 280, "plate": 395, "cradle": 435, "cell": 520, "foot": 548, "shim": 632, "retainer": 668, "m2": 722, "floor": 790}
 line(300, 165, 300, 815, "#B8C0C8", 1, 'stroke-dasharray="6 5"')
 
-A.y0 = ys["m4"]; A.m4()
-A.y0 = ys["plate"]; A.plate(half=34)
-A.y0 = ys["cradle"]; A.cradle()
-A.y0 = ys["cell"]; A.cell()
-A.y0 = ys["foot"]; A.foot()
-A.y0 = ys["shim"]; A.shim()
-A.y0 = ys["retainer"]; A.retainer()
-A.y0 = ys["m2"]; A.m2()
-A.y0 = ys["floor"]; A.floor(0, half=34, depth=4)
+A.y0 = ys["m4"]
+A.m4()
+A.y0 = ys["plate"]
+A.plate(half=34)
+A.y0 = ys["cradle"]
+A.cradle()
+A.y0 = ys["cell"]
+A.cell()
+A.y0 = ys["foot"]
+A.foot()
+A.y0 = ys["shim"]
+A.shim()
+A.y0 = ys["retainer"]
+A.retainer()
+A.y0 = ys["m2"]
+A.m2()
+A.y0 = ys["floor"]
+A.floor(0, half=34, depth=4)
 
 # assembly arrows
 arrow(206, 236, 262)                     # screws down into plate
@@ -277,7 +287,8 @@ cx3, cy3, s3 = 985, 650, 4.4
 def Q(x, y):
     return (cx3 + x * s3, cy3 - y * s3)
 # cradle behind (same outline), hidden pocket edge
-x0, y0 = Q(-27, 27); x1, y1 = Q(27, -27)
+x0, y0 = Q(-27, 27)
+x1, y1 = Q(27, -27)
 rect(x0, y0, x1 - x0, y1 - y0, "#E4DDD1", PETG_S, 1, 'rx="18"')
 # retainer: outline minus window and notch (fixed geometry: notch runs into the window)
 rp = [Q(-27, 27), Q(27, 27), Q(27, -27), Q(NOTCH_HALF, -27), Q(NOTCH_HALF, -WIN_HALF), Q(WIN_HALF, -WIN_HALF),
@@ -285,12 +296,15 @@ rp = [Q(-27, 27), Q(27, 27), Q(27, -27), Q(NOTCH_HALF, -27), Q(NOTCH_HALF, -WIN_
       Q(-NOTCH_HALF, -27), Q(-27, -27)]
 poly(rp, PETG, PETG_S, 1.4)
 # cell face in the window
-wx0, wy0 = Q(-WIN_HALF, WIN_HALF); wx1, wy1 = Q(WIN_HALF, -WIN_HALF)
+wx0, wy0 = Q(-WIN_HALF, WIN_HALF)
+wx1, wy1 = Q(WIN_HALF, -WIN_HALF)
 rect(wx0, wy0, wx1 - wx0, wy1 - wy0, STEEL, STEEL_S, 1)
-nx0, ny0 = Q(-NOTCH_HALF, -WIN_HALF); nx1, ny1 = Q(NOTCH_HALF, -27)
+nx0, ny0 = Q(-NOTCH_HALF, -WIN_HALF)
+nx1, ny1 = Q(NOTCH_HALF, -27)
 rect(nx0, ny0, nx1 - nx0, ny1 - ny0, "#E4DDD1", "none")
 # hidden pocket edge
-px0, py0 = Q(-POCKET_HALF, POCKET_HALF); px1, py1 = Q(POCKET_HALF, -POCKET_HALF)
+px0, py0 = Q(-POCKET_HALF, POCKET_HALF)
+px1, py1 = Q(POCKET_HALF, -POCKET_HALF)
 rect(px0, py0, px1 - px0, py1 - py0, "none", PETG_S, 1, 'stroke-dasharray="4 3"')
 # foot
 fx, fy = Q(0, 0)
@@ -328,20 +342,24 @@ positions = {"L1": (-307.2, 122.4), "L2": (-62.4, 122.4), "L3": (-62.4, -122.4),
              "R1": (62.4, 122.4), "R2": (307.2, 122.4), "R3": (307.2, -122.4), "R4": (62.4, -122.4)}
 for side in (-1, 1):
     c = side * spacing / 2
-    x0, y0 = S(c - 152.4, 152.4); x1, y1 = S(c + 152.4, -152.4)
+    x0, y0 = S(c - 152.4, 152.4)
+    x1, y1 = S(c + 152.4, -152.4)
     rect(x0, y0, x1 - x0, y1 - y0, ALU, ALU_S, 1.2, 'rx="3"')
     text((x0 + x1) / 2, y1 + 20, "Plate L" if side < 0 else "Plate R", 13, INK, 600, "middle")
-ex0, ey0 = S(-30.5, 147.5); ex1, ey1 = S(30.5, -147.5)
+ex0, ey0 = S(-30.5, 147.5)
+ex1, ey1 = S(30.5, -147.5)
 rect(ex0, ey0, ex1 - ex0, ey1 - ey0, "#E4DDD1", PETG_S, 1.2, 'rx="4"')
 text((ex0 + ex1) / 2, (ey0 + ey1) / 2, "enclosure", 12, PETG_S, 600, "middle",
      f'transform="rotate(-90 {(ex0 + ex1) / 2:.1f} {(ey0 + ey1) / 2:.1f})"')
 for ch, (x, y) in positions.items():
     inward = 1 if ch[0] == "L" else -1          # direction toward the enclosure
-    x0, y0 = S(x - 27, y + 27); x1, y1 = S(x + 27, y - 27)
+    x0, y0 = S(x - 27, y + 27)
+    x1, y1 = S(x + 27, y - 27)
     rect(x0, y0, x1 - x0, y1 - y0, PETG, PETG_S, 1.1, 'rx="3"')
     # notch on the enclosure-facing side
     nx = x + inward * 27
-    a = S(nx - inward * 10, y + 3.5); b = S(nx, y - 3.5)
+    a = S(nx - inward * 10, y + 3.5)
+    b = S(nx, y - 3.5)
     rect(min(a[0], b[0]), a[1], abs(b[0] - a[0]), b[1] - a[1], "#FFFFFF", ACCENT, 1.1)
     # cable to the enclosure wall; outer corners detour around the inner cradle
     wall = -inward * 30.5
