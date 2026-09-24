@@ -36,6 +36,14 @@ Achieved loop rate: — · `drdyMissed` over 10 min: —
 | FQBN for `arduino-cli` | `arduino:zephyr:unoq` (core `arduino:zephyr`, "Arduino Q Boards") | arduino-cli 1.5.1, arduino:zephyr 1.0.0, `arduino-cli board list` | 2026-09-23 |
 | Board ports | USB serial `/dev/cu.usbmodem*` and network port (mDNS `open-fp.local`), both detected as Arduino UNO Q | `arduino-cli board list` | 2026-09-23 |
 
+## Bench tooling
+
+| Item | Answer | Checked against | Date |
+|---|---|---|---|
+| `Monitor` for bench sketches | `Arduino_RouterBridge` 0.4.3 `Monitor` (a `Stream`) sends output to the Linux side as `mon/write` RPCs; read it with `arduino-app-cli monitor` | library source `src/monitor.h` | 2026-09-24 |
+| `bench/ads1220_single` builds | compiles for `arduino:zephyr:unoq` (89 KB flash, 36 KB RAM) | arduino-cli 1.5.1, arduino:zephyr 1.0.0, Arduino_RouterBridge 0.4.3 | 2026-09-24 |
+| USB upload | `arduino-cli upload` for the UNO Q goes through `adb` using the port's serial number, so it needs the board's USB port (`tools/bench/flash.sh` finds it). **Not yet run end to end:** the board was unplugged | arduino-cli upload error output | 2026-09-24 |
+
 ## Performance
 
 | Item | Result | Checked against | Date |

@@ -1,6 +1,6 @@
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["app/python", "tools/sim"]
+pythonpath = ["app/python", "tools/sim", "tools/bench"]
 addopts = "-q"
 filterwarnings = ["ignore:Using `httpx` with `starlette.testclient` is deprecated"]
 

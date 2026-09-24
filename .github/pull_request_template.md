@@ -40,7 +40,7 @@ Every PR must describe the manual testing a human performed. Be specific:
 - [ ] **Manual testing described** — I documented what I verified by hand above
 - [ ] Python tests pass (`pytest`)
 - [ ] Ruff passes (`ruff check app/python tools tests docs/img`)
-- [ ] Pylint passes (`PYTHONPATH=app/python:tools/sim pylint app/python/open_fp tools/sim --fail-under=9`)
+- [ ] Pylint passes (`PYTHONPATH=app/python:tools/sim:tools/bench pylint app/python/open_fp tools/sim tools/bench --fail-under=9`)
 - [ ] Hardware changes recorded in `docs/VERIFIED.md` (measurements, fit checks, pin changes)
 - [ ] Generated files regenerated and committed (e.g. `docs/img/corner-assembly.svg`, CAD STL/STEP)
 - [ ] Updated docs if needed
