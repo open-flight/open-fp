@@ -108,7 +108,7 @@ jobs:
             // Python that the tests cover: the processing package and the simulator.
             const isSource = (f) =>
               !isTest(f) &&
-              (/^app\/python\/open_fp\/.*\.py$/.test(f) || /^tools\/sim\/.*\.py$/.test(f));
+              (/^app\/python\/open_fp\/.*\.py$/.test(f) || /^tools\/(sim|bench)\/.*\.py$/.test(f));
 
             const changed = files
               .filter((f) => f.status !== "removed")

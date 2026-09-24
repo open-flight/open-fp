@@ -209,4 +209,4 @@ With the UNO Q **unplugged**:
 2. On each board, measure **AIN0 to GND** and **AIN1 to GND**. Both should read close to **1.65 V** with nobody on the plates. Then measure **AIN0 to AIN1** directly: it should be within about 10 mV. More than ~20 mV uses up too much of the ADC's ±25.8 mV input range, so record it and check that cell's wiring.
 3. Pressing a cell by hand moves AIN0 by well under 1 mV. Most multimeters won't show that, so don't worry if you see nothing. The bench sketch in step 5 shows it clearly as thousands of counts.
 4. If a board's AIN0 sits at 0 V or 3.3 V, the centre tap isn't connected or E+/E− isn't connected. Recheck step 7.
-5. Then flash the bench sketch (`bench/ads1220_single`, milestone M1). It confirms each board's register readback and prints raw counts. Record the unloaded mean and noise in [`VERIFIED.md`](VERIFIED.md).
+5. Then run the one-cell bench test: [`bench-single-cell.md`](bench-single-cell.md). It flashes `bench/ads1220_single`, checks the register readback, and measures the unloaded reading, noise and press response.
