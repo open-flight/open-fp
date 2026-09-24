@@ -42,13 +42,15 @@ class ClockMapper:
         self.window_s = window_s
         self.n_bins = n_bins
         self.fixed_latency_s = fixed_latency_s
-        self.reset()
+        self._unwrap = Unwrapper()
+        self._pts: deque[tuple[float, float]] = deque()   # (mcu_s, host - mcu_s)
+        self._fit: tuple[float, float] | None = None       # offset = a + b * mcu_s
 
     def reset(self):
         """Forget everything, e.g. after an MCU restart."""
         self._unwrap = Unwrapper()
-        self._pts: deque[tuple[float, float]] = deque()   # (mcu_s, host - mcu_s)
-        self._fit: tuple[float, float] | None = None       # offset = a + b * mcu_s
+        self._pts = deque()
+        self._fit = None
 
     def update(self, mcu_us: int, host_arrival_s: float) -> None:
         mcu_s = self._unwrap.unwrap(mcu_us) / 1e6

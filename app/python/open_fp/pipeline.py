@@ -75,8 +75,9 @@ class _RawHistory:
 class Pipeline:
     RATE_HZ = 200.0
 
-    def __init__(self, cfg: Config, cal: Calibration | None = None, clock_latency_s: float = 0.0,
-                 auto_zero_n: float = 20.0, auto_zero_after_s: float = 3.0, auto_zero_tau_s: float = 5.0):
+    def __init__(self, cfg: Config, cal: Calibration | None = None, *,
+                 clock_latency_s: float = 0.0, auto_zero_n: float = 20.0,
+                 auto_zero_after_s: float = 3.0, auto_zero_tau_s: float = 5.0):
         self.cfg = cfg
         self.stats = Stats()
         self.seq = SequenceTracker()
@@ -89,6 +90,7 @@ class Pipeline:
         self._quiet_s = 0.0
         self._last_arrival = 0.0
         self._last_flag_t = {FLAG_SATURATION: -math.inf, FLAG_DRDY_MISSED: -math.inf}
+        self.tares = np.zeros(N_CH)
         self.set_calibration(cal or Calibration.default())
         self.set_config(cfg)
 
@@ -153,7 +155,8 @@ class Pipeline:
         loaded = {p: np.where(np.isnan(cop[p][:, :1]), 0.0, fz[p][:, None]) for p in ("L", "R")}
         w = loaded["L"] + loaded["R"]
         with np.errstate(invalid="ignore", divide="ignore"):
-            cop["C"] = (loaded["L"] * np.nan_to_num(cop["L"]) + loaded["R"] * np.nan_to_num(cop["R"])) / w
+            weighted = sum(loaded[p] * np.nan_to_num(cop[p]) for p in ("L", "R"))
+            cop["C"] = weighted / w
             lead = 100.0 * fz[self.cfg.lead_plate] / total
         cop["C"][w[:, 0] <= 0] = np.nan
         lead[total < self.cfg.cop_min_force_n] = np.nan

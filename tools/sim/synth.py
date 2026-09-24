@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 
 import numpy as np
 
-from open_fp.calibration import G, Calibration
+from open_fp.calibration import Calibration, G
 from open_fp.config import N_CH, Config
 from open_fp.protocol import Batch
 
@@ -84,7 +84,7 @@ def _zeros2(n):
     return np.zeros((n, 2))
 
 
-def _seg_empty(duration, rng, **_):
+def _seg_empty(duration, _rng, **_):
     t = _times(duration)
     return _Seg(np.full(len(t), np.nan), np.zeros(len(t)), _zeros2(len(t)), _zeros2(len(t)))
 
@@ -97,7 +97,7 @@ def _seg_stance(duration, rng, lead=55.0, **_):
     return _Seg(lead + sway, np.ones(len(t)), off, off.copy())
 
 
-def _seg_step_on(duration, rng, lead=55.0, **_):
+def _seg_step_on(duration, _rng, lead=55.0, **_):
     t = _times(duration)
     total = _keyframes(t, [(0, 0.0), (duration * 0.6, 1.0)])
     return _Seg(np.full(len(t), lead), total, _zeros2(len(t)), _zeros2(len(t)))
@@ -126,20 +126,20 @@ def _seg_swing(duration, rng, address_s=2.0, tempo=None, **_):
     return _Seg(lead, total, np.stack([zeros, lead_y], 1), np.stack([zeros, trail_y], 1), [swing])
 
 
-def _seg_sway(duration, rng, amp=15.0, freq=0.4, **_):
+def _seg_sway(duration, _rng, amp=15.0, freq=0.4, **_):
     t = _times(duration)
     lead = 50 + amp * np.sin(2 * np.pi * freq * t)
     return _Seg(lead, np.ones(len(t)), _zeros2(len(t)), _zeros2(len(t)))
 
 
-def _seg_shuffle(duration, rng, **_):
+def _seg_shuffle(duration, _rng, **_):
     t = _times(duration)
     lead = _keyframes(t, [(0, 55), (0.5, 55), (0.65, 0), (0.95, 0), (1.1, 55), (1.8, 55),
                           (1.95, 100), (2.25, 100), (2.4, 55)])
     return _Seg(lead, np.ones(len(t)), _zeros2(len(t)), _zeros2(len(t)))
 
 
-def _seg_press(duration, rng, **_):
+def _seg_press(duration, _rng, **_):
     """Fast shift onto the lead foot with no backswing first (e.g. leaning forward)."""
     t = _times(duration)
     lead = _keyframes(t, [(0, 55), (0.5, 55), (0.7, 85), (1.5, 85), (2.5, 55)])
@@ -189,8 +189,9 @@ def generate(scenarios: list[Scenario], cfg: Config, *, cal: Calibration | None 
 
     pos = np.asarray(cfg.positions())
     centre = {p: pos[cfg.plate_channels(p)].mean(axis=0) for p in ("L", "R")}
-    forces = (corner_forces(cfg, cfg.lead_plate, centre[cfg.lead_plate] + lead_off, total_n * frac)
-              + corner_forces(cfg, cfg.trail_plate, centre[cfg.trail_plate] + trail_off, total_n * (1 - frac)))
+    lp, tp = cfg.lead_plate, cfg.trail_plate
+    forces = (corner_forces(cfg, lp, centre[lp] + lead_off, total_n * frac)
+              + corner_forces(cfg, tp, centre[tp] + trail_off, total_n * (1 - frac)))
 
     cal = cal or Calibration(tares=rng.uniform(-50_000, 50_000, N_CH).tolist(),
                              gains=Calibration.default().gains)

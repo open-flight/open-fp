@@ -3,3 +3,38 @@ testpaths = ["tests"]
 pythonpath = ["app/python", "tools/sim"]
 addopts = "-q"
 filterwarnings = ["ignore:Using `httpx` with `starlette.testclient` is deprecated"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]  # line length is checked by pylint
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+known-first-party = ["open_fp", "synth", "sim_server"]
+
+[tool.pylint.main]
+py-version = "3.12"
+
+[tool.pylint.messages_control]
+# Same exceptions as open-flight/openflight.
+disable = [
+    "too-many-instance-attributes",
+    "too-many-public-methods",
+    "too-many-locals",
+    "too-many-statements",
+    "import-outside-toplevel",
+    "broad-exception-caught",
+    "invalid-name",
+    "duplicate-code",
+]
+
+[tool.pylint.design]
+# Allow a few keyword-only tuning knobs; positional arguments stay at the default limit of 5.
+max-args = 7
+
+[tool.pylint.format]
+max-line-length = 100

@@ -11,6 +11,7 @@ import time
 from collections import deque
 from dataclasses import dataclass
 from datetime import datetime
+from typing import NamedTuple
 
 import numpy as np
 
@@ -95,6 +96,17 @@ class Swing:
         }
 
 
+class _Tick(NamedTuple):
+    """One 200 Hz sample as the state machine sees it."""
+    t: float
+    total: float          # N, both plates
+    f_lead: float
+    f_trail: float
+    lead: float           # lead % of total
+    vx: float             # lateral CoP speed, mm/s (signed)
+    v2: float             # CoP speed, mm/s
+
+
 @dataclass
 class Event:
     kind: str                      # "state" | "swing_complete" | "swing_updated"
@@ -102,7 +114,7 @@ class Event:
     state: str | None = None
 
 
-def analyze(a: dict, cfg: Config, bw_n: float, ms_i: int, trig_i: int,
+def analyze(a: dict, cfg: Config, bw_n: float, *, ms_i: int, trig_i: int,
             impact_i: int | None = None) -> tuple[dict, dict]:
     """Detect force events and compute metrics on a captured swing's arrays."""
     th = cfg.swing
@@ -138,8 +150,8 @@ def analyze(a: dict, cfg: Config, bw_n: float, ms_i: int, trig_i: int,
     def at(i):
         return None if i is None else float(t[i])
 
-    events = {"motion_start": at(ms_i), "max_trail": at(mt), "transition": at(tr), "max_lead": at(ml),
-              "finish": at(fin), "impact": at(impact_i), "trigger": at(trig_i)}
+    events = {"motion_start": at(ms_i), "max_trail": at(mt), "transition": at(tr),
+              "max_lead": at(ml), "finish": at(fin), "impact": at(impact_i), "trigger": at(trig_i)}
 
     lp, tp = cfg.lead_plate, cfg.trail_plate
     lead_cop, trail_cop = a[f"cop_{lp}"], a[f"cop_{tp}"]
@@ -198,7 +210,16 @@ class SwingDetector:
         self._total_ema: float | None = None
         self._quiet_since: float | None = None
         self._quiet: deque[tuple[float, float, float]] = deque()   # (t, total, lead)
-        self._reset_swing()
+        self._quiet_for = 0.0
+        self._address_lead: float | None = None
+        # per-swing state, cleared by _reset_swing()
+        self._motion_start: float | None = None
+        self._trigger: float | None = None
+        self._impact: float | None = None
+        self._impact_source: str | None = None
+        self._run_start: float | None = None
+        self._last_slow_t: float | None = None
+        self._min_lead = math.inf
 
     def set_config(self, cfg: Config):
         self.cfg = cfg
@@ -209,7 +230,7 @@ class SwingDetector:
 
     def update(self, s: Samples) -> list[Event]:
         events: list[Event] = []
-        if not len(s):
+        if len(s) == 0:
             return events
         self._hist.append(s)
         while self._hist and s.t[-1] - self._hist[0].t[-1] > HISTORY_S:
@@ -218,8 +239,9 @@ class SwingDetector:
         for i in range(len(s)):
             t = float(s.t[i])
             vx, v2 = self._speeds(t, s.cop["C"][i])
-            self._step(t, float(s.fz_total[i]), float(s.fz[lead_plate][i]), float(s.fz[trail_plate][i]),
-                       float(s.lead_pct[i]), vx, v2, events)
+            tick = _Tick(t, float(s.fz_total[i]), float(s.fz[lead_plate][i]),
+                         float(s.fz[trail_plate][i]), float(s.lead_pct[i]), vx, v2)
+            self._step(tick, events)
         return events
 
     def arm(self) -> bool:
@@ -242,7 +264,8 @@ class SwingDetector:
 
     def mark_impact(self, t_host: float, source: str = "shot") -> list[Event]:
         """Label impact at host time `t_host` in the current or most recent swing."""
-        if self.state == "swinging" and self._motion_start is not None and t_host >= self._motion_start:
+        swinging = self.state == "swinging" and self._motion_start is not None
+        if swinging and t_host >= self._motion_start:
             if self._trigger is None:
                 self._trigger = t_host
             self._impact, self._impact_source = t_host, source
@@ -252,8 +275,8 @@ class SwingDetector:
             t = sw.arrays["t"]
             ms_i = self._index(t, sw.events["motion_start"])
             trig_i = self._index(t, sw.events["trigger"])
-            sw.events, sw.metrics = analyze(sw.arrays, self.cfg, sw.bw_n, ms_i, trig_i,
-                                            self._index(t, t_host - sw.t0_host))
+            sw.events, sw.metrics = analyze(sw.arrays, self.cfg, sw.bw_n, ms_i=ms_i, trig_i=trig_i,
+                                            impact_i=self._index(t, t_host - sw.t0_host))
             sw.impact_source = source
             return [Event("swing_updated", swing=sw)]
         return []
@@ -278,86 +301,99 @@ class SwingDetector:
         v = (self._sxy - p0) / (t - t0)
         return float(v[0]), float(np.hypot(*v))
 
-    def _step(self, t, total, f_lead, f_trail, lead, vx, v2, events):
+    def _step(self, k: _Tick, events: list[Event]) -> None:
         th = self.cfg.swing
-        prev_t, self._last_t = self._last_t, t
-        dt = t - prev_t if prev_t is not None else 0.0
-        bw = self.bw_n
-        idle_thr = th.idle_total_pct_bw / 100 * bw if bw else th.idle_total_n
-
-        if total < idle_thr:
+        prev_t, self._last_t = self._last_t, k.t
+        dt = k.t - prev_t if prev_t is not None else 0.0
+        idle_thr = th.idle_total_pct_bw / 100 * self.bw_n if self.bw_n else th.idle_total_n
+        if k.total < idle_thr:
             self._quiet_since, self._total_ema = None, None
             self._quiet.clear()
             if self.state != "idle":
                 self._reset_swing()
                 self._set_state("idle", events)
             return
+        quiet = self._update_quiet(k, dt)
+        if self.state in ("idle", "review", "address"):
+            self._step_waiting(quiet, events)
+        elif self.state == "armed":
+            self._step_armed(k, quiet, events)
+        elif self.state == "swinging":
+            self._step_swinging(k, events)
 
-        a = dt / (TOTAL_EMA_TAU_S + dt) if self._total_ema is not None else 1.0
-        self._total_ema = total if self._total_ema is None else self._total_ema + a * (total - self._total_ema)
-        quiet = (min(f_lead, f_trail) > th.address_foot_pct / 100 * total
-                 and abs(total - self._total_ema) <= th.address_total_tol_pct / 100 * self._total_ema
-                 and v2 < th.address_cop_speed_mm_s)
+    def _update_quiet(self, k: _Tick, dt: float) -> bool:
+        """Track whether the golfer is standing still at address; returns this sample's verdict."""
+        th = self.cfg.swing
+        if self._total_ema is None:
+            self._total_ema = k.total
+        else:
+            self._total_ema += dt / (TOTAL_EMA_TAU_S + dt) * (k.total - self._total_ema)
+        steady = abs(k.total - self._total_ema) <= th.address_total_tol_pct / 100 * self._total_ema
+        quiet = (min(k.f_lead, k.f_trail) > th.address_foot_pct / 100 * k.total
+                 and steady and k.v2 < th.address_cop_speed_mm_s)
         if quiet:
             if self._quiet_since is None:
-                self._quiet_since = t
-            self._quiet.append((t, total, lead))
-            while self._quiet and t - self._quiet[0][0] > th.address_hold_s:
+                self._quiet_since = k.t
+            self._quiet.append((k.t, k.total, k.lead))
+            while self._quiet and k.t - self._quiet[0][0] > th.address_hold_s:
                 self._quiet.popleft()
         else:
             self._quiet_since = None
             self._quiet.clear()
-        quiet_for = t - self._quiet_since if self._quiet_since is not None else 0.0
+        self._quiet_for = k.t - self._quiet_since if self._quiet_since is not None else 0.0
+        return quiet
 
-        if self.state in ("idle", "review", "address"):
-            if quiet_for >= th.address_hold_s:
-                self._arm(events)
-            elif quiet_for >= ADDRESS_ENTER_S and self.state != "address":
-                self._set_state("address", events)
-            elif not quiet and self.state == "address":
-                self._set_state("idle", events)
+    def _step_waiting(self, quiet: bool, events: list[Event]) -> None:
+        """idle / review / address: arm once the golfer holds still long enough."""
+        if self._quiet_for >= self.cfg.swing.address_hold_s:
+            self._arm(events)
+        elif self._quiet_for >= ADDRESS_ENTER_S and self.state != "address":
+            self._set_state("address", events)
+        elif not quiet and self.state == "address":
+            self._set_state("idle", events)
+
+    def _step_armed(self, k: _Tick, quiet: bool, events: list[Event]) -> None:
+        """armed: start a swing on sustained lateral CoP motion."""
+        th = self.cfg.swing
+        if quiet:
+            self._address_lead = float(np.mean([q[2] for q in self._quiet]))
+        if not math.isnan(k.v2) and k.v2 < th.address_cop_speed_mm_s:
+            self._last_slow_t = k.t
+        if math.isnan(k.vx) or abs(k.vx) <= th.motion_speed_mm_s:
+            self._run_start = None
             return
+        if self._run_start is None:
+            self._run_start = k.t
+        if k.t - self._run_start >= th.motion_sustain_s:
+            slow = self._last_slow_t
+            self._motion_start = slow if slow is not None else self._run_start
+            self._min_lead = k.lead
+            self._set_state("swinging", events)
 
-        if self.state == "armed":
-            if quiet:
-                self._address_lead = float(np.mean([q[2] for q in self._quiet]))
-            if not math.isnan(v2) and v2 < th.address_cop_speed_mm_s:
-                self._last_slow_t = t
-            if not math.isnan(vx) and abs(vx) > th.motion_speed_mm_s:
-                if self._run_start is None:
-                    self._run_start = t
-                if t - self._run_start >= th.motion_sustain_s:
-                    self._motion_start = self._last_slow_t if self._last_slow_t is not None else self._run_start
-                    self._min_lead = lead
-                    self._set_state("swinging", events)
-            else:
-                self._run_start = None
+    def _step_swinging(self, k: _Tick, events: list[Event]) -> None:
+        """swinging: wait for the downswing trigger, then capture until post-trigger time."""
+        th = self.cfg.swing
+        if not math.isnan(k.lead):
+            self._min_lead = min(self._min_lead, k.lead)
+        if self._trigger is not None:
+            start = self._motion_start - th.pre_roll_s
+            if k.t >= self._trigger + th.post_trigger_s or k.t - start >= th.max_capture_s:
+                self._finalize(k.t, events)
             return
-
-        if self.state == "swinging":
-            if not math.isnan(lead):
-                self._min_lead = min(self._min_lead, lead)
-            if self._trigger is None:
-                if min(f_lead, f_trail) < th.min_foot_pct_bw / 100 * (bw or total):
-                    self._reset_swing()
-                    self._set_state("idle", events)
-                    return
-                if quiet_for >= th.address_hold_s:        # settled back without swinging
-                    self._reset_swing()
-                    self._arm(events)
-                    return
-                if t - self._motion_start > th.max_capture_s - th.pre_roll_s - th.post_trigger_s:
-                    self._reset_swing()
-                    self._set_state("idle", events)
-                    return
-                backswing = (self._address_lead is not None
-                             and self._min_lead <= self._address_lead - th.min_backswing_shift_pct)
-                if backswing and not math.isnan(vx) and vx * self.cfg.lead_dir_x > th.trigger_speed_mm_s:
-                    self._trigger = t
-            else:
-                start = self._motion_start - th.pre_roll_s
-                if t >= self._trigger + th.post_trigger_s or t - start >= th.max_capture_s:
-                    self._finalize(t, events)
+        if min(k.f_lead, k.f_trail) < th.min_foot_pct_bw / 100 * (self.bw_n or k.total):
+            # a foot came off the plate: stepping, not swinging
+            self._reset_swing()
+            self._set_state("idle", events)
+        elif self._quiet_for >= th.address_hold_s:  # settled back without swinging
+            self._reset_swing()
+            self._arm(events)
+        elif k.t - self._motion_start > th.max_capture_s - th.pre_roll_s - th.post_trigger_s:
+            self._reset_swing()
+            self._set_state("idle", events)
+        elif (self._address_lead is not None
+              and self._min_lead <= self._address_lead - th.min_backswing_shift_pct
+              and not math.isnan(k.vx) and k.vx * self.cfg.lead_dir_x > th.trigger_speed_mm_s):
+            self._trigger = k.t
 
     # -- helpers -------------------------------------------------------------
 
@@ -378,7 +414,6 @@ class SwingDetector:
         self._impact_source = None
         self._run_start = self._last_slow_t = None
         self._min_lead = math.inf
-        self._address_lead = getattr(self, "_address_lead", None)
 
     @staticmethod
     def _index(t: np.ndarray, rel: float | None) -> int | None:
@@ -403,11 +438,13 @@ class SwingDetector:
         trig_i = self._index(t, self._trigger - t0)
         imp_i = self._index(t, self._impact - t0) if self._impact is not None else None
         bw = self.bw_n or float(np.nanmedian(s.fz_total[m]))
-        ev, metrics = analyze(arrays, self.cfg, bw, ms_i, trig_i, imp_i)
+        ev, metrics = analyze(arrays, self.cfg, bw, ms_i=ms_i, trig_i=trig_i, impact_i=imp_i)
         created = self.now_fn()
-        swing = Swing(id=self._new_id(created), created=datetime.fromtimestamp(created).isoformat(timespec="seconds"),
+        swing = Swing(id=self._new_id(created),
+                      created=datetime.fromtimestamp(created).isoformat(timespec="seconds"),
                       golfer=self.cfg.golfer, bw_n=bw, t0_host=t0, arrays=arrays, events=ev,
-                      metrics=metrics, impact_source=self._impact_source if self._impact is not None else None)
+                      metrics=metrics,
+                      impact_source=self._impact_source if self._impact is not None else None)
         self.last_swing = swing
         self._reset_swing()
         self._quiet_since = None        # re-address needs a fresh quiet period after review
@@ -416,7 +453,8 @@ class SwingDetector:
         events.append(Event("swing_complete", swing=swing))
 
     def _new_id(self, created: float) -> str:
-        base = datetime.fromtimestamp(created).strftime("%Y%m%d-%H%M%S-") + f"{int(created * 1000) % 1000:03d}"
+        millis = int(created * 1000) % 1000
+        base = datetime.fromtimestamp(created).strftime("%Y%m%d-%H%M%S-") + f"{millis:03d}"
         sid, k = base, 1
         while sid in self._ids:
             k += 1
