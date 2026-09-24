@@ -29,7 +29,7 @@ Print on the Bambu H2D. The STL files are in `cad/stl/`, the STEP files in `cad/
 
 | File | Qty | Material | Settings | Orientation |
 |---|---|---|---|---|
-| `01_corner_cradle` | 8 | PETG/ABS | 5 walls, 40 % gyroid | open (pocket) side down |
+| `01_corner_cradle` | 8 | PETG/ABS | 5 walls, 40 % gyroid, ≥4 top layers | pocket side **up** (plate face on bed), see note below |
 | `02_cradle_retainer` | 8 | PETG/ABS | 3 walls | flat |
 | `03_centre_enclosure_base` | 1 | PETG/ABS | 3 walls, 20 % | open side up |
 | `04_centre_enclosure_lid` | 1 | PETG/ABS | 3 walls, 20 % | vents up |
@@ -39,5 +39,7 @@ Print on the Bambu H2D. The STL files are in `cad/stl/`, the STEP files in `cad/
 | `09_drill_template_b` | 1 | any | 100 % | lips up |
 | `10_hub_foot_tpu` | 8 | TPU 95A | 100 % | flat |
 | `08_assembly_two_plates.step` | — | reference only | | |
+
+**Cradle orientation:** print pocket side up, with the plate-mounting face on the bed. This changes the original plan of pocket side down. Pocket-up prints with no supports and no bridges. The only overhang is the blind end of the two M4 insert holes. The pocket seat, which carries the cell's frame and all the load, prints as a solid top surface instead of a 35 mm bridge that can sag. The plate-mounting face also comes out bed-flat. Use elephant-foot compensation so the M4 insert holes stay Ø5.6. After heat-setting the inserts, scrape the plate face flush.
 
 **Before printing all eight cradles,** measure a load cell and print one cradle to check the fit.
