@@ -1,0 +1,11 @@
+# Dev machine, CI and simulator dependencies. The board's app container already ships
+# numpy and fastapi (see docs/VERIFIED.md), so nothing here is installed on the board.
+numpy==2.5.3
+fastapi==0.141.1
+uvicorn==0.53.0
+python-socketio==5.17.0
+fastapi-socketio==0.0.10
+httpx==0.28.1
+pytest==9.1.1
+ruff==0.16.8
+pylint==4.0.9
