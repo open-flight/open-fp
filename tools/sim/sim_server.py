@@ -19,6 +19,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT / "app" / "python"), str(Path(__file__).parent)]
+# The imports below need the sys.path entries above, so they can't be at the top.
+# pylint: disable=wrong-import-position
 
 import numpy as np  # noqa: E402
 import uvicorn  # noqa: E402
@@ -81,7 +83,8 @@ async def stream(core: Core, ui: SimWebUI, args) -> None:
             due = start + t_end / args.speed
             await asyncio.sleep(max(0.0, due - time.monotonic()))
             core.on_payload(encode_batch(b), time.monotonic())
-            while shots and shots[0] + 0.03 <= t_end:        # shot message arrives ~30 ms after impact
+            # the shot message arrives ~30 ms after impact
+            while shots and shots[0] + 0.03 <= t_end:
                 impact_mono = start + shots.pop(0) / args.speed
                 core.shot_event((time.time() - (time.monotonic() - impact_mono)) * 1000)
             for event, payload in core.tick(time.monotonic()):
@@ -91,15 +94,18 @@ async def stream(core: Core, ui: SimWebUI, args) -> None:
 
 
 def main():
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--port", type=int, default=7070,
                     help="default 7070: macOS AirPlay Receiver already uses 7000")
     ap.add_argument("--host", default="0.0.0.0")
     ap.add_argument("--data", default=str(Path(__file__).parent / ".data"))
     ap.add_argument("--seed", type=int, default=None)
-    ap.add_argument("--swings", type=int, default=8, help="swings per generated session before it loops")
+    ap.add_argument("--swings", type=int, default=8,
+                    help="swings per generated session before it loops")
     ap.add_argument("--bw-kg", type=float, default=82.0)
-    ap.add_argument("--shot-prob", type=float, default=0.5, help="fraction of swings that get a shot event")
+    ap.add_argument("--shot-prob", type=float, default=0.5,
+                    help="fraction of swings that get a shot event")
     ap.add_argument("--speed", type=float, default=1.0, help="playback speed (1 = real time)")
     args = ap.parse_args()
 
@@ -109,7 +115,7 @@ def main():
     core = Core(data_dir)
 
     @contextlib.asynccontextmanager
-    async def lifespan(app):
+    async def lifespan(_app):
         task = asyncio.create_task(stream(core, ui, args))
         yield
         task.cancel()

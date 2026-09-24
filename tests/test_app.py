@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 
 from open_fp.app import Core
-from open_fp.calibration import G, Calibration, placement_spots, save_calibration
+from open_fp.calibration import Calibration, G, placement_spots, save_calibration
 from open_fp.config import Config
 from open_fp.protocol import encode_batch
 from synth import RATE_HZ, Scenario, corner_forces, generate, to_batches

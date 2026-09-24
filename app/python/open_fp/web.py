@@ -86,8 +86,9 @@ def register(ui, core: Core) -> None:
     # Registered before /api/swings/{swing_id} so the .csv suffix isn't taken as an id.
     @api("GET", "/api/swings/{swing_id}.csv")
     def swing_csv(swing_id: str):
+        disposition = f'attachment; filename="swing-{swing_id}.csv"'
         return Response(core.swing_csv(swing_id), media_type="text/csv",
-                        headers={"Content-Disposition": f'attachment; filename="swing-{swing_id}.csv"'})
+                        headers={"Content-Disposition": disposition})
 
     @api("GET", "/api/swings/{swing_id}")
     def swing(swing_id: str):
