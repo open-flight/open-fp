@@ -18,7 +18,7 @@
 <text x="40.0" y="70.0" font-size="14" font-weight="400" fill="#5F6B78" text-anchor="start" >One of eight. Load path: plate → cradle → cell frame → cell centre → TPU foot → floor.</text>
 <text x="40.0" y="116.0" font-size="16" font-weight="700" fill="#1F2933" text-anchor="start" >1 · Exploded, as installed</text>
 <text x="40.0" y="136.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >Cutaway through the two plate screws. Plate on top, floor at the bottom. Parts move along the dashed line.</text>
-<line x1="300.0" y1="165.0" x2="300.0" y2="790.0" stroke="#B8C0C8" stroke-width="1" stroke-dasharray="6 5"/>
+<line x1="300.0" y1="165.0" x2="300.0" y2="815.0" stroke="#B8C0C8" stroke-width="1" stroke-dasharray="6 5"/>
 <polygon points="141.0,174.7 189.0,174.7 177.0,186.7 177.0,246.7 153.0,246.7 153.0,186.7" fill="#4A5563" stroke="#4A5563" stroke-width="1" stroke-linejoin="round" />
 <polygon points="411.0,174.7 459.0,174.7 447.0,186.7 447.0,246.7 423.0,246.7 423.0,186.7" fill="#4A5563" stroke="#4A5563" stroke-width="1" stroke-linejoin="round" />
 <rect x="96.0" y="289.7" width="408.0" height="38.1" fill="#C9D1D9" stroke="#6E7B88" stroke-width="1.2" />
@@ -28,27 +28,32 @@
 <rect x="196.2" y="385.8" width="207.6" height="49.2" fill="#E4DDD1" stroke="none" stroke-width="1.2" />
 <rect x="279.0" y="391.8" width="42.0" height="43.2" fill="#FFFFFF" stroke="#C2410C" stroke-width="1.2" stroke-dasharray="4 3"/>
 <polygon points="138.0,367.8 148.2,367.8 148.2,406.8 181.8,406.8 181.8,367.8 418.2,367.8 418.2,406.8 451.8,406.8 451.8,367.8 462.0,367.8 462.0,435.0 403.8,435.0 403.8,385.8 384.0,385.8 384.0,376.8 216.0,376.8 216.0,385.8 196.2,385.8 196.2,435.0 138.0,435.0" fill="url(#hatch)" stroke="#7A7063" stroke-width="1.4" stroke-linejoin="round" />
+<rect x="196.2" y="385.8" width="19.8" height="21.0" fill="url(#hatch)" stroke="#7A7063" stroke-width="1.2" />
+<rect x="384.0" y="385.8" width="19.8" height="21.0" fill="url(#hatch)" stroke="#7A7063" stroke-width="1.2" />
 <rect x="150.6" y="367.8" width="28.8" height="37.2" fill="#C9A227" stroke="#8A6D12" stroke-width="0.8" />
 <rect x="420.6" y="367.8" width="28.8" height="37.2" fill="#C9A227" stroke="#8A6D12" stroke-width="0.8" />
 <rect x="155.4" y="411.0" width="19.2" height="24.0" fill="none" stroke="#7A7063" stroke-width="0.9" stroke-dasharray="3 2"/>
 <rect x="425.4" y="411.0" width="19.2" height="24.0" fill="none" stroke="#7A7063" stroke-width="0.9" stroke-dasharray="3 2"/>
-<rect x="198.0" y="475.8" width="204.0" height="46.8" fill="#AEB8C2" stroke="#56626F" stroke-width="1.3" rx="2"/>
-<line x1="243.0" y1="481.8" x2="243.0" y2="516.6" stroke="#56626F" stroke-width="1.2" />
-<line x1="357.0" y1="481.8" x2="357.0" y2="516.6" stroke="#56626F" stroke-width="1.2" />
-<rect x="270.0" y="522.6" width="60.0" height="6.0" fill="#AEB8C2" stroke="#56626F" stroke-width="1.2" />
-<rect x="246.0" y="563.6" width="108.0" height="21.0" fill="#2EC4B6" stroke="#17857B" stroke-width="1.3" rx="2"/>
-<rect x="138.0" y="630.0" width="78.0" height="9.6" fill="url(#hatch)" stroke="#7A7063" stroke-width="1.3" />
-<rect x="384.0" y="630.0" width="78.0" height="9.6" fill="url(#hatch)" stroke="#7A7063" stroke-width="1.3" />
-<polygon points="151.8,699.6 178.2,699.6 171.0,692.4 171.0,669.6 159.0,669.6 159.0,692.4" fill="#4A5563" stroke="#4A5563" stroke-width="1" stroke-linejoin="round" />
-<polygon points="421.8,699.6 448.2,699.6 441.0,692.4 441.0,669.6 429.0,669.6 429.0,692.4" fill="#4A5563" stroke="#4A5563" stroke-width="1" stroke-linejoin="round" />
-<rect x="96.0" y="745.0" width="408.0" height="24.0" fill="url(#floor)" stroke="#8E8475" stroke-width="1" />
+<rect x="198.0" y="491.8" width="204.0" height="19.2" fill="#AEB8C2" stroke="#56626F" stroke-width="1.3" rx="1.5"/>
+<line x1="237.0" y1="494.2" x2="237.0" y2="508.6" stroke="#56626F" stroke-width="1.2" />
+<line x1="363.0" y1="494.2" x2="363.0" y2="508.6" stroke="#56626F" stroke-width="1.2" />
+<rect x="267.0" y="511.0" width="66.0" height="27.6" fill="#AEB8C2" stroke="#56626F" stroke-width="1.3" rx="1.5"/>
+<rect x="246.0" y="566.6" width="108.0" height="21.0" fill="#2EC4B6" stroke="#17857B" stroke-width="1.3" rx="2"/>
+<rect x="198.0" y="623.0" width="16.2" height="9.0" fill="#2EC4B6" stroke="#17857B" stroke-width="1.1" />
+<rect x="385.8" y="623.0" width="16.2" height="9.0" fill="#2EC4B6" stroke="#17857B" stroke-width="1.1" />
+<rect x="138.0" y="668.0" width="78.0" height="9.6" fill="url(#hatch)" stroke="#7A7063" stroke-width="1.3" />
+<rect x="384.0" y="668.0" width="78.0" height="9.6" fill="url(#hatch)" stroke="#7A7063" stroke-width="1.3" />
+<polygon points="151.8,731.6 178.2,731.6 171.0,724.4 171.0,701.6 159.0,701.6 159.0,724.4" fill="#4A5563" stroke="#4A5563" stroke-width="1" stroke-linejoin="round" />
+<polygon points="421.8,731.6 448.2,731.6 441.0,724.4 441.0,701.6 429.0,701.6 429.0,724.4" fill="#4A5563" stroke="#4A5563" stroke-width="1" stroke-linejoin="round" />
+<rect x="96.0" y="790.0" width="408.0" height="24.0" fill="url(#floor)" stroke="#8E8475" stroke-width="1" />
 <line x1="206.0" y1="236.0" x2="206.0" y2="262.0" stroke="#5F6B78" stroke-width="1.2" marker-end="url(#arrow)"/>
 <line x1="394.0" y1="236.0" x2="394.0" y2="262.0" stroke="#5F6B78" stroke-width="1.2" marker-end="url(#arrow)"/>
-<line x1="300.0" y1="474.0" x2="300.0" y2="440.0" stroke="#5F6B78" stroke-width="1.2" marker-end="url(#arrow)"/>
-<line x1="252.0" y1="578.0" x2="252.0" y2="545.0" stroke="#5F6B78" stroke-width="1.2" marker-end="url(#arrow)"/>
-<line x1="470.0" y1="622.0" x2="470.0" y2="594.0" stroke="#5F6B78" stroke-width="1.2" marker-end="url(#arrow)"/>
-<line x1="206.0" y1="676.0" x2="206.0" y2="646.0" stroke="#5F6B78" stroke-width="1.2" marker-end="url(#arrow)"/>
-<line x1="394.0" y1="676.0" x2="394.0" y2="646.0" stroke="#5F6B78" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="470.0" y1="500.0" x2="470.0" y2="462.0" stroke="#5F6B78" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="225.0" y1="596.0" x2="225.0" y2="570.0" stroke="#5F6B78" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="480.0" y1="624.0" x2="480.0" y2="596.0" stroke="#5F6B78" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="470.0" y1="660.0" x2="470.0" y2="640.0" stroke="#5F6B78" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="206.0" y1="706.0" x2="206.0" y2="680.0" stroke="#5F6B78" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="394.0" y1="706.0" x2="394.0" y2="680.0" stroke="#5F6B78" stroke-width="1.2" marker-end="url(#arrow)"/>
 <line x1="419.0" y1="205.0" x2="524.0" y2="192.0" stroke="#5F6B78" stroke-width="0.8" />
 <circle cx="419.0" cy="205.0" r="2" fill="#5F6B78"/>
 <text x="530.0" y="196.0" font-size="13" font-weight="600" fill="#1F2933" text-anchor="start" >M4 × 12 flat-head ×2</text>
@@ -60,32 +65,36 @@
 <line x1="435.0" y1="380.0" x2="524.0" y2="356.0" stroke="#5F6B78" stroke-width="0.8" />
 <circle cx="435.0" cy="380.0" r="2" fill="#5F6B78"/>
 <text x="530.0" y="360.0" font-size="13" font-weight="600" fill="#1F2933" text-anchor="start" >Cradle, pocket facing DOWN</text>
-<text x="530.0" y="376.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >M4 heat-set inserts in the top face;</text>
-<text x="530.0" y="392.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >28 mm relief: only the frame ring touches</text>
+<text x="530.0" y="376.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >M4 inserts in the top face; frame rests on a</text>
+<text x="530.0" y="392.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >3.5 mm ledge; 28 mm relief clears the tongue</text>
 <line x1="321.0" y1="425.0" x2="524.0" y2="420.0" stroke="#5F6B78" stroke-width="0.8" />
 <circle cx="321.0" cy="425.0" r="2" fill="#5F6B78"/>
 <text x="530.0" y="424.0" font-size="13" font-weight="600" fill="#C2410C" text-anchor="start" >Cable notch (in the pocket's back wall)</text>
 <text x="530.0" y="440.0" font-size="13" font-weight="400" fill="#C2410C" text-anchor="start" >must break through into the pocket</text>
-<line x1="402.0" y1="500.0" x2="524.0" y2="486.0" stroke="#5F6B78" stroke-width="0.8" />
-<circle cx="402.0" cy="500.0" r="2" fill="#5F6B78"/>
-<text x="530.0" y="490.0" font-size="13" font-weight="600" fill="#1F2933" text-anchor="start" >Load cell, centre boss facing DOWN</text>
-<text x="530.0" y="506.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >frame presses up against the pocket ceiling;</text>
-<text x="530.0" y="522.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >wires lie on the bottom face</text>
-<line x1="348.0" y1="572.0" x2="524.0" y2="560.0" stroke="#5F6B78" stroke-width="0.8" />
-<circle cx="348.0" cy="572.0" r="2" fill="#5F6B78"/>
-<text x="530.0" y="564.0" font-size="13" font-weight="600" fill="#1F2933" text-anchor="start" >TPU hub foot</text>
-<text x="530.0" y="580.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >strap sits in its channel, dome in the dimple; CA</text>
-<line x1="420.0" y1="634.0" x2="524.0" y2="624.0" stroke="#5F6B78" stroke-width="0.8" />
-<circle cx="420.0" cy="634.0" r="2" fill="#5F6B78"/>
-<text x="530.0" y="628.0" font-size="13" font-weight="600" fill="#1F2933" text-anchor="start" >Retainer, countersinks facing the floor</text>
-<text x="530.0" y="644.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >notch lines up with the cradle notch</text>
-<line x1="394.0" y1="684.0" x2="524.0" y2="682.0" stroke="#5F6B78" stroke-width="0.8" />
-<circle cx="394.0" cy="684.0" r="2" fill="#5F6B78"/>
-<text x="530.0" y="686.0" font-size="13" font-weight="600" fill="#1F2933" text-anchor="start" >M2 × 5 countersunk ×4</text>
-<text x="530.0" y="702.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >one per corner (two shown)</text>
-<line x1="470.0" y1="755.0" x2="524.0" y2="756.0" stroke="#5F6B78" stroke-width="0.8" />
-<circle cx="470.0" cy="755.0" r="2" fill="#5F6B78"/>
-<text x="530.0" y="760.0" font-size="13" font-weight="600" fill="#1F2933" text-anchor="start" >3/8" rubber flooring</text>
+<line x1="402.0" y1="494.0" x2="524.0" y2="482.0" stroke="#5F6B78" stroke-width="0.8" />
+<circle cx="402.0" cy="494.0" r="2" fill="#5F6B78"/>
+<text x="530.0" y="486.0" font-size="13" font-weight="600" fill="#1F2933" text-anchor="start" >Load cell, strap facing DOWN</text>
+<text x="530.0" y="502.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >frame rests on the ledge; the strap is the</text>
+<text x="530.0" y="518.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >load point; wires lie on the strap side</text>
+<line x1="354.0" y1="590.0" x2="524.0" y2="562.0" stroke="#5F6B78" stroke-width="0.8" />
+<circle cx="354.0" cy="590.0" r="2" fill="#5F6B78"/>
+<text x="530.0" y="566.0" font-size="13" font-weight="600" fill="#1F2933" text-anchor="start" >TPU hub foot</text>
+<text x="530.0" y="582.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >strap sits in its channel, dome in the dimple; CA</text>
+<line x1="402.0" y1="627.0" x2="524.0" y2="616.0" stroke="#5F6B78" stroke-width="0.8" />
+<circle cx="402.0" cy="627.0" r="2" fill="#5F6B78"/>
+<text x="530.0" y="620.0" font-size="13" font-weight="600" fill="#1F2933" text-anchor="start" >1.5 mm TPU shim ring</text>
+<text x="530.0" y="636.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >on the frame edge only; gap over the notch</text>
+<line x1="420.0" y1="672.0" x2="524.0" y2="662.0" stroke="#5F6B78" stroke-width="0.8" />
+<circle cx="420.0" cy="672.0" r="2" fill="#5F6B78"/>
+<text x="530.0" y="666.0" font-size="13" font-weight="600" fill="#1F2933" text-anchor="start" >Retainer, countersinks facing the floor</text>
+<text x="530.0" y="682.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >notch lines up with the cradle notch</text>
+<line x1="394.0" y1="716.0" x2="524.0" y2="712.0" stroke="#5F6B78" stroke-width="0.8" />
+<circle cx="394.0" cy="716.0" r="2" fill="#5F6B78"/>
+<text x="530.0" y="716.0" font-size="13" font-weight="600" fill="#1F2933" text-anchor="start" >M2 × 5 countersunk ×4</text>
+<text x="530.0" y="732.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >one per corner (two shown)</text>
+<line x1="470.0" y1="800.0" x2="524.0" y2="800.0" stroke="#5F6B78" stroke-width="0.8" />
+<circle cx="470.0" cy="800.0" r="2" fill="#5F6B78"/>
+<text x="530.0" y="804.0" font-size="13" font-weight="600" fill="#1F2933" text-anchor="start" >3/8" rubber flooring</text>
 <text x="840.0" y="116.0" font-size="16" font-weight="700" fill="#1F2933" text-anchor="start" >2 · Assembled</text>
 <text x="840.0" y="136.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >Only the TPU foot touches the floor.</text>
 <rect x="819.0" y="185.9" width="442.0" height="41.3" fill="#C9D1D9" stroke="#6E7B88" stroke-width="1.2" />
@@ -97,56 +106,60 @@
 <rect x="927.5" y="246.7" width="224.9" height="53.3" fill="#E4DDD1" stroke="none" stroke-width="1.2" />
 <rect x="1017.2" y="253.2" width="45.5" height="46.8" fill="#FFFFFF" stroke="#C2410C" stroke-width="1.2" stroke-dasharray="4 3"/>
 <polygon points="864.5,227.2 875.5,227.2 875.5,269.4 912.0,269.4 912.0,227.2 1168.0,227.2 1168.0,269.4 1204.5,269.4 1204.5,227.2 1215.5,227.2 1215.5,300.0 1152.5,300.0 1152.5,246.7 1131.0,246.7 1131.0,236.9 949.0,236.9 949.0,246.7 927.5,246.7 927.5,300.0 864.5,300.0" fill="url(#hatch)" stroke="#7A7063" stroke-width="1.4" stroke-linejoin="round" />
+<rect x="927.5" y="246.7" width="21.5" height="22.8" fill="url(#hatch)" stroke="#7A7063" stroke-width="1.2" />
+<rect x="1131.0" y="246.7" width="21.5" height="22.8" fill="url(#hatch)" stroke="#7A7063" stroke-width="1.2" />
 <rect x="878.1" y="227.2" width="31.2" height="40.3" fill="#C9A227" stroke="#8A6D12" stroke-width="0.8" />
 <rect x="1170.7" y="227.2" width="31.2" height="40.3" fill="#C9A227" stroke="#8A6D12" stroke-width="0.8" />
 <rect x="883.4" y="274.0" width="20.8" height="26.0" fill="none" stroke="#7A7063" stroke-width="0.9" stroke-dasharray="3 2"/>
 <rect x="1175.8" y="274.0" width="20.8" height="26.0" fill="none" stroke="#7A7063" stroke-width="0.9" stroke-dasharray="3 2"/>
-<rect x="929.5" y="246.7" width="221.0" height="50.7" fill="#AEB8C2" stroke="#56626F" stroke-width="1.3" rx="2"/>
-<line x1="978.2" y1="253.2" x2="978.2" y2="290.9" stroke="#56626F" stroke-width="1.2" />
-<line x1="1101.8" y1="253.2" x2="1101.8" y2="290.9" stroke="#56626F" stroke-width="1.2" />
-<rect x="1007.5" y="297.4" width="65.0" height="6.5" fill="#AEB8C2" stroke="#56626F" stroke-width="1.2" />
-<rect x="981.5" y="303.9" width="117.0" height="22.8" fill="#2EC4B6" stroke="#17857B" stroke-width="1.3" rx="2"/>
+<rect x="929.5" y="269.4" width="221.0" height="20.8" fill="#AEB8C2" stroke="#56626F" stroke-width="1.3" rx="1.5"/>
+<line x1="971.8" y1="272.1" x2="971.8" y2="287.6" stroke="#56626F" stroke-width="1.2" />
+<line x1="1108.2" y1="272.1" x2="1108.2" y2="287.6" stroke="#56626F" stroke-width="1.2" />
+<rect x="1004.2" y="290.2" width="71.5" height="29.9" fill="#AEB8C2" stroke="#56626F" stroke-width="1.3" rx="1.5"/>
+<rect x="981.5" y="320.1" width="117.0" height="22.8" fill="#2EC4B6" stroke="#17857B" stroke-width="1.3" rx="2"/>
+<rect x="929.5" y="290.2" width="17.5" height="9.8" fill="#2EC4B6" stroke="#17857B" stroke-width="1.1" />
+<rect x="1133.0" y="290.2" width="17.5" height="9.8" fill="#2EC4B6" stroke="#17857B" stroke-width="1.1" />
 <rect x="864.5" y="300.0" width="84.5" height="10.4" fill="url(#hatch)" stroke="#7A7063" stroke-width="1.3" />
 <rect x="1131.0" y="300.0" width="84.5" height="10.4" fill="url(#hatch)" stroke="#7A7063" stroke-width="1.3" />
 <polygon points="879.5,310.4 908.0,310.4 900.2,302.6 900.2,277.9 887.2,277.9 887.2,302.6" fill="#4A5563" stroke="#4A5563" stroke-width="1" stroke-linejoin="round" />
 <polygon points="1172.0,310.4 1200.5,310.4 1192.8,302.6 1192.8,277.9 1179.8,277.9 1179.8,302.6" fill="#4A5563" stroke="#4A5563" stroke-width="1" stroke-linejoin="round" />
-<rect x="819.0" y="326.6" width="442.0" height="26.0" fill="url(#floor)" stroke="#8E8475" stroke-width="1" />
-<line x1="854.8" y1="310.4" x2="854.8" y2="326.6" stroke="#C2410C" stroke-width="1.2" marker-start="url(#arrowA)" marker-end="url(#arrowA)"/>
-<text x="846.8" y="322.5" font-size="12" font-weight="600" fill="#C2410C" text-anchor="end" >gap</text>
-<text x="840.0" y="384.0" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start" >The retainer must clear the floor. If it touches, it carries</text>
-<text x="840.0" y="401.0" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start" >load around the cell and the reading drops.</text>
-<text x="840.0" y="456.0" font-size="16" font-weight="700" fill="#1F2933" text-anchor="start" >3 · From below (looking up at the retainer)</text>
-<text x="840.0" y="476.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >Line up the cradle notch, the retainer notch, and the cell's wires.</text>
-<rect x="866.2" y="521.2" width="237.6" height="237.6" fill="#E4DDD1" stroke="#7A7063" stroke-width="1" rx="18"/>
-<polygon points="866.2,521.2 1103.8,521.2 1103.8,758.8 1000.4,758.8 1000.4,701.6 1046.6,701.6 1046.6,578.4 923.4,578.4 923.4,701.6 969.6,701.6 969.6,758.8 866.2,758.8" fill="#F1ECE3" stroke="#7A7063" stroke-width="1.4" stroke-linejoin="round" />
-<rect x="923.4" y="578.4" width="123.2" height="123.2" fill="#AEB8C2" stroke="#56626F" stroke-width="1" />
-<rect x="969.6" y="701.6" width="30.8" height="57.2" fill="#E4DDD1" stroke="none" stroke-width="1.2" />
-<rect x="908.9" y="563.9" width="152.2" height="152.2" fill="none" stroke="#7A7063" stroke-width="1" stroke-dasharray="4 3"/>
-<circle cx="985.0" cy="640.0" r="39.6" fill="#2EC4B6" stroke="#17857B" stroke-width="1.3"/>
-<path d="M1017.6,648.8 Q980.8,681.8 980.8,710.4 L980.8,789.6" fill="none" stroke="#777" stroke-width="3.6" stroke-linecap="round"/>
-<path d="M1017.6,648.8 Q980.8,681.8 980.8,710.4 L980.8,789.6" fill="none" stroke="#D64545" stroke-width="2.4" stroke-linecap="round"/>
-<path d="M1024.6,648.8 Q985.0,681.8 985.0,710.4 L985.0,789.6" fill="none" stroke="#777" stroke-width="3.6" stroke-linecap="round"/>
-<path d="M1024.6,648.8 Q985.0,681.8 985.0,710.4 L985.0,789.6" fill="none" stroke="#222222" stroke-width="2.4" stroke-linecap="round"/>
-<path d="M1031.6,648.8 Q989.2,681.8 989.2,710.4 L989.2,789.6" fill="none" stroke="#777" stroke-width="3.6" stroke-linecap="round"/>
-<path d="M1031.6,648.8 Q989.2,681.8 989.2,710.4 L989.2,789.6" fill="none" stroke="#F4F4F4" stroke-width="2.4" stroke-linecap="round"/>
-<circle cx="886.0" cy="739.0" r="9.680000000000001" fill="#4A5563"/>
-<line x1="881.0" y1="739.0" x2="891.0" y2="739.0" stroke="#FFFFFF" stroke-width="1.2" />
-<circle cx="886.0" cy="541.0" r="9.680000000000001" fill="#4A5563"/>
-<line x1="881.0" y1="541.0" x2="891.0" y2="541.0" stroke="#FFFFFF" stroke-width="1.2" />
-<circle cx="1084.0" cy="739.0" r="9.680000000000001" fill="#4A5563"/>
-<line x1="1079.0" y1="739.0" x2="1089.0" y2="739.0" stroke="#FFFFFF" stroke-width="1.2" />
-<circle cx="1084.0" cy="541.0" r="9.680000000000001" fill="#4A5563"/>
-<line x1="1079.0" y1="541.0" x2="1089.0" y2="541.0" stroke="#FFFFFF" stroke-width="1.2" />
-<line x1="985.0" y1="802.4" x2="985.0" y2="828.4" stroke="#C2410C" stroke-width="1.4" marker-end="url(#arrowA)"/>
-<text x="985.0" y="846.4" font-size="13" font-weight="600" fill="#C2410C" text-anchor="middle" >notch points toward the enclosure</text>
-<line x1="1046.6" y1="604.8" x2="1124.0" y2="556.0" stroke="#5F6B78" stroke-width="0.8" />
-<circle cx="1046.6" cy="604.8" r="2" fill="#5F6B78"/>
+<rect x="819.0" y="342.9" width="442.0" height="26.0" fill="url(#floor)" stroke="#8E8475" stroke-width="1" />
+<line x1="854.8" y1="310.4" x2="854.8" y2="342.9" stroke="#C2410C" stroke-width="1.2" marker-start="url(#arrowA)" marker-end="url(#arrowA)"/>
+<text x="846.8" y="330.6" font-size="12" font-weight="600" fill="#C2410C" text-anchor="end" >gap</text>
+<text x="840.0" y="404.0" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start" >The retainer must clear the floor. If it touches, it carries</text>
+<text x="840.0" y="421.0" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start" >load around the cell and the reading drops.</text>
+<text x="840.0" y="470.0" font-size="16" font-weight="700" fill="#1F2933" text-anchor="start" >3 · From below (looking up at the retainer)</text>
+<text x="840.0" y="490.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >Line up the cradle notch, the retainer notch, and the cell's wires.</text>
+<rect x="866.2" y="531.2" width="237.6" height="237.6" fill="#E4DDD1" stroke="#7A7063" stroke-width="1" rx="18"/>
+<polygon points="866.2,531.2 1103.8,531.2 1103.8,768.8 1000.4,768.8 1000.4,711.6 1046.6,711.6 1046.6,588.4 923.4,588.4 923.4,711.6 969.6,711.6 969.6,768.8 866.2,768.8" fill="#F1ECE3" stroke="#7A7063" stroke-width="1.4" stroke-linejoin="round" />
+<rect x="923.4" y="588.4" width="123.2" height="123.2" fill="#AEB8C2" stroke="#56626F" stroke-width="1" />
+<rect x="969.6" y="711.6" width="30.8" height="57.2" fill="#E4DDD1" stroke="none" stroke-width="1.2" />
+<rect x="908.9" y="573.9" width="152.2" height="152.2" fill="none" stroke="#7A7063" stroke-width="1" stroke-dasharray="4 3"/>
+<circle cx="985.0" cy="650.0" r="39.6" fill="#2EC4B6" stroke="#17857B" stroke-width="1.3"/>
+<path d="M1017.6,658.8 Q980.8,691.8 980.8,720.4 L980.8,799.6" fill="none" stroke="#777" stroke-width="3.6" stroke-linecap="round"/>
+<path d="M1017.6,658.8 Q980.8,691.8 980.8,720.4 L980.8,799.6" fill="none" stroke="#D64545" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M1024.6,658.8 Q985.0,691.8 985.0,720.4 L985.0,799.6" fill="none" stroke="#777" stroke-width="3.6" stroke-linecap="round"/>
+<path d="M1024.6,658.8 Q985.0,691.8 985.0,720.4 L985.0,799.6" fill="none" stroke="#222222" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M1031.6,658.8 Q989.2,691.8 989.2,720.4 L989.2,799.6" fill="none" stroke="#777" stroke-width="3.6" stroke-linecap="round"/>
+<path d="M1031.6,658.8 Q989.2,691.8 989.2,720.4 L989.2,799.6" fill="none" stroke="#F4F4F4" stroke-width="2.4" stroke-linecap="round"/>
+<circle cx="886.0" cy="749.0" r="9.680000000000001" fill="#4A5563"/>
+<line x1="881.0" y1="749.0" x2="891.0" y2="749.0" stroke="#FFFFFF" stroke-width="1.2" />
+<circle cx="886.0" cy="551.0" r="9.680000000000001" fill="#4A5563"/>
+<line x1="881.0" y1="551.0" x2="891.0" y2="551.0" stroke="#FFFFFF" stroke-width="1.2" />
+<circle cx="1084.0" cy="749.0" r="9.680000000000001" fill="#4A5563"/>
+<line x1="1079.0" y1="749.0" x2="1089.0" y2="749.0" stroke="#FFFFFF" stroke-width="1.2" />
+<circle cx="1084.0" cy="551.0" r="9.680000000000001" fill="#4A5563"/>
+<line x1="1079.0" y1="551.0" x2="1089.0" y2="551.0" stroke="#FFFFFF" stroke-width="1.2" />
+<line x1="985.0" y1="812.4" x2="985.0" y2="838.4" stroke="#C2410C" stroke-width="1.4" marker-end="url(#arrowA)"/>
+<text x="985.0" y="856.4" font-size="13" font-weight="600" fill="#C2410C" text-anchor="middle" >notch points toward the enclosure</text>
+<line x1="1046.6" y1="614.8" x2="1124.0" y2="556.0" stroke="#5F6B78" stroke-width="0.8" />
+<circle cx="1046.6" cy="614.8" r="2" fill="#5F6B78"/>
 <text x="1130.0" y="560.0" font-size="13" font-weight="600" fill="#1F2933" text-anchor="start" >28 mm window</text>
 <text x="1130.0" y="576.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >foot pokes through</text>
 <text x="1130.0" y="640.0" font-size="12" font-weight="400" fill="#5F6B78" text-anchor="start" >dashed: pocket</text>
 <text x="1130.0" y="656.0" font-size="12" font-weight="400" fill="#5F6B78" text-anchor="start" >edge (hidden)</text>
-<text x="40.0" y="870.0" font-size="16" font-weight="700" fill="#1F2933" text-anchor="start" >4 · Which way the notches point (plate L and R from above)</text>
-<text x="40.0" y="890.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >Cradles are under the plates. Every notch faces the centre enclosure, so the cables run inward.</text>
+<text x="40.0" y="880.0" font-size="16" font-weight="700" fill="#1F2933" text-anchor="start" >4 · Which way the notches point (plate L and R from above)</text>
+<text x="40.0" y="900.0" font-size="13" font-weight="400" fill="#5F6B78" text-anchor="start" >Cradles are under the plates. Every notch faces the centre enclosure, so the cables run inward.</text>
 <rect x="397.2" y="950.3" width="219.5" height="219.5" fill="#C9D1D9" stroke="#6E7B88" stroke-width="1.2" rx="3"/>
 <text x="506.9" y="1189.7" font-size="13" font-weight="600" fill="#1F2933" text-anchor="middle" >Plate L</text>
 <rect x="663.3" y="950.3" width="219.5" height="219.5" fill="#C9D1D9" stroke="#6E7B88" stroke-width="1.2" rx="3"/>
