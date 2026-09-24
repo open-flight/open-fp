@@ -132,7 +132,7 @@ The counts-per-kg range assumes a 50 kg cell at about 0.5–1 mV/V. Your number 
 | No output at all in step 7/8 | Sketch not flashed, or the board isn't on the network (`ping open-fp.local`) |
 | `E,no DRDY for 500 ms` | DRDY not on D2; ADC unpowered; readback failed |
 | Readback `FF FF FF FF` | DOUT not on D12, CS not on D3, or ADC unpowered |
-| Readback `00 00 00 00` | DIN or SCLK not connected, or DOUT shorted to GND |
+| Readback `00 00 00 00` | DOUT isn't reaching D12 (an unconnected D12 floats low and reads 00), DIN or SCLK not connected, or DOUT shorted to GND |
 | Reading pinned at ±8,388,607 | AIN0 or AIN1 floating; R1/R2 missing; S not connected |
 | Reading moves when you touch a wire | Noise pickup: shorten wires, twist the cell's three wires together |
 | Reading drifts steadily | Warm-up (give it 5 min), or the cell is touching something |
