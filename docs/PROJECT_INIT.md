@@ -196,7 +196,7 @@ Corner channel IDs (also the physical labels on cables, cradles and ADC boards):
 | 4 | R1 | R | toe, inner | D7 | (+62.4, +122.4) |
 | 5 | R2 | R | toe, outer | D8 | (+307.2, +122.4) |
 | 6 | R3 | R | heel, outer | D9 | (+307.2, −122.4) |
-| 7 | R4 | R | heel, inner | D10 | (+62.4, −122.4) |
+| 7 | R4 | R | heel, inner | A2 (was D10, see §7.2) | (+62.4, −122.4) |
 
 Defaults assume plate centres at x = ±184.8 mm (304.8 plate + 64.8 mm gap) and cells 30 mm in from each plate edge (±122.4 from plate centre). The enclosure floats, so the real gap varies: **measure plate centre spacing after setup and set `plate_spacing_mm` in config.** Positions are data, not code.
 
@@ -270,7 +270,7 @@ flowchart LR
     MCU["UNO Q · STM32U585<br/>SPI master, 1 kHz sampling"]
     MPU["UNO Q · QRB2210 Debian<br/>processing + WebUI :7000"]
     ADCL -- "SPI + CS D3–D6" --> MCU
-    ADCR -- "SPI + CS D7–D10" --> MCU
+    ADCR -- "SPI + CS D7–D9, A2" --> MCU
     MCU -- "Bridge (MessagePack RPC)" --> MPU
   end
   PL -- "4 × shielded 3-wire" --> ADCL
@@ -287,11 +287,11 @@ flowchart LR
 | MISO | D12 | DOUT/DRDY on all 8 (tri-stated when CS high) |
 | DRDY (pace) | D2 | **DRDY of L1 only** |
 | CS L1–L4 | D3, D4, D5, D6 | CS of L1, L2, L3, L4 |
-| CS R1–R4 | D7, D8, D9, D10 | CS of R1, R2, R3, R4 |
+| CS R1–R4 | D7, D8, D9, **A2** | CS of R1, R2, R3, R4 |
 | 3V3 | 3V3 | AVDD, DVDD, REFP0 on all 8; top of every bridge |
 | GND | GND | AVSS/DGND, REFN0 on all 8; bottom of every bridge |
 
-**VERIFY** SPI pin assignment and interrupt support on D2 against the UNO Q pinout and the Zephyr core version installed.
+**Verified (2026-09-23, arduino:zephyr 1.0.0):** D11/D12/D13 = PB15/PB14/PB13 = SPI2 MOSI/MISO/SCK, the default `SPI`. D2 = PB3 and `attachInterrupt` is implemented. **D10 = PB9 is SPI2's hardware NSS in the board's pinctrl**, so `SPI.begin()` takes it over and drives it low during every transfer. R4's CS therefore moved to **A2 (PA6)**, and D10 must stay unconnected. A0 is avoided because the DAC claims it, and D0/D1 because they are the MCU console UART. See `docs/wiring.md`.
 
 Other ADS1220 pins: tie CLK to DGND (internal oscillator) if the module exposes it and doesn't already. Leave the other boards' DRDY pins unconnected. **Do not tie DRDY pins together**: the ADS1220 DRDY output is push-pull and parallel outputs will fight. (An earlier sketch of this design showed a shared DRDY; that was wrong.)
 
@@ -412,7 +412,7 @@ inline int32_t read(uint8_t cs) {
 #include "ads1220.h"
 
 constexpr uint8_t N_CH = 8;
-constexpr uint8_t CS_PINS[N_CH] = {3, 4, 5, 6, 7, 8, 9, 10};   // L1..L4, R1..R4
+constexpr uint8_t CS_PINS[N_CH] = {3, 4, 5, 6, 7, 8, 9, A2};   // L1..L4, R1..R4 (R4 on A2: D10 is SPI2 NSS)
 constexpr uint8_t DRDY_PIN = 2;                                // L1 DRDY only
 constexpr uint8_t DECIM = 5;                                   // 1000 Hz -> 200 Hz
 constexpr uint8_t FRAMES_PER_MSG = 10;                         // 20 msgs/s
