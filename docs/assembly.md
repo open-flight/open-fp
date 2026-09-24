@@ -29,4 +29,6 @@ For each of the 8 corners:
 6. **Put the JST-XH plug on** and label the corner (L1…R4). See [wiring.md §3](wiring.md#3-put-jst-xh-plugs-on-the-cells).
 7. **Mount it on the plate** with 2 × M4 × 12 flat-heads from the top and blue threadlocker, **notch facing the enclosure** (panel 4 of the drawing).
 
+> **Relief fix (2026-09-23).** The recess in the pocket floor (the ceiling once installed) is now a 28 mm rounded square instead of a Ø24 circle. Only the cell's outer frame ring may touch the cradle. The tongue and the strain-gauge beams inside it move under load, and the tongue's corners reached past the old circle. To check an old cradle: lay the cell strap-side up on a flat table. If the tongue's corners touch the table, they'll touch the old Ø24 cradle too, so reprint it.
+
 > **Notch fix (2026-09-23).** The first cradle and retainer files had the cable notch stopping short: a 0.7 mm wall between the cradle's notch and pocket, and 4 mm of solid retainer between its notch and window. That wall trapped the wires, and the retainer would have clamped them against the cell. `01_corner_cradle` and `02_cradle_retainer` (STL and STEP) now have both notches cut through. Nothing else changed: exactly 35.3 mm³ and 44.8 mm³ were removed. If you printed the old version, trim the wall with a flush cutter and cut the retainer notch through to the window.

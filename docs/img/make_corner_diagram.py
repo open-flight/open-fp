@@ -9,7 +9,7 @@ from pathlib import Path
 # -- geometry (mm) ----------------------------------------------------------------
 CR_W, CR_H = 54.0, 11.2          # cradle
 POCKET_HALF, POCKET_D = 17.3, 8.2
-RELIEF_R, RELIEF_TOP = 12.0, 9.7
+RELIEF_R, RELIEF_TOP = 14.0, 9.7   # 28 mm rounded-square relief (half-width)
 M4_X, M4_R, M4_D = 22.5, 2.8, 6.5
 M2_X, M2_R, M2_D = 22.5, 1.6, 4.0
 NOTCH_HALF, NOTCH_D = 3.5, 7.2
@@ -223,7 +223,7 @@ arrow(394, 676, 646)
 LX = 530
 label(419, 205, [("M4 × 12 flat-head ×2", {"weight": 600}), ("down through the plate, blue threadlocker", {"fill": MUTED})], LX, 196)
 label(504, 300, [("Neoprene on 1/4\" aluminum plate", {"weight": 600}), ("countersunk so the screw heads sit flush", {"fill": MUTED})], LX, 288)
-label(435, 380, [("Cradle, pocket facing DOWN", {"weight": 600}), ("M4 heat-set inserts in the top face;", {"fill": MUTED}), ("Ø24 relief above the cell lets its centre flex", {"fill": MUTED})], LX, 360)
+label(435, 380, [("Cradle, pocket facing DOWN", {"weight": 600}), ("M4 heat-set inserts in the top face;", {"fill": MUTED}), ("28 mm relief: only the frame ring touches", {"fill": MUTED})], LX, 360)
 label(321, 425, [("Cable notch (in the pocket's back wall)", {"weight": 600, "fill": ACCENT}), ("must break through into the pocket", {"fill": ACCENT})], LX, 424)
 label(402, 500, [("Load cell, centre boss facing DOWN", {"weight": 600}), ("frame presses up against the pocket ceiling;", {"fill": MUTED}), ("wires lie on the bottom face", {"fill": MUTED})], LX, 490)
 label(348, 572, [("TPU hub foot", {"weight": 600}), ("strap sits in its channel, dome in the dimple; CA", {"fill": MUTED})], LX, 564)
