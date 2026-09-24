@@ -48,6 +48,8 @@ Achieved loop rate: — · `drdyMissed` over 10 min: —
 
 - **2026-09-23, locating hub foot.** The owner asked for a foot that locates on the cell. The cell's load point is a riveted strap across the centre tongue with a dome in the middle, and it faces the floor. The new `10_hub_foot_tpu` (from `hardware/cad/src/hub_foot.py`) is Ø18 × 4.7 mm with an 11.4 × 1.2 mm channel for the strap and a Ø6 × 0.6 mm dimple for the dome. It keeps 3.5 mm of foot below the load point, so floor clearance is unchanged. The strap width (11.0) and dome diameter (5.5) are **estimated from photos**; measure them with calipers and regenerate.
 
+- **2026-09-23, cell rattles vertically under the retainer.** The raised centre strap faces out, so the frame's outer edge sits a few mm below the rim and the flat retainer doesn't touch it. Added a TPU shim ring (`11_cell_shim_tpu`, from `hardware/cad/src/cell_shim.py`): 34 mm outside, 28.6 mm inside, so it rests only on the frame and stays clear of the tongue and strap, with a 9 mm gap at the cable notch. It comes as a tuning set of 1.5–3.5 mm; record the thickness that works here: ___ mm.
+
 ## Notes found during scaffolding
 
 - App Lab's generated skeleton puts the web client libs in `app/assets/libs/` (`arduino.js`, `socket.io.min.js`), not `assets/vendor/` as §2 planned. Keep `libs/` from the brick and put uPlot in `vendor/`.
