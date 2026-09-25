@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1040" width="1400" height="1040" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+<rect width="1400" height="1040" fill="#FFFFFF"/>
+<circle cx="58" cy="44" r="18" fill="#1F2933"/>
+<text x="58" y="50" font-size="18" font-weight="700" fill="#FFFFFF" text-anchor="middle">3</text>
+<text x="88" y="52" font-size="24" font-weight="700" fill="#1F2933" text-anchor="start">Chain the carriers to the UNO Q</text>
+<text x="40" y="88" font-size="14" font-weight="400" fill="#5F6B78" text-anchor="start">Top-down, roughly as it sits on the floor: plates left and right, the centre enclosure between them, toe (ball side) at the top.</text>
+<rect x="50" y="170" width="280" height="720" rx="6" fill="#EEF1F4" stroke="#9AA5B1" stroke-width="1.6"/>
+<text x="190" y="912" font-size="14" font-weight="700" fill="#1F2933" text-anchor="middle">Plate L</text>
+<rect x="1070" y="170" width="280" height="720" rx="6" fill="#EEF1F4" stroke="#9AA5B1" stroke-width="1.6"/>
+<text x="1210" y="912" font-size="14" font-weight="700" fill="#1F2933" text-anchor="middle">Plate R</text>
+<rect x="80" y="200" width="70" height="50" rx="8" fill="#E9ECEF" stroke="#56626F" stroke-width="1.6"/>
+<text x="115" y="231" font-size="15" font-weight="700" fill="#56626F" text-anchor="middle">L1</text>
+<rect x="230" y="200" width="70" height="50" rx="8" fill="#E9ECEF" stroke="#56626F" stroke-width="1.6"/>
+<text x="265" y="231" font-size="15" font-weight="700" fill="#56626F" text-anchor="middle">L2</text>
+<rect x="230" y="810" width="70" height="50" rx="8" fill="#E9ECEF" stroke="#56626F" stroke-width="1.6"/>
+<text x="265" y="841" font-size="15" font-weight="700" fill="#56626F" text-anchor="middle">L3</text>
+<rect x="80" y="810" width="70" height="50" rx="8" fill="#E9ECEF" stroke="#56626F" stroke-width="1.6"/>
+<text x="115" y="841" font-size="15" font-weight="700" fill="#56626F" text-anchor="middle">L4</text>
+<rect x="1100" y="200" width="70" height="50" rx="8" fill="#E9ECEF" stroke="#56626F" stroke-width="1.6"/>
+<text x="1135" y="231" font-size="15" font-weight="700" fill="#56626F" text-anchor="middle">R1</text>
+<rect x="1250" y="200" width="70" height="50" rx="8" fill="#E9ECEF" stroke="#56626F" stroke-width="1.6"/>
+<text x="1285" y="231" font-size="15" font-weight="700" fill="#56626F" text-anchor="middle">R2</text>
+<rect x="1250" y="810" width="70" height="50" rx="8" fill="#E9ECEF" stroke="#56626F" stroke-width="1.6"/>
+<text x="1285" y="841" font-size="15" font-weight="700" fill="#56626F" text-anchor="middle">R3</text>
+<rect x="1100" y="810" width="70" height="50" rx="8" fill="#E9ECEF" stroke="#56626F" stroke-width="1.6"/>
+<text x="1135" y="841" font-size="15" font-weight="700" fill="#56626F" text-anchor="middle">R4</text>
+<text x="190" y="160" font-size="12" font-weight="600" fill="#5F6B78" text-anchor="middle">toe ↑</text>
+<rect x="400" y="150" width="610" height="760" rx="10" fill="none" stroke="#9AA5B1" stroke-width="1.6" stroke-dasharray="8 6"/>
+<text x="705" y="935" font-size="13" font-weight="700" fill="#5F6B78" text-anchor="middle">Centre enclosure</text>
+<rect x="450" y="190" width="500" height="170" rx="10" fill="#F6F4EF" stroke="#7A7063" stroke-width="2"/>
+<text x="700" y="220" font-size="15" font-weight="700" fill="#7A7063" text-anchor="middle">Toe carrier</text>
+<rect x="478" y="240" width="100" height="60" rx="6" fill="#EFEAF7" stroke="#5B3B8C" stroke-width="1.4"/>
+<text x="528" y="276" font-size="15" font-weight="700" fill="#5B3B8C" text-anchor="middle">L1</text>
+<rect x="593" y="240" width="100" height="60" rx="6" fill="#EFEAF7" stroke="#5B3B8C" stroke-width="1.4"/>
+<text x="643" y="276" font-size="15" font-weight="700" fill="#5B3B8C" text-anchor="middle">L2</text>
+<rect x="708" y="240" width="100" height="60" rx="6" fill="#EFEAF7" stroke="#5B3B8C" stroke-width="1.4"/>
+<text x="758" y="276" font-size="15" font-weight="700" fill="#5B3B8C" text-anchor="middle">R1</text>
+<rect x="823" y="240" width="100" height="60" rx="6" fill="#EFEAF7" stroke="#5B3B8C" stroke-width="1.4"/>
+<text x="873" y="276" font-size="15" font-weight="700" fill="#5B3B8C" text-anchor="middle">R2</text>
+<rect x="450" y="690" width="500" height="170" rx="10" fill="#F6F4EF" stroke="#7A7063" stroke-width="2"/>
+<text x="700" y="720" font-size="15" font-weight="700" fill="#7A7063" text-anchor="middle">Heel carrier</text>
+<rect x="478" y="740" width="100" height="60" rx="6" fill="#EFEAF7" stroke="#5B3B8C" stroke-width="1.4"/>
+<text x="528" y="776" font-size="15" font-weight="700" fill="#5B3B8C" text-anchor="middle">L3</text>
+<rect x="593" y="740" width="100" height="60" rx="6" fill="#EFEAF7" stroke="#5B3B8C" stroke-width="1.4"/>
+<text x="643" y="776" font-size="15" font-weight="700" fill="#5B3B8C" text-anchor="middle">L4</text>
+<rect x="708" y="740" width="100" height="60" rx="6" fill="#EFEAF7" stroke="#5B3B8C" stroke-width="1.4"/>
+<text x="758" y="776" font-size="15" font-weight="700" fill="#5B3B8C" text-anchor="middle">R3</text>
+<rect x="823" y="740" width="100" height="60" rx="6" fill="#EFEAF7" stroke="#5B3B8C" stroke-width="1.4"/>
+<text x="873" y="776" font-size="15" font-weight="700" fill="#5B3B8C" text-anchor="middle">R4</text>
+<rect x="560" y="450" width="280" height="150" rx="10" fill="#E8F1F2" stroke="#2F6F73" stroke-width="2"/>
+<text x="700" y="518" font-size="16" font-weight="700" fill="#2F6F73" text-anchor="middle">Arduino UNO Q</text>
+<text x="700" y="538" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">14 header pins used</text>
+<path d="M600.0,450 L600.0,360" fill="none" stroke="#D64545" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M605.0,450 L605.0,360" fill="none" stroke="#222222" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M610.0,450 L610.0,360" fill="none" stroke="#2F80ED" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M615.0,450 L615.0,360" fill="none" stroke="#27AE60" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M620.0,450 L620.0,360" fill="none" stroke="#9B51E0" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M750.0,450 L750.0,360" fill="none" stroke="#E2A400" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M755.0,450 L755.0,360" fill="none" stroke="#E2A400" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M760.0,450 L760.0,360" fill="none" stroke="#E2A400" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M765.0,450 L765.0,360" fill="none" stroke="#E2A400" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M770.0,450 L770.0,360" fill="none" stroke="#EB5757" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M752.5,600 L752.5,690" fill="none" stroke="#E2A400" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M757.5,600 L757.5,690" fill="none" stroke="#E2A400" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M762.5,600 L762.5,690" fill="none" stroke="#E2A400" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M767.5,600 L767.5,690" fill="none" stroke="#E2A400" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M950,318 L990,318 L990,752 L950,752" fill="none" stroke="#D64545" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M950,323 L985,323 L985,747 L950,747" fill="none" stroke="#222222" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M950,328 L980,328 L980,742 L950,742" fill="none" stroke="#2F80ED" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M950,333 L975,333 L975,737 L950,737" fill="none" stroke="#27AE60" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M950,338 L970,338 L970,732 L950,732" fill="none" stroke="#9B51E0" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="588" cy="400" r="11" fill="#1F2933"/>
+<text x="588" y="405" font-size="12" font-weight="700" fill="#FFFFFF" text-anchor="middle">1</text>
+<text x="570" y="403" font-size="13" font-weight="700" fill="#1F2933" text-anchor="end">BUS → toe BUS IN</text>
+<text x="570" y="419" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="end">3V3 GND SCLK MOSI MISO</text>
+<circle cx="790" cy="400" r="11" fill="#1F2933"/>
+<text x="790" y="405" font-size="12" font-weight="700" fill="#FFFFFF" text-anchor="middle">3</text>
+<text x="808" y="403" font-size="13" font-weight="700" fill="#1F2933" text-anchor="start">CS + DRDY → toe</text>
+<text x="808" y="419" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="start">D3 D4 D7 D8 + D2</text>
+<circle cx="955" cy="495" r="11" fill="#1F2933"/>
+<text x="955" y="500" font-size="12" font-weight="700" fill="#FFFFFF" text-anchor="middle">2</text>
+<text x="960" y="530" font-size="12" font-weight="700" fill="#1F2933" text-anchor="end">toe BUS OUT</text>
+<text x="960" y="546" font-size="12" font-weight="700" fill="#1F2933" text-anchor="end">→ heel BUS IN</text>
+<text x="960" y="562" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="end">same 5 wires,</text>
+<text x="960" y="578" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="end">chained</text>
+<circle cx="790" cy="645" r="11" fill="#1F2933"/>
+<text x="790" y="650" font-size="12" font-weight="700" fill="#FFFFFF" text-anchor="middle">4</text>
+<text x="808" y="648" font-size="13" font-weight="700" fill="#1F2933" text-anchor="start">CS → heel</text>
+<text x="808" y="664" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="start">D5 D6 D9 A2</text>
+<path d="M115,200 L115,182 L425,182 L425,225 L450,225" fill="none" stroke="#9AA5B1" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M115,200 L115,182 L425,182 L425,225 L450,225" fill="none" stroke="#E9ECEF" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M300,245 L450,245" fill="none" stroke="#9AA5B1" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M300,245 L450,245" fill="none" stroke="#E9ECEF" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1285,200 L1285,182 L975,182 L975,225 L950,225" fill="none" stroke="#9AA5B1" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1285,200 L1285,182 L975,182 L975,225 L950,225" fill="none" stroke="#E9ECEF" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1100,245 L950,245" fill="none" stroke="#9AA5B1" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1100,245 L950,245" fill="none" stroke="#E9ECEF" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M300,825 L450,825" fill="none" stroke="#9AA5B1" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M300,825 L450,825" fill="none" stroke="#E9ECEF" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M115,860 L115,878 L425,878 L425,845 L450,845" fill="none" stroke="#9AA5B1" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M115,860 L115,878 L425,878 L425,845 L450,845" fill="none" stroke="#E9ECEF" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1100,825 L950,825" fill="none" stroke="#9AA5B1" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1100,825 L950,825" fill="none" stroke="#E9ECEF" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1285,860 L1285,878 L975,878 L975,845 L950,845" fill="none" stroke="#9AA5B1" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1285,860 L1285,878 L975,878 L975,845 L950,845" fill="none" stroke="#E9ECEF" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="705" y="975" font-size="12" font-weight="400" fill="#5F6B78" text-anchor="middle">Grey: cell cables (outer corners ~450 mm, inner ~250 mm), each to its unit's JST on the carrier.</text>
+<path d="M300,1001 L326,1001" fill="none" stroke="#D64545" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="334" y="1005" font-size="12" font-weight="400" fill="#1F2933" text-anchor="start">3V3</text>
+<path d="M418,1001 L444,1001" fill="none" stroke="#222222" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="452" y="1005" font-size="12" font-weight="400" fill="#1F2933" text-anchor="start">GND</text>
+<path d="M536,1001 L562,1001" fill="none" stroke="#2F80ED" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="570" y="1005" font-size="12" font-weight="400" fill="#1F2933" text-anchor="start">SCLK</text>
+<path d="M654,1001 L680,1001" fill="none" stroke="#27AE60" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="688" y="1005" font-size="12" font-weight="400" fill="#1F2933" text-anchor="start">MOSI</text>
+<path d="M772,1001 L798,1001" fill="none" stroke="#9B51E0" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="806" y="1005" font-size="12" font-weight="400" fill="#1F2933" text-anchor="start">MISO</text>
+<path d="M890,1001 L916,1001" fill="none" stroke="#E2A400" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="924" y="1005" font-size="12" font-weight="400" fill="#1F2933" text-anchor="start">CS</text>
+<path d="M1008,1001 L1034,1001" fill="none" stroke="#EB5757" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="1042" y="1005" font-size="12" font-weight="400" fill="#1F2933" text-anchor="start">DRDY</text>
+</svg>

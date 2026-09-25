@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 760" width="1280" height="760" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+<rect width="1280" height="760" fill="#FFFFFF"/>
+<circle cx="58" cy="44" r="18" fill="#1F2933"/>
+<text x="58" y="50" font-size="18" font-weight="700" fill="#FFFFFF" text-anchor="middle">1</text>
+<text x="88" y="52" font-size="24" font-weight="700" fill="#1F2933" text-anchor="start">Build a unit (×8)</text>
+<text x="40" y="88" font-size="14" font-weight="400" fill="#5F6B78" text-anchor="start">A unit is one ADS1220 breakout, its two bridge resistors, and a JST socket for its load cell. Every unit is identical.</text>
+<rect x="540" y="190" width="250" height="480" rx="10" fill="#EFEAF7" stroke="#5B3B8C" stroke-width="2"/>
+<text x="665.0" y="222" font-size="16" font-weight="700" fill="#5B3B8C" text-anchor="middle">ADS1220 breakout</text>
+<text x="665.0" y="240" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">pins as printed on the board</text>
+<circle cx="540" cy="270" r="5" fill="#FFFFFF" stroke="#5B3B8C" stroke-width="2"/>
+<text x="552" y="274" font-size="13" font-weight="700" fill="#5B3B8C" text-anchor="start">DRDY</text>
+<circle cx="540" cy="320" r="5" fill="#FFFFFF" stroke="#5B3B8C" stroke-width="2"/>
+<text x="552" y="324" font-size="13" font-weight="700" fill="#5B3B8C" text-anchor="start">MISO</text>
+<circle cx="540" cy="370" r="5" fill="#FFFFFF" stroke="#5B3B8C" stroke-width="2"/>
+<text x="552" y="374" font-size="13" font-weight="700" fill="#5B3B8C" text-anchor="start">MOSI</text>
+<circle cx="540" cy="420" r="5" fill="#FFFFFF" stroke="#5B3B8C" stroke-width="2"/>
+<text x="552" y="424" font-size="13" font-weight="700" fill="#5B3B8C" text-anchor="start">SCLK</text>
+<circle cx="540" cy="470" r="5" fill="#FFFFFF" stroke="#5B3B8C" stroke-width="2"/>
+<text x="552" y="474" font-size="13" font-weight="700" fill="#5B3B8C" text-anchor="start">CS</text>
+<circle cx="540" cy="520" r="5" fill="#FFFFFF" stroke="#5B3B8C" stroke-width="2"/>
+<text x="552" y="524" font-size="13" font-weight="700" fill="#5B3B8C" text-anchor="start">CLK</text>
+<circle cx="540" cy="580" r="5" fill="#FFFFFF" stroke="#5B3B8C" stroke-width="2"/>
+<text x="552" y="584" font-size="13" font-weight="700" fill="#5B3B8C" text-anchor="start">DVDD</text>
+<circle cx="540" cy="630" r="5" fill="#FFFFFF" stroke="#5B3B8C" stroke-width="2"/>
+<text x="552" y="634" font-size="13" font-weight="700" fill="#5B3B8C" text-anchor="start">DGND</text>
+<circle cx="790" cy="270" r="5" fill="#FFFFFF" stroke="#5B3B8C" stroke-width="2"/>
+<text x="778" y="274" font-size="13" font-weight="700" fill="#5B3B8C" text-anchor="end">AIN0</text>
+<circle cx="790" cy="320" r="5" fill="#FFFFFF" stroke="#5B3B8C" stroke-width="2"/>
+<text x="778" y="324" font-size="13" font-weight="700" fill="#5B3B8C" text-anchor="end">AIN1</text>
+<circle cx="790" cy="370" r="5" fill="#FFFFFF" stroke="#5B3B8C" stroke-width="2"/>
+<text x="778" y="374" font-size="13" font-weight="700" fill="#5B3B8C" text-anchor="end">AIN2</text>
+<circle cx="790" cy="420" r="5" fill="#FFFFFF" stroke="#5B3B8C" stroke-width="2"/>
+<text x="778" y="424" font-size="13" font-weight="700" fill="#5B3B8C" text-anchor="end">AIN3</text>
+<circle cx="790" cy="480" r="5" fill="#FFFFFF" stroke="#5B3B8C" stroke-width="2"/>
+<text x="778" y="484" font-size="13" font-weight="700" fill="#5B3B8C" text-anchor="end">REFN0</text>
+<circle cx="790" cy="530" r="5" fill="#FFFFFF" stroke="#5B3B8C" stroke-width="2"/>
+<text x="778" y="534" font-size="13" font-weight="700" fill="#5B3B8C" text-anchor="end">REFP0</text>
+<circle cx="790" cy="580" r="5" fill="#FFFFFF" stroke="#5B3B8C" stroke-width="2"/>
+<text x="778" y="584" font-size="13" font-weight="700" fill="#5B3B8C" text-anchor="end">AVDD</text>
+<circle cx="790" cy="630" r="5" fill="#FFFFFF" stroke="#5B3B8C" stroke-width="2"/>
+<text x="778" y="634" font-size="13" font-weight="700" fill="#5B3B8C" text-anchor="end">AGND</text>
+<rect x="60" y="190" width="190" height="480" rx="10" fill="#FFFFFF" stroke="#1F2933" stroke-width="2"/>
+<text x="155" y="220" font-size="15" font-weight="700" fill="#1F2933" text-anchor="middle">Unit → carrier</text>
+<text x="155" y="238" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">the only wires that leave a unit</text>
+<circle cx="250" cy="270" r="5" fill="#FFFFFF" stroke="#1F2933" stroke-width="2"/>
+<text x="238" y="274" font-size="13" font-weight="700" fill="#1F2933" text-anchor="end">DRDY*</text>
+<path d="M250,270 L540,270" fill="none" stroke="#EB5757" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="7 5"/>
+<circle cx="250" cy="320" r="5" fill="#FFFFFF" stroke="#1F2933" stroke-width="2"/>
+<text x="238" y="324" font-size="13" font-weight="700" fill="#1F2933" text-anchor="end">MISO</text>
+<path d="M250,320 L540,320" fill="none" stroke="#9B51E0" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="250" cy="370" r="5" fill="#FFFFFF" stroke="#1F2933" stroke-width="2"/>
+<text x="238" y="374" font-size="13" font-weight="700" fill="#1F2933" text-anchor="end">MOSI</text>
+<path d="M250,370 L540,370" fill="none" stroke="#27AE60" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="250" cy="420" r="5" fill="#FFFFFF" stroke="#1F2933" stroke-width="2"/>
+<text x="238" y="424" font-size="13" font-weight="700" fill="#1F2933" text-anchor="end">SCLK</text>
+<path d="M250,420 L540,420" fill="none" stroke="#2F80ED" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="250" cy="470" r="5" fill="#FFFFFF" stroke="#1F2933" stroke-width="2"/>
+<text x="238" y="474" font-size="13" font-weight="700" fill="#1F2933" text-anchor="end">CS</text>
+<path d="M250,470 L540,470" fill="none" stroke="#E2A400" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="250" cy="580" r="5" fill="#FFFFFF" stroke="#1F2933" stroke-width="2"/>
+<text x="238" y="584" font-size="13" font-weight="700" fill="#1F2933" text-anchor="end">3V3</text>
+<path d="M250,580 L540,580" fill="none" stroke="#D64545" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="250" cy="630" r="5" fill="#FFFFFF" stroke="#1F2933" stroke-width="2"/>
+<text x="238" y="634" font-size="13" font-weight="700" fill="#1F2933" text-anchor="end">GND</text>
+<path d="M250,630 L540,630" fill="none" stroke="#222222" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="155" y="655" font-size="12" font-weight="600" fill="#C2410C" text-anchor="middle">* DRDY: L1 only</text>
+<path d="M540,520 L490,520" fill="none" stroke="#222222" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M490,520 L490,538" fill="none" stroke="#222222" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M476,538 L504,538" fill="none" stroke="#222222" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M481,543 L499,543" fill="none" stroke="#222222" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M486,548 L494,548" fill="none" stroke="#222222" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M790,480 L840,480" fill="none" stroke="#222222" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M840,480 L840,498" fill="none" stroke="#222222" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M826,498 L854,498" fill="none" stroke="#222222" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M831,503 L849,503" fill="none" stroke="#222222" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M836,508 L844,508" fill="none" stroke="#222222" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M790,530 L890,530" fill="none" stroke="#D64545" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M890,530 L890,508" fill="none" stroke="#D64545" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M879,508 L901,508 L890,494 Z" fill="#D64545"/>
+<text x="890" y="488" font-size="12" font-weight="700" fill="#D64545" text-anchor="middle">3V3</text>
+<path d="M790,580 L940,580" fill="none" stroke="#D64545" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M940,580 L940,558" fill="none" stroke="#D64545" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M929,558 L951,558 L940,544 Z" fill="#D64545"/>
+<text x="940" y="538" font-size="12" font-weight="700" fill="#D64545" text-anchor="middle">3V3</text>
+<path d="M790,630 L840,630" fill="none" stroke="#222222" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M840,630 L840,648" fill="none" stroke="#222222" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M826,648 L854,648" fill="none" stroke="#222222" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M831,653 L849,653" fill="none" stroke="#222222" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M836,658 L844,658" fill="none" stroke="#222222" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="776" y="446" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="end">AIN2, AIN3: leave open</text>
+<path d="M790,320 L914,320" fill="none" stroke="#8D6E63" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="880" cy="320" r="3.6" fill="#8D6E63"/>
+<rect x="914" y="311" width="52" height="18" rx="4" fill="#FFF6E5" stroke="#B7791F" stroke-width="1.5"/>
+<rect x="922" y="311" width="4" height="18" fill="#8B4513"/>
+<rect x="932" y="311" width="4" height="18" fill="#222222"/>
+<rect x="942" y="311" width="4" height="18" fill="#D64545"/>
+<rect x="952" y="311" width="4" height="18" fill="#C9A227"/>
+<text x="940" y="346" font-size="13" font-weight="600" fill="#1F2933" text-anchor="middle">R1  1 kΩ</text>
+<path d="M966,320 L1020,320" fill="none" stroke="#D64545" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1020,320 L1020,298" fill="none" stroke="#D64545" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1009,298 L1031,298 L1020,284 Z" fill="#D64545"/>
+<text x="1020" y="278" font-size="12" font-weight="700" fill="#D64545" text-anchor="middle">3V3</text>
+<path d="M880,320 L880,344" fill="none" stroke="#8D6E63" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="871" y="344" width="18" height="52" rx="4" fill="#FFF6E5" stroke="#B7791F" stroke-width="1.5"/>
+<rect x="871" y="352" width="18" height="4" fill="#8B4513"/>
+<rect x="871" y="362" width="18" height="4" fill="#222222"/>
+<rect x="871" y="372" width="18" height="4" fill="#D64545"/>
+<rect x="871" y="382" width="18" height="4" fill="#C9A227"/>
+<text x="896" y="374" font-size="13" font-weight="600" fill="#1F2933" text-anchor="start">R2  1 kΩ</text>
+<path d="M880,396 L880,404" fill="none" stroke="#222222" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M880,404 L880,422" fill="none" stroke="#222222" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M866,422 L894,422" fill="none" stroke="#222222" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M871,427 L889,427" fill="none" stroke="#222222" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M876,432 L884,432" fill="none" stroke="#222222" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="804" y="310" font-size="12" font-weight="400" fill="#5F6B78" text-anchor="start">≈1.65 V</text>
+<rect x="1010" y="120" width="44" height="130" rx="4" fill="#FFFFFF" stroke="#1F2933" stroke-width="1.8"/>
+<text x="1032" y="110" font-size="12" font-weight="700" fill="#1F2933" text-anchor="middle">JST</text>
+<path d="M790,270 L830,270 L830,228 L1010,228" fill="none" stroke="#00897B" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="1002" y="220" font-size="12" font-weight="700" fill="#00897B" text-anchor="end">S → AIN0</text>
+<path d="M1010,142 L970,142" fill="none" stroke="#D64545" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M970,142 L970,120" fill="none" stroke="#D64545" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M959,120 L981,120 L970,106 Z" fill="#D64545"/>
+<text x="970" y="100" font-size="12" font-weight="700" fill="#D64545" text-anchor="middle">3V3</text>
+<path d="M1010,172 L940,172" fill="none" stroke="#222222" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M940,172 L940,190" fill="none" stroke="#222222" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M926,190 L954,190" fill="none" stroke="#222222" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M931,195 L949,195" fill="none" stroke="#222222" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M936,200 L944,200" fill="none" stroke="#222222" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="1032" y="146" font-size="10" font-weight="700" fill="#1F2933" text-anchor="middle">1 E+</text>
+<text x="1032" y="176" font-size="10" font-weight="700" fill="#1F2933" text-anchor="middle">2 E−</text>
+<text x="1032" y="232" font-size="10" font-weight="700" fill="#1F2933" text-anchor="middle">3 S</text>
+<rect x="1150" y="110" width="100" height="150" rx="12" fill="#E9ECEF" stroke="#56626F" stroke-width="2"/>
+<text x="1200" y="178" font-size="13" font-weight="700" fill="#56626F" text-anchor="middle">Load cell</text>
+<path d="M1054,142 L1150,142" fill="none" stroke="#9AA5B1" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1054,142 L1150,142" fill="none" stroke="#F4F4F4" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="1107" y="136" font-size="10" font-weight="400" fill="#5F6B78" text-anchor="middle">white</text>
+<path d="M1054,172 L1150,172" fill="none" stroke="#9AA5B1" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1054,172 L1150,172" fill="none" stroke="#222222" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="1107" y="166" font-size="10" font-weight="400" fill="#5F6B78" text-anchor="middle">black</text>
+<path d="M1054,228 L1150,228" fill="none" stroke="#9AA5B1" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1054,228 L1150,228" fill="none" stroke="#D64545" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="1107" y="222" font-size="10" font-weight="400" fill="#5F6B78" text-anchor="middle">red</text>
+<text x="1200" y="280" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">cable shield → GND,</text>
+<text x="1200" y="295" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">this end only</text>
+<text x="60" y="700" font-size="12" font-weight="400" fill="#5F6B78" text-anchor="start">3V3 flag and ground symbol = the carrier's 3V3 and GND rails (step 2). Red is the centre tap S on this build's cells; which of white/black is E+ only sets the sign.</text>
+<text x="60" y="720" font-size="12" font-weight="600" fill="#C2410C" text-anchor="start">Both supplies (DVDD, AVDD) and both grounds (DGND, AGND) must be connected. CLK to GND selects the internal oscillator.</text>
+</svg>
