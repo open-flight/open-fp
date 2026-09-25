@@ -131,3 +131,61 @@ def test_summary_without_data_says_so_plainly():
     text = summarize(Readback(True, (0x0E, 0xC4, 0x40, 0x00)), check_baseline([]), None, None)
     assert "no data from the sketch" in text
     assert "headroom" not in text and "mean 0" not in text
+
+
+# -- single-ended mode (AIN0 vs ground; for testing before R1/R2 are fitted) -----------------------
+
+
+def test_modes_have_expected_registers():
+    from single_cell import DIFFERENTIAL, SINGLE_ENDED
+
+    assert DIFFERENTIAL.regs == (0x0E, 0xC4, 0x40, 0x00)
+    assert SINGLE_ENDED.regs == (0x81, 0xC4, 0x40, 0x00)
+    assert SINGLE_ENDED.command == "s" and DIFFERENTIAL.command == "d"
+
+
+def test_single_ended_press_threshold_sees_a_small_gain_1_press():
+    from single_cell import SINGLE_ENDED
+
+    base = 4_190_000
+    windows = [S(i, base) for i in range(5)] + [S(i, base - 600, std=40) for i in range(5, 20)]
+    assert detect_press(base, windows, min_delta=SINGLE_ENDED.press_delta).pressed
+    assert not detect_press(base, windows, min_delta=20_000).pressed
+
+
+def test_single_ended_mass_range():
+    from single_cell import SINGLE_ENDED
+
+    s = scale_from_mass(
+        0, [S(i, 240) for i in range(30)], mass_kg=2.0, cpk_range=SINGLE_ENDED.cpk_range
+    )
+    assert s.ok and s.counts_per_kg == pytest.approx(120)
+
+
+def test_summary_uses_mode_expected_registers():
+    from single_cell import SINGLE_ENDED
+
+    text = summarize(Readback(False, (0x0E, 0xC4, 0x40, 0x00)), None, None, None, mode=SINGLE_ENDED)
+    assert "expected 81 C4 40 00" in text
+
+
+def test_release_tolerance_scales_with_mode():
+    from single_cell import SINGLE_ENDED
+
+    windows = [S(i, 1_000 + 300) for i in range(10)]  # 300 counts off after a 600-count press
+    assert returned_to_baseline(1_000, windows, press_delta=-600)  # default floor: 5,000
+    assert not returned_to_baseline(
+        1_000, windows, press_delta=-600, floor=SINGLE_ENDED.press_delta / 4
+    )
+
+
+def test_parse_stats_with_drdy_count():
+    st = parse_line("S,1000,74,4190000,40,4189900,4190100,100")
+    assert st == Stats(1000, 74, 4190000, 40, 4189900, 4190100, 100)
+
+
+def test_rate_uses_drdy_count_when_reported():
+    # loop captured only 74 of every 100 conversions, but the ADC ran at 1000 SPS
+    windows = [Stats(100 * i, 74, 0, 400, -2000, 2000, 100) for i in range(50)]
+    r = check_baseline(windows)
+    assert r.rate_hz == pytest.approx(1000, rel=0.01) and r.ok, r.problems

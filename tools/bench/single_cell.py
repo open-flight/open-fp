@@ -36,6 +36,26 @@ PRESS_DELTA_COUNTS = 20_000  # a firm thumb press is far more than this
 COUNTS_PER_KG_RANGE = (3_000, 60_000)
 
 
+@dataclass(frozen=True)
+class Mode:
+    """How the sketch is measuring, and the thresholds that go with it."""
+
+    name: str
+    command: str  # keystroke that switches the sketch into this mode (and re-checks the ADC)
+    regs: tuple[int, ...]  # config registers the readback should match
+    press_delta: float  # counts a firm thumb press should exceed
+    cpk_range: tuple[float, float]  # plausible counts per kg
+
+
+# AIN0 - AIN1, gain 128: the real configuration, needs R1/R2 on AIN1.
+DIFFERENTIAL = Mode(
+    "differential", "d", (0x0E, 0xC4, 0x40, 0x00), PRESS_DELTA_COUNTS, COUNTS_PER_KG_RANGE
+)
+# AIN0 - AVSS, gain 1, PGA bypassed: tests wiring and response before R1/R2 are fitted.
+# The signal sits at ~half scale and moves ~85-170 counts/kg, so thresholds are ~128x smaller.
+SINGLE_ENDED = Mode("single-ended", "s", (0x81, 0xC4, 0x40, 0x00), 150, (20, 600))
+
+
 # -- sketch output ---------------------------------------------------------------------------
 
 
@@ -48,11 +68,12 @@ class Readback:
 @dataclass(frozen=True)
 class Stats:
     ms: int
-    n: int
+    n: int  # samples the loop captured
     mean: int
     std: int
     vmin: int
     vmax: int
+    drdy: int | None = None  # conversions the ADC signalled (interrupt count), if reported
 
 
 @dataclass(frozen=True)
@@ -67,7 +88,7 @@ def parse_line(line: str):
     try:
         if parts[0] == "R" and len(parts) == 6:
             return Readback(parts[1] == "1", tuple(int(p, 16) for p in parts[2:]))
-        if parts[0] == "S" and len(parts) == 7:
+        if parts[0] == "S" and len(parts) in (7, 8):
             return Stats(*(int(p) for p in parts[1:]))
         if parts[0] == "E" and len(parts) >= 2:
             return SketchError(",".join(parts[1:]))
@@ -97,7 +118,9 @@ def check_baseline(windows: list[Stats]) -> Baseline:
     total_n = sum(w.n for w in windows)
     duration_s = (windows[-1].ms - windows[0].ms) / 1000 + 0.1
     b = Baseline(True)
-    b.rate_hz = total_n / duration_s
+    # The ADC's own rate: DRDY pulses if the sketch counts them, else samples captured.
+    conversions = sum(w.drdy if w.drdy is not None else w.n for w in windows)
+    b.rate_hz = conversions / duration_s
     b.mean = sum(w.mean * w.n for w in windows) / total_n
     b.noise = statistics.median(w.std for w in windows)
     b.drift = windows[-1].mean - windows[0].mean
@@ -145,13 +168,15 @@ def detect_press(
     return Press(abs(delta) >= min_delta, delta, 1 if delta > 0 else -1)
 
 
-def returned_to_baseline(baseline_mean: float, windows: list[Stats], press_delta: float) -> bool:
-    """After letting go, the reading should settle back to within 5 % of the press."""
+def returned_to_baseline(
+    baseline_mean: float, windows: list[Stats], press_delta: float, floor: float = 5_000
+) -> bool:
+    """After letting go, the reading should settle back to within 5 % of the press (or `floor`)."""
     if not windows:
         return False
     tail = windows[-5:]
     settled = statistics.median(w.mean for w in tail)
-    return abs(settled - baseline_mean) <= max(5_000, 0.05 * abs(press_delta))
+    return abs(settled - baseline_mean) <= max(floor, 0.05 * abs(press_delta))
 
 
 @dataclass
@@ -161,17 +186,26 @@ class Scale:
     delta: float
 
 
-def scale_from_mass(baseline_mean: float, windows: list[Stats], mass_kg: float) -> Scale:
+def scale_from_mass(
+    baseline_mean: float,
+    windows: list[Stats],
+    mass_kg: float,
+    cpk_range: tuple[float, float] = COUNTS_PER_KG_RANGE,
+) -> Scale:
     """Counts per kg from a known mass, using the steadier second half of the window."""
     steady = windows[len(windows) // 2 :] or windows
     delta = statistics.median(w.mean for w in steady) - baseline_mean
     cpk = abs(delta) / mass_kg
-    lo, hi = COUNTS_PER_KG_RANGE
+    lo, hi = cpk_range
     return Scale(lo <= cpk <= hi, cpk, delta)
 
 
 def summarize(
-    readback: Readback | None, base: Baseline | None, press: Press | None, scale: Scale | None
+    readback: Readback | None,
+    base: Baseline | None,
+    press: Press | None,
+    scale: Scale | None,
+    mode: Mode = DIFFERENTIAL,
 ) -> str:
     def line(ok, label, detail=""):
         return f"  {'PASS' if ok else 'FAIL'}  {label}{': ' + detail if detail else ''}"
@@ -180,12 +214,12 @@ def summarize(
     if readback is None:
         out.append(line(False, "register readback", "no R line from the sketch"))
     else:
-        regs = " ".join(f"{r:02X}" for r in readback.regs)
+        regs = _hex(readback.regs)
         out.append(
             line(
                 readback.ok,
                 "register readback",
-                regs + ("" if readback.ok else " (expected 0E C4 40 00)"),
+                regs + ("" if readback.ok else f" (expected {_hex(mode.regs)})"),
             )
         )
     if base is not None and base.rate_hz == 0:
@@ -212,7 +246,7 @@ def summarize(
             )
         )
     if scale is not None:
-        lo, hi = COUNTS_PER_KG_RANGE
+        lo, hi = mode.cpk_range
         out.append(
             line(
                 scale.ok,
@@ -221,6 +255,10 @@ def summarize(
             )
         )
     return "\n".join(out)
+
+
+def _hex(regs) -> str:
+    return " ".join(f"{r:02X}" for r in regs)
 
 
 # -- live session ------------------------------------------------------------------------------
@@ -291,7 +329,9 @@ def run_live(args) -> int:
     results: dict = {"cell": args.cell, "date": datetime.now().isoformat(timespec="seconds")}
     try:
         print(f"Connecting to arduino@{args.host} (arduino-app-cli monitor)...")
-        mon.send("r")  # ask the sketch to reset the ADC and print its readback
+        mode = SINGLE_ENDED if args.single_ended else DIFFERENTIAL
+        print(f"Measuring {mode.name}.")
+        mon.send(mode.command)  # switch mode, reset the ADC, print its readback
         items = mon.collect(6.0)
         readbacks = [i for i in items if isinstance(i, Readback)]
         readback = readbacks[-1] if readbacks else None
@@ -302,7 +342,7 @@ def run_live(args) -> int:
             )
             return 2
         if readback is None or not readback.ok:
-            print(summarize(readback, None, None, None))
+            print(summarize(readback, None, None, None, mode))
             print(
                 "\nStopping: the ADC must read back its registers before the other steps mean "
                 "anything.\nCheck the wiring against docs/bench-single-cell.md (step 4 and "
@@ -323,8 +363,10 @@ def run_live(args) -> int:
             "  (Support the cell by its outer frame, e.g. in the cradle.)"
         )
         print("  Press now...")
-        press = detect_press(base.mean, stats_only(mon.collect(6.0)))
-        released = returned_to_baseline(base.mean, stats_only(mon.collect(2.0)), press.delta)
+        press = detect_press(base.mean, stats_only(mon.collect(6.0)), mode.press_delta)
+        released = returned_to_baseline(
+            base.mean, stats_only(mon.collect(2.0)), press.delta, floor=mode.press_delta / 4
+        )
         if press.pressed and not released:
             base.problems.append(
                 "didn't return to baseline after letting go (cell rubbing or loose)"
@@ -338,9 +380,11 @@ def run_live(args) -> int:
                 "  (frame supported), hands off, then press Enter."
             )
             print("  Recording 5 s...")
-            scale = scale_from_mass(base.mean, stats_only(mon.collect(5.0)), args.mass_kg)
+            scale = scale_from_mass(
+                base.mean, stats_only(mon.collect(5.0)), args.mass_kg, mode.cpk_range
+            )
 
-        print(summarize(readback, base, press, scale))
+        print(summarize(readback, base, press, scale, mode))
         results.update(
             readback=asdict(readback) if readback else None,
             baseline=asdict(base),
@@ -382,6 +426,11 @@ def main() -> int:
     ap.add_argument("--cell", default="L1", help="label for the results file")
     ap.add_argument(
         "--mass-kg", type=float, default=None, help="known test mass for a counts/kg check"
+    )
+    ap.add_argument(
+        "--single-ended",
+        action="store_true",
+        help="measure AIN0 against ground (gain 1): tests wiring before R1/R2 are fitted",
     )
     ap.add_argument("--baseline-s", type=float, default=10.0)
     ap.add_argument("--out", default=str(Path(__file__).resolve().parents[2] / "bench" / "results"))
