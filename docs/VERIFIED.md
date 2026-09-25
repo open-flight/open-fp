@@ -51,6 +51,8 @@ Achieved loop rate: — · `drdyMissed` over 10 min: —
 | Monitor RPC cost | Each `Monitor.available()`/`println` call blocks the MCU loop for roughly 13 ms (a loop polling DRDY captured ~150 of 1000 samples/s when checking `Monitor.available()` every loop). **The firmware must not call the router in the sampling loop;** batch sends as the spec plans (`Bridge.notify` at 20 Hz) and check whether they block the same way. | bench/ads1220_single on hardware | 2026-09-25 |
 | ADC self-test ('v') on L1, wired except R1/R2 | AVDD 3333 mV, external REF 3316 mV (REFP0/REFN0 OK), AIN1 552 mV (floating, no R1/R2 yet), **AIN0 > 2048 mV: at the 3.3 V rail, not the ~1650 mV centre-tap voltage.** Cause: white was wired as S, but red is the centre tap. **After swapping (red → AIN0):** AVDD 3333, REF 3317, **AIN0 1663 mV**. Single-ended reading ≈ 4,204,500 counts (= 1663/3317 of full scale), per-sample noise 127 counts at gain 1, 100 ms means within ~60 counts, DRDY 94–95 per 100 ms. | bench/ads1220_single voltage check | 2026-09-25 |
 
+- **2026-09-25, L1 live view (single-ended, gain 1):** 100 ms averages steady within tens of counts, rate ~940 Hz. **Occasional single-sample outliers of −1,000 to −2,000 counts (one +800),** about 0.4–0.8 mV, visible only in the per-window min/max. Unconfirmed guess: a late read when a Monitor RPC delays the loop, racing the next conversion. Recheck in differential mode with R1/R2, and in the real firmware, which reads each sample paced by DRDY.
+
 ## Performance
 
 | Item | Result | Checked against | Date |

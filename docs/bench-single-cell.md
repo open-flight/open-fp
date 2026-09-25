@@ -110,6 +110,14 @@ Keys (type one, then Enter):
 
 Ctrl-C exits.
 
+### Live view (optional)
+
+```bash
+.venv/bin/python tools/bench/live_view.py     # opens http://localhost:7071
+```
+
+This shows presses in real time: the change since tare as a big number, and a 30 s chart of the 100 ms averages with their min–max band. It also shows the mode, readback, sample rate and noise. The buttons send the sketch's keys (single-ended, differential, voltage check, re-check). The kg figure uses a rough counts-per-kg you can edit, until calibration gives the real value. Only one program can read the monitor at a time, so close the live view before running the guided test.
+
 ### 8. Run the guided test
 
 ```bash
