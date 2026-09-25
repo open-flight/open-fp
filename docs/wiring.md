@@ -122,7 +122,7 @@ Pick one color scheme for the 4 cores and keep it for all 8 runs, for example:
 
 Generic ADS1220 modules vary, so check yours before soldering anything and write the answers in [`VERIFIED.md`](VERIFIED.md) (item 7).
 
-1. **Find these pins on the silkscreen:** CS, SCLK, DIN, DOUT (sometimes "DOUT/DRDY"), DRDY, AVDD, DVDD, AVSS/DGND (often a single GND), AIN0, AIN1, REFP0, REFN0, and CLK if it's broken out.
+1. **Find these pins on the silkscreen:** CS, SCLK, DIN (labelled MOSI on this build's breakout), DOUT (MISO), DRDY, AVDD, DVDD, AGND and DGND (split on this build's breakout, so wire both), AIN0, AIN1, REFP0, REFN0, and CLK.
 2. **Power:** check whether the board has a voltage regulator (a small 3- or 5-pin chip near the power pins). If it has a regulator that expects 5 V, **stop**: powering it from 3V3 may not work, and the reference would no longer match the bridge supply. Record it and ask before continuing.
 3. **CLK:** if CLK is broken out and isn't already tied to ground on the board, connect it to GND. This selects the internal oscillator. If it's not broken out, the board already handles it.
 4. **REFP0 / REFN0:** some modules tie REFP0 to AVDD and REFN0 to GND on the board. Check with continuity. If they aren't tied, you'll wire them in step 7.
