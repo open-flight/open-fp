@@ -11,7 +11,7 @@ This file records the answer to every **VERIFY** item in [`PROJECT_INIT.md`](PRO
 | 5 | App container: persistent data path, `requirements.txt` support, numpy preinstalled? | numpy 2.5.1, fastapi 0.141.1, uvicorn 0.52.1, msgpack 1.2.1 preinstalled (CPython 3.13.14). App venv lives in `<app>/.cache/.venv`. Persistence and `requirements.txt` handling are still open. | `docker run python-apps-base:0.12.0` | 2026-09-23 |
 | 6 | `arduino-app-cli`: start/stop/logs/autostart commands; App Lab app dir on the board | App dir `/home/arduino/ArduinoApps/open-fp`. `app start\|stop\|restart <path>`, `app logs <path> [--follow] [--tail N] [--all]`, `monitor` (MCU serial). Autostart candidate: `properties set default <path>` (boot behavior untested). **No `rsync` on board**: deploy uses tar. | `arduino-app-cli` 0.13.0 | 2026-09-23 |
 | 7 | ADS1220 module: exposed pins (CLK, REFP0/REFN0, AVDD/DVDD), onboard regulator, hole spacing | Purple ADS1220 breakout. Left edge: DRDY, MISO, MOSI, SCLK, CS, CLK, DVDD, DGND. Right edge: AIN0–AIN3, REFN0, REFP0, AVDD, AGND. Supplies and grounds are split (DVDD/AVDD, DGND/AGND), so both pairs must be wired; CLK is broken out, so tie it to GND. **Still open:** onboard regulator, board size and hole spacing. | owner's photo of the board | 2026-09-25 |
-| 8 | Load cell wire colors (per cell, see `wiring.md`) | | | |
+| 8 | Load cell wire colors (per cell, see `wiring.md`) | **Red = centre tap (S); white and black = ends (E+/E−)** on L1. Wiring white as S put AIN0 at the 3.3 V rail; with red on AIN0 it reads 1663 mV. Check the other seven with a meter. | ADC self-check on L1 | 2026-09-25 |
 | 9 | App Lab first-boot steps (§11.1) | Board name, Wi-Fi, `arduino` password, updates, exactly as in §11.1. Board reachable at `open-fp.local`. OS: Debian 13 (trixie), kernel 6.16.7, aarch64. | App Lab (owner), `uname -a` | 2026-09-23 |
 
 ## Bench measurements (M1/M2)
@@ -49,7 +49,7 @@ Achieved loop rate: — · `drdyMissed` over 10 min: —
 | Item | Result | Checked against | Date |
 |---|---|---|---|
 | Monitor RPC cost | Each `Monitor.available()`/`println` call blocks the MCU loop for roughly 13 ms (a loop polling DRDY captured ~150 of 1000 samples/s when checking `Monitor.available()` every loop). **The firmware must not call the router in the sampling loop;** batch sends as the spec plans (`Bridge.notify` at 20 Hz) and check whether they block the same way. | bench/ads1220_single on hardware | 2026-09-25 |
-| ADC self-test ('v') on L1, wired except R1/R2 | AVDD 3333 mV, external REF 3316 mV (REFP0/REFN0 OK), AIN1 552 mV (floating, no R1/R2 yet), **AIN0 > 2048 mV: at the 3.3 V rail, not the ~1650 mV centre-tap voltage.** Either S/E+ are swapped or E− isn't grounded. | bench/ads1220_single voltage check | 2026-09-25 |
+| ADC self-test ('v') on L1, wired except R1/R2 | AVDD 3333 mV, external REF 3316 mV (REFP0/REFN0 OK), AIN1 552 mV (floating, no R1/R2 yet), **AIN0 > 2048 mV: at the 3.3 V rail, not the ~1650 mV centre-tap voltage.** Cause: white was wired as S, but red is the centre tap. **After swapping (red → AIN0):** AVDD 3333, REF 3317, **AIN0 1663 mV**. Single-ended reading ≈ 4,204,500 counts (= 1663/3317 of full scale), per-sample noise 127 counts at gain 1, 100 ms means within ~60 counts, DRDY 94–95 per 100 ms. | bench/ads1220_single voltage check | 2026-09-25 |
 
 ## Performance
 
