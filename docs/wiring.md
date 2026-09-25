@@ -170,31 +170,13 @@ Full wiring for one corner (repeat ×8):
 
 ## 8. Build the two ADC carriers and the harness
 
-![Harness: UNO Q to two ADC carriers to 8 load cells](img/harness.svg)
+The full harness has its own step-by-step guide with diagrams: **[`harness.md`](harness.md)**.
 
-All 8 boards share power and three SPI lines. Each board gets its own CS wire, and **only L1** has DRDY wired. That's 14 UNO Q pins, **one wire per pin**. The job is fanning the 5 shared lines out to 8 boards, which is what the carriers are for.
+1. **Build 8 identical units.** Each is a breakout, R1/R2, and a JST socket for its cell. Each exposes 6 wires (DRDY too on L1).
+2. **Mount 4 units per carrier.** Each carrier has 5 bus rails with BUS IN / BUS OUT headers.
+3. **Chain it all together:** Q → toe carrier → heel carrier on the bus, plus a chip-select bundle to each carrier.
 
-**Carriers.** The enclosure has two ADC pads: toe (+y) for L1, L2, R1, R2, and heel (−y) for L3, L4, R3, R4. Build one perfboard (2.54 mm protoboard) carrier per pad. Each carrier holds:
-
-- its 4 ADS1220 modules, soldered down
-- 5 bus rails across the board (3V3, GND, SCLK, MOSI, MISO), with each module tapped onto them with short wires
-- each module's R1/R2 pair, right at its pins (step 6)
-- a JST-XH header per cell cable, with the cable shield soldered to the GND rail (step 7)
-
-Don't use a solderless breadboard in the plates. A swing shakes the floor, and a loose contact on CS or MISO corrupts readings in ways that are hard to find. A breadboard is fine for the one-cell bench test.
-
-**Harness.**
-
-1. **Q → toe carrier, 10 wires:** 3V3, GND, D13 → SCLK rail, D11 → MOSI rail, D12 → MISO rail, CS for L1 (D3), L2 (D4), R1 (D7), R2 (D8), and L1's DRDY → D2.
-2. **Toe carrier → heel carrier, 5 wires:** the same five bus rails, chained across.
-3. **Q → heel carrier, 4 wires:** CS for L3 (D5), L4 (D6), R3 (D9), R4 (**A2**).
-4. **Power:** use 22 AWG for 3V3 and GND. The total draw is about 30 mA, so size isn't critical, but a solid ground matters.
-5. **SPI length:** keep the Q-to-carrier runs short. About 15–30 cm total per line is comfortable at 2 MHz.
-6. **DRDY:** only **L1's DRDY goes to D2**. Leave the other seven DRDY pads unconnected. **Never tie DRDY pins together.** They are push-pull outputs and would fight each other.
-7. **Nothing goes to D10, D0 or D1.**
-8. **Optional CS pull-ups:** a 10 kΩ resistor from each CS to 3V3 keeps every board deselected while the MCU boots. The firmware also drives every CS high as its very first action.
-
-Whether 4 modules fit side by side on a pad depends on the module's size, which is still open (VERIFIED item 7). If they don't fit, mount them in two stacked pairs, as §6.7 of the spec allows.
+That's 14 UNO Q pins, one wire each. **Nothing goes to D10, D0 or D1, and only L1's DRDY is wired (to D2).** Whether 4 breakouts fit side by side on a pad depends on the breakout's size, which is still open (VERIFIED item 7). If they don't fit, mount them in two stacked pairs, as §6.7 of the spec allows.
 
 ## 9. Check before power
 

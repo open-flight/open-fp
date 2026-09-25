@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+<rect width="1280" height="800" fill="#FFFFFF"/>
+<circle cx="58" cy="44" r="18" fill="#1F2933"/>
+<text x="58" y="50" font-size="18" font-weight="700" fill="#FFFFFF" text-anchor="middle">2</text>
+<text x="88" y="52" font-size="24" font-weight="700" fill="#1F2933" text-anchor="start">Put four units on a carrier (×2)</text>
+<text x="40" y="88" font-size="14" font-weight="400" fill="#5F6B78" text-anchor="start">A carrier is a perfboard with 5 bus rails. Every unit taps all five rails; its CS and cell socket come out the bottom edge.</text>
+<rect x="70" y="130" width="1140" height="510" rx="12" fill="#F6F4EF" stroke="#7A7063" stroke-width="2"/>
+<text x="640.0" y="158" font-size="13" font-weight="700" fill="#7A7063" text-anchor="middle">Toe carrier (perfboard). The heel carrier is identical, with L3, L4, R3, R4.</text>
+<rect x="86" y="184" width="60" height="120" rx="4" fill="#FFFFFF" stroke="#1F2933" stroke-width="1.8"/>
+<text x="86" y="174" font-size="12" font-weight="700" fill="#1F2933" text-anchor="start">BUS IN ← UNO Q</text>
+<rect x="1134" y="184" width="60" height="120" rx="4" fill="#FFFFFF" stroke="#1F2933" stroke-width="1.8"/>
+<text x="1194" y="174" font-size="12" font-weight="700" fill="#1F2933" text-anchor="end">BUS OUT → heel carrier</text>
+<path d="M146,200 L1134,200" fill="none" stroke="#D64545" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="146" cy="200" r="4.5" fill="#D64545"/>
+<circle cx="1134" cy="200" r="4.5" fill="#D64545"/>
+<text x="154" y="195" font-size="11" font-weight="700" fill="#D64545" text-anchor="start">3V3</text>
+<path d="M146,222 L1134,222" fill="none" stroke="#222222" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="146" cy="222" r="4.5" fill="#222222"/>
+<circle cx="1134" cy="222" r="4.5" fill="#222222"/>
+<text x="154" y="217" font-size="11" font-weight="700" fill="#222222" text-anchor="start">GND</text>
+<path d="M146,244 L1134,244" fill="none" stroke="#2F80ED" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="146" cy="244" r="4.5" fill="#2F80ED"/>
+<circle cx="1134" cy="244" r="4.5" fill="#2F80ED"/>
+<text x="154" y="239" font-size="11" font-weight="700" fill="#2F80ED" text-anchor="start">SCLK</text>
+<path d="M146,266 L1134,266" fill="none" stroke="#27AE60" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="146" cy="266" r="4.5" fill="#27AE60"/>
+<circle cx="1134" cy="266" r="4.5" fill="#27AE60"/>
+<text x="154" y="261" font-size="11" font-weight="700" fill="#27AE60" text-anchor="start">MOSI</text>
+<path d="M146,288 L1134,288" fill="none" stroke="#9B51E0" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="146" cy="288" r="4.5" fill="#9B51E0"/>
+<circle cx="1134" cy="288" r="4.5" fill="#9B51E0"/>
+<text x="154" y="283" font-size="11" font-weight="700" fill="#9B51E0" text-anchor="start">MISO</text>
+<rect x="230" y="330" width="200" height="150" rx="8" fill="#EFEAF7" stroke="#5B3B8C" stroke-width="1.8"/>
+<text x="330.0" y="374" font-size="22" font-weight="700" fill="#5B3B8C" text-anchor="middle">L1</text>
+<text x="330.0" y="394" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">unit (step 1)</text>
+<text x="330.0" y="412" font-size="11" font-weight="400" fill="#1F2933" text-anchor="middle">toe outer</text>
+<path d="M270,330 L270,200" fill="none" stroke="#D64545" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="270" cy="200" r="3.6" fill="#D64545"/>
+<path d="M300,330 L300,222" fill="none" stroke="#222222" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="300" cy="222" r="3.6" fill="#222222"/>
+<path d="M330,330 L330,244" fill="none" stroke="#2F80ED" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="330" cy="244" r="3.6" fill="#2F80ED"/>
+<path d="M360,330 L360,266" fill="none" stroke="#27AE60" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="360" cy="266" r="3.6" fill="#27AE60"/>
+<path d="M390,330 L390,288" fill="none" stroke="#9B51E0" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="390" cy="288" r="3.6" fill="#9B51E0"/>
+<path d="M270,480 L270,640" fill="none" stroke="#E2A400" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="270" cy="640" r="5" fill="#FFFFFF" stroke="#E2A400" stroke-width="2"/>
+<text x="282" y="644" font-size="13" font-weight="700" fill="#E2A400" text-anchor="start"></text>
+<text x="270" y="664" font-size="12" font-weight="700" fill="#E2A400" text-anchor="middle">CS ← D3</text>
+<path d="M320,480 L320,640" fill="none" stroke="#EB5757" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="320" cy="640" r="5" fill="#FFFFFF" stroke="#EB5757" stroke-width="2"/>
+<text x="332" y="644" font-size="13" font-weight="700" fill="#EB5757" text-anchor="start"></text>
+<text x="324" y="682" font-size="12" font-weight="700" fill="#EB5757" text-anchor="middle">DRDY → D2</text>
+<rect x="364" y="454" width="32" height="20" rx="3" fill="#FFFFFF" stroke="#1F2933" stroke-width="1.4"/>
+<text x="380" y="468" font-size="9" font-weight="700" fill="#1F2933" text-anchor="middle">JST</text>
+<path d="M380,474 L380,700" fill="none" stroke="#7A8796" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="380" y="718" font-size="12" font-weight="700" fill="#1F2933" text-anchor="middle">cell L1</text>
+<text x="380" y="734" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">450 mm</text>
+<rect x="470" y="330" width="200" height="150" rx="8" fill="#EFEAF7" stroke="#5B3B8C" stroke-width="1.8"/>
+<text x="570.0" y="374" font-size="22" font-weight="700" fill="#5B3B8C" text-anchor="middle">L2</text>
+<text x="570.0" y="394" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">unit (step 1)</text>
+<text x="570.0" y="412" font-size="11" font-weight="400" fill="#1F2933" text-anchor="middle">toe inner</text>
+<path d="M510,330 L510,200" fill="none" stroke="#D64545" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="510" cy="200" r="3.6" fill="#D64545"/>
+<path d="M540,330 L540,222" fill="none" stroke="#222222" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="540" cy="222" r="3.6" fill="#222222"/>
+<path d="M570,330 L570,244" fill="none" stroke="#2F80ED" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="570" cy="244" r="3.6" fill="#2F80ED"/>
+<path d="M600,330 L600,266" fill="none" stroke="#27AE60" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="600" cy="266" r="3.6" fill="#27AE60"/>
+<path d="M630,330 L630,288" fill="none" stroke="#9B51E0" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="630" cy="288" r="3.6" fill="#9B51E0"/>
+<path d="M510,480 L510,640" fill="none" stroke="#E2A400" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="510" cy="640" r="5" fill="#FFFFFF" stroke="#E2A400" stroke-width="2"/>
+<text x="522" y="644" font-size="13" font-weight="700" fill="#E2A400" text-anchor="start"></text>
+<text x="510" y="664" font-size="12" font-weight="700" fill="#E2A400" text-anchor="middle">CS ← D4</text>
+<rect x="604" y="454" width="32" height="20" rx="3" fill="#FFFFFF" stroke="#1F2933" stroke-width="1.4"/>
+<text x="620" y="468" font-size="9" font-weight="700" fill="#1F2933" text-anchor="middle">JST</text>
+<path d="M620,474 L620,700" fill="none" stroke="#7A8796" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="620" y="718" font-size="12" font-weight="700" fill="#1F2933" text-anchor="middle">cell L2</text>
+<text x="620" y="734" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">250 mm</text>
+<rect x="710" y="330" width="200" height="150" rx="8" fill="#EFEAF7" stroke="#5B3B8C" stroke-width="1.8"/>
+<text x="810.0" y="374" font-size="22" font-weight="700" fill="#5B3B8C" text-anchor="middle">R1</text>
+<text x="810.0" y="394" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">unit (step 1)</text>
+<text x="810.0" y="412" font-size="11" font-weight="400" fill="#1F2933" text-anchor="middle">toe inner</text>
+<path d="M750,330 L750,200" fill="none" stroke="#D64545" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="750" cy="200" r="3.6" fill="#D64545"/>
+<path d="M780,330 L780,222" fill="none" stroke="#222222" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="780" cy="222" r="3.6" fill="#222222"/>
+<path d="M810,330 L810,244" fill="none" stroke="#2F80ED" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="810" cy="244" r="3.6" fill="#2F80ED"/>
+<path d="M840,330 L840,266" fill="none" stroke="#27AE60" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="840" cy="266" r="3.6" fill="#27AE60"/>
+<path d="M870,330 L870,288" fill="none" stroke="#9B51E0" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="870" cy="288" r="3.6" fill="#9B51E0"/>
+<path d="M750,480 L750,640" fill="none" stroke="#E2A400" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="750" cy="640" r="5" fill="#FFFFFF" stroke="#E2A400" stroke-width="2"/>
+<text x="762" y="644" font-size="13" font-weight="700" fill="#E2A400" text-anchor="start"></text>
+<text x="750" y="664" font-size="12" font-weight="700" fill="#E2A400" text-anchor="middle">CS ← D7</text>
+<rect x="844" y="454" width="32" height="20" rx="3" fill="#FFFFFF" stroke="#1F2933" stroke-width="1.4"/>
+<text x="860" y="468" font-size="9" font-weight="700" fill="#1F2933" text-anchor="middle">JST</text>
+<path d="M860,474 L860,700" fill="none" stroke="#7A8796" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="860" y="718" font-size="12" font-weight="700" fill="#1F2933" text-anchor="middle">cell R1</text>
+<text x="860" y="734" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">250 mm</text>
+<rect x="950" y="330" width="200" height="150" rx="8" fill="#EFEAF7" stroke="#5B3B8C" stroke-width="1.8"/>
+<text x="1050.0" y="374" font-size="22" font-weight="700" fill="#5B3B8C" text-anchor="middle">R2</text>
+<text x="1050.0" y="394" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">unit (step 1)</text>
+<text x="1050.0" y="412" font-size="11" font-weight="400" fill="#1F2933" text-anchor="middle">toe outer</text>
+<path d="M990,330 L990,200" fill="none" stroke="#D64545" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="990" cy="200" r="3.6" fill="#D64545"/>
+<path d="M1020,330 L1020,222" fill="none" stroke="#222222" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1020" cy="222" r="3.6" fill="#222222"/>
+<path d="M1050,330 L1050,244" fill="none" stroke="#2F80ED" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1050" cy="244" r="3.6" fill="#2F80ED"/>
+<path d="M1080,330 L1080,266" fill="none" stroke="#27AE60" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1080" cy="266" r="3.6" fill="#27AE60"/>
+<path d="M1110,330 L1110,288" fill="none" stroke="#9B51E0" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1110" cy="288" r="3.6" fill="#9B51E0"/>
+<path d="M990,480 L990,640" fill="none" stroke="#E2A400" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="990" cy="640" r="5" fill="#FFFFFF" stroke="#E2A400" stroke-width="2"/>
+<text x="1002" y="644" font-size="13" font-weight="700" fill="#E2A400" text-anchor="start"></text>
+<text x="990" y="664" font-size="12" font-weight="700" fill="#E2A400" text-anchor="middle">CS ← D8</text>
+<rect x="1084" y="454" width="32" height="20" rx="3" fill="#FFFFFF" stroke="#1F2933" stroke-width="1.4"/>
+<text x="1100" y="468" font-size="9" font-weight="700" fill="#1F2933" text-anchor="middle">JST</text>
+<path d="M1100,474 L1100,700" fill="none" stroke="#7A8796" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="1100" y="718" font-size="12" font-weight="700" fill="#1F2933" text-anchor="middle">cell R2</text>
+<text x="1100" y="734" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">450 mm</text>
+<text x="640" y="758" font-size="12" font-weight="400" fill="#5F6B78" text-anchor="middle">Dot = soldered joint. The 5 rails run the full width, so BUS IN and BUS OUT are the same 5 signals: that is what lets carriers chain.</text>
+</svg>
