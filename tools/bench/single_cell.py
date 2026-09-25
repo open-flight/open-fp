@@ -168,15 +168,27 @@ def detect_press(
     return Press(abs(delta) >= min_delta, delta, 1 if delta > 0 else -1)
 
 
+def release_offset(baseline_mean: float, windows: list[Stats]) -> float:
+    """Where the reading settled after letting go, relative to the baseline (last 0.5 s)."""
+    return statistics.median(w.mean for w in windows[-5:]) - baseline_mean
+
+
 def returned_to_baseline(
-    baseline_mean: float, windows: list[Stats], press_delta: float, floor: float = 5_000
+    baseline_mean: float,
+    windows: list[Stats],
+    press_delta: float,
+    floor: float = 5_000,
+    drift: float = 0.0,
 ) -> bool:
-    """After letting go, the reading should settle back to within 5 % of the press (or `floor`)."""
+    """After letting go, the reading should settle most of the way back.
+
+    Tolerance: the largest of `floor`, a quarter of the press, and 1.5x the drift seen during
+    the baseline (the release is measured several seconds later, so drift alone moves it).
+    """
     if not windows:
         return False
-    tail = windows[-5:]
-    settled = statistics.median(w.mean for w in tail)
-    return abs(settled - baseline_mean) <= max(floor, 0.05 * abs(press_delta))
+    tolerance = max(floor, 0.25 * abs(press_delta), 1.5 * abs(drift))
+    return abs(release_offset(baseline_mean, windows)) <= tolerance
 
 
 @dataclass
@@ -354,7 +366,8 @@ def run_live(args) -> int:
             "Step 1/3 - baseline. Take everything off the cell and don't touch it or its wires."
         )
         print(f"  Recording {args.baseline_s:.0f} s...")
-        base = check_baseline(stats_only(mon.collect(args.baseline_s)))
+        base_w = stats_only(mon.collect(args.baseline_s))
+        base = check_baseline(base_w)
         print(f"  mean {base.mean:,.0f}, noise {base.noise:,.0f} counts, {base.rate_hz:.0f} Hz")
 
         countdown(
@@ -363,13 +376,19 @@ def run_live(args) -> int:
             "  (Support the cell by its outer frame, e.g. in the cradle.)"
         )
         print("  Press now...")
-        press = detect_press(base.mean, stats_only(mon.collect(6.0)), mode.press_delta)
+        press_w = stats_only(mon.collect(6.0))
+        press = detect_press(base.mean, press_w, mode.press_delta)
+        release_w = stats_only(mon.collect(2.0))
         released = returned_to_baseline(
-            base.mean, stats_only(mon.collect(2.0)), press.delta, floor=mode.press_delta / 4
+            base.mean, release_w, press.delta, floor=mode.press_delta / 4, drift=base.drift
         )
+        if release_w:
+            print(
+                f"  after letting go: {release_offset(base.mean, release_w):+,.0f} counts from baseline"
+            )
         if press.pressed and not released:
             base.problems.append(
-                "didn't return to baseline after letting go (cell rubbing or loose)"
+                "didn't return to baseline after letting go (cell rubbing, loose, or drifting)"
             )
             base.ok = False
 
@@ -380,9 +399,8 @@ def run_live(args) -> int:
                 "  (frame supported), hands off, then press Enter."
             )
             print("  Recording 5 s...")
-            scale = scale_from_mass(
-                base.mean, stats_only(mon.collect(5.0)), args.mass_kg, mode.cpk_range
-            )
+            mass_w = stats_only(mon.collect(5.0))
+            scale = scale_from_mass(base.mean, mass_w, args.mass_kg, mode.cpk_range)
 
         print(summarize(readback, base, press, scale, mode))
         results.update(
@@ -390,6 +408,13 @@ def run_live(args) -> int:
             baseline=asdict(base),
             press=asdict(press),
             scale=asdict(scale) if scale else None,
+            mode=mode.name,
+            windows={
+                "baseline": [asdict(w) for w in base_w],
+                "press": [asdict(w) for w in press_w],
+                "release": [asdict(w) for w in release_w],
+                "mass": [asdict(w) for w in mass_w] if args.mass_kg else [],
+            },
         )
         out = Path(args.out)
         out.mkdir(parents=True, exist_ok=True)
