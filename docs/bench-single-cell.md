@@ -97,14 +97,28 @@ S,51234,100,1203456,420,1201800,1205100
   └ MCU time, ms
 ```
 
-Type `r` and Enter to reset the ADC and re-check the registers. Ctrl-C to exit.
+The 8th field of each `S` line is the number of conversions the ADC signalled, counted by the DRDY interrupt. `n` can be lower, because each `Monitor` call blocks the MCU for about 13 ms.
+
+Keys (type one, then Enter):
+
+| Key | What it does |
+|---|---|
+| `v` | **Voltage check.** The ADC measures AVDD, AIN0 and AIN1 against its internal 2.048 V reference, and the external reference on REFP0/REFN0. Prints `V,<name>,<mV>`. Expect AVDD ≈ 3300, REF ≈ 3300, AIN0 and AIN1 ≈ 1650. |
+| `s` | **Single-ended mode:** AIN0 against ground, gain 1. Works **before R1/R2 are fitted**. It tests wiring and response, not accuracy. |
+| `d` | **Differential mode:** AIN0 − AIN1, gain 128. The real configuration; needs R1/R2. |
+| `r` | Reset the ADC and re-check its registers. |
+
+Ctrl-C exits.
 
 ### 8. Run the guided test
 
 ```bash
 .venv/bin/python tools/bench/single_cell.py                 # readback, baseline, press test
 .venv/bin/python tools/bench/single_cell.py --mass-kg 2.0   # plus counts per kg
+.venv/bin/python tools/bench/single_cell.py --single-ended  # before R1/R2 are fitted
 ```
+
+`--single-ended` uses thresholds for gain 1: a thumb press moves the reading by hundreds of counts rather than hundreds of thousands, and a known mass gives about 85–170 counts per kg.
 
 It walks you through each step:
 
@@ -136,7 +150,9 @@ The counts-per-kg range assumes a 50 kg cell at about 0.5–1 mV/V. Your number 
 | `E,no DRDY for 500 ms` | DRDY not on D2; ADC unpowered; readback failed |
 | Readback `FF FF FF FF` | MISO not on D12, CS not on D3, or ADC unpowered (check both DVDD and AVDD) |
 | Readback `00 00 00 00` | MISO isn't reaching D12 (an unconnected D12 floats low and reads 00), MOSI or SCLK not connected, or MISO shorted to GND |
-| Reading pinned at ±8,388,607 | AIN0 or AIN1 floating; R1/R2 missing; S not connected |
+| Reading pinned at ±8,388,607 | Run the voltage check (`v`). AIN0 or AIN1 floating; R1/R2 missing; S not connected |
+| `V,AIN0,>2048` (AIN0 at the 3.3 V rail) | The wire on AIN0 is E+, not S (re-identify the wires: S is the one **not** in the 2 kΩ pair), or E− isn't connected to GND, so S floats up to E+ |
+| `V,REF,<AVDD/4…` | REFP0/REFN0 aren't connected to 3V3/GND |
 | Reading moves when you touch a wire | Noise pickup: shorten wires, twist the cell's three wires together |
 | Reading drifts steadily | Warm-up (give it 5 min), or the cell is touching something |
 
