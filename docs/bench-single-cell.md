@@ -41,7 +41,7 @@ Leave **D10, D0 and D1** unconnected: D10 is the SPI hardware chip select and D0
 
 ### 1. Identify the cell's wires
 
-With a multimeter on resistance, measure all three pairs. The pair that reads **about 2 kΩ** is E+ and E−. The third wire is **S**. Call either end E+; if you guess wrong, the reading falls instead of rising under load, which is fine for this test. Note the colours in the table in [`wiring.md` §2](wiring.md#2-identify-and-label-each-load-cell).
+With a multimeter on resistance, measure all three pairs. The pair that reads **about 2 kΩ** is E+ and E−. The third wire is **S**. On this build's red/black/white cells, **red is S**, not white. Call either end E+; if you guess wrong, the reading falls instead of rising under load, which is fine for this test. Note the colours in the table in [`wiring.md` §2](wiring.md#2-identify-and-label-each-load-cell).
 
 ### 2. Prepare the ADS1220 module
 

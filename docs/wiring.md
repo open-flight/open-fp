@@ -64,12 +64,12 @@ Each cell has 3 wires: two ends of a pair of strain gauges (excitation), and the
 
 1. Measure the resistance between each pair of wires. One pair reads about **2 kΩ**: those are the two **ends**. The other two pairs read about **1 kΩ**.
 2. The wire that isn't in the 2 kΩ pair is the **centre tap, S**.
-3. Call one end **E+** and the other **E−**. Typically white/black are the ends and red is the centre, but go by the meter. If you guess E+/E− backwards, that channel reads negative under load, which is fixed in software (`signs` in config). Just be consistent.
+3. Call one end **E+** and the other **E−**. On the cells in this build (red/black/white), **red is the centre tap S**, and white and black are the ends. That was confirmed on L1, where wiring white as S put AIN0 at the 3.3 V rail. Still check each cell with the meter. If you guess E+/E− backwards, that channel reads negative under load, which is fixed in software (`signs` in config). Just be consistent.
 4. Record each cell here and put a label on its lead:
 
 | Ch | ID | E+ color | E− color | S color | End-to-end (Ω) | Sign (config) | Notes |
 |---|---|---|---|---|---|---|---|
-| 0 | L1 | | | | | | |
+| 0 | L1 | white or black | the other | **red** | | | red is S on these cells (confirmed 2026-09-25) |
 | 1 | L2 | | | | | | |
 | 2 | L3 | | | | | | |
 | 3 | L4 | | | | | | |
