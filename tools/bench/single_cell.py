@@ -81,8 +81,19 @@ class SketchError:
     message: str
 
 
+@dataclass(frozen=True)
+class ModeLine:
+    name: str  # "differential" | "single-ended"
+
+
+@dataclass(frozen=True)
+class Voltage:
+    name: str  # AVDD, AIN0, AIN1, REF
+    value: str  # millivolts, or a message such as ">2048"
+
+
 def parse_line(line: str):
-    """One line of ads1220_single output -> Readback | Stats | SketchError | None."""
+    """One line of ads1220_single output -> Readback | Stats | SketchError | ModeLine | Voltage | None."""
     line = line.strip()
     parts = line.split(",")
     try:
@@ -92,6 +103,10 @@ def parse_line(line: str):
             return Stats(*(int(p) for p in parts[1:]))
         if parts[0] == "E" and len(parts) >= 2:
             return SketchError(",".join(parts[1:]))
+        if parts[0] == "M" and len(parts) == 2:
+            return ModeLine(parts[1])
+        if parts[0] == "V" and len(parts) >= 3:
+            return Voltage(parts[1], ",".join(parts[2:]))
     except ValueError:
         return None
     return None
