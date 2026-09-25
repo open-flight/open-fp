@@ -189,3 +189,16 @@ def test_rate_uses_drdy_count_when_reported():
     windows = [Stats(100 * i, 74, 0, 400, -2000, 2000, 100) for i in range(50)]
     r = check_baseline(windows)
     assert r.rate_hz == pytest.approx(1000, rel=0.01) and r.ok, r.problems
+
+
+def test_release_tolerance_allows_for_baseline_drift():
+    # the owner's first single-ended run: -343 press, 176 counts of baseline drift in 10 s
+    windows = [S(i, 1_000 - 150) for i in range(10)]
+    assert not returned_to_baseline(1_000, windows, press_delta=-343, floor=37.5)
+    assert returned_to_baseline(1_000, windows, press_delta=-343, floor=37.5, drift=-176)
+
+
+def test_release_offset_reports_where_it_settled():
+    from single_cell import release_offset
+
+    assert release_offset(1_000, [S(i, 1_120) for i in range(10)]) == 120

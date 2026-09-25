@@ -18,7 +18,7 @@ This file records the answer to every **VERIFY** item in [`PROJECT_INIT.md`](PRO
 
 | Channel | Unloaded mean (counts) | Std dev (counts) | Register readback | Notes |
 |---|---|---|---|---|
-| L1 | | | | |
+| L1 | 4,204,513 (single-ended, gain 1, no R1/R2) | 116 | OK (`81 C4 40 00`) | Thumb press −343 counts (falls under load). 945 conversions/s. Drift −176 counts over 10 s. Differential (gain 128) test pending R1/R2. 2026-09-25 |
 | L2 | | | | |
 | L3 | | | | |
 | L4 | | | | |
