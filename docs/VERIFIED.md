@@ -53,6 +53,8 @@ Achieved loop rate: — · `drdyMissed` over 10 min: —
 
 - **2026-09-25, L1 live view (single-ended, gain 1):** 100 ms averages steady within tens of counts, rate ~940 Hz. **Occasional single-sample outliers of −1,000 to −2,000 counts (one +800),** about 0.4–0.8 mV, visible only in the per-window min/max. Unconfirmed guess: a late read when a Monitor RPC delays the loop, racing the next conversion. Recheck in differential mode with R1/R2, and in the real firmware, which reads each sample paced by DRDY.
 
+| Enclosure interior, measured from `03_centre_enclosure_base.step` | Outer 294.8 × 60.8 × 19.9 mm. Cavity about **55.8 mm wide**, 292 mm long, floor at z 2.6. **ADC pads** at each end: x ±47 to ±137 mm from centre, y ±25 (about **90 × 50 mm**), top at z 5.4, with a 7.5 mm grid of insert holes. **14.5 mm clearance** from the pad top to the rim. Lid posts at x = 0 and ±140, y ±23; UNO Q bosses near x ≈ 30. So each ADC carrier must fit about 90 × 50 mm: 4 breakouts in 2 × 2, soldered directly, with no sockets (sockets add ~8.5 mm). | CadQuery 2.8 probes of the STEP | 2026-09-25 |
+
 ## Performance
 
 | Item | Result | Checked against | Date |
