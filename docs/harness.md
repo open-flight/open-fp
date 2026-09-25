@@ -39,6 +39,47 @@ Each carrier is a strip of 2.54 mm perfboard:
 | Toe (+y end pad) | L1, L2, R1, R2 | D3, D4, D7, D8 | L1's DRDY → D2 |
 | Heel (−y end pad) | L3, L4, R3, R4 | D5, D6, D9, **A2** | BUS OUT not used |
 
+### Building a carrier on stripboard
+
+![Carrier layout on stripboard](img/carrier-stripboard.svg)
+
+Use single-sided 2.54 mm stripboard, 37 × 17 holes (about 94 × 43 mm). That fits the enclosure between the UNO Q and the lid posts, roughly x = 40–134 mm from centre, overhanging the 90 mm pad a little at each end. Mount it on the pad with **nylon** standoffs through holes in the unused strips I and M. The breakout's pins pair up across the board (AGND|DGND, AVDD|DVDD, …), so with the header columns across the strips:
+
+- **Strip A is the GND rail and strip B the 3V3 rail**, running under all four breakouts and never cut.
+- **Strips J, K, L are the SCLK, MOSI and MISO rails.**
+- **Strips N and O repeat 3V3 and GND** next to the JSTs, tied to B and A by the links in columns 19 and 10.
+
+Build order:
+
+1. **Cut the strips (✕):**
+   - rows C–H at columns 5, 14, 23, 32, which falls between each breakout's two header columns
+   - rows C–H at columns 10, 19, 28, between breakouts
+   - row P at columns 2, 5, 11, 14, 20, 23, 29, 32, so each unit's S strip is separate
+
+   Cut from the copper side and count columns carefully, because the board is mirrored when flipped. Check every cut with a meter.
+2. **Fit the wire links**, all of them before any breakout, since they run underneath. Per breakout, with x0 = its left header column (2, 11, 20, 29):
+
+   | Link | From | To |
+   |---|---|---|
+   | REFP0 → 3V3 | x0+1, C | x0+1, B |
+   | REFN0 → GND | x0+2, D | x0+2, A |
+   | CLK → GND | x0+6, C | x0+6, A |
+   | SCLK → rail | x0+4, E | x0+4, J |
+   | MOSI → rail | x0+5, F | x0+5, K |
+   | MISO → rail | x0+6, G | x0+6, L |
+   | AIN0 → S | x0+1, H | x0+1, P |
+
+   Plus two tie links: **column 10, A→O** (GND) and **column 19, B→N** (3V3).
+3. **Fit the JSTs:** column x0+2, rows N–Q. Pin 1 (E+) goes on N, pin 2 (E−) on O, pin 3 (S) on P, pin 4 on Q (unused).
+4. **Solder the breakouts:** pins down, header spacer underneath, left column (AGND…AIN0) at x0 and right column (DGND…DRDY) at x0+7, rows A–H. Then solder **R1 (AVDD–AIN1) and R2 (AIN1–AGND)** on top of each breakout.
+5. **External wires:**
+   - the bus into column 1 (BUS IN) and column 37 (BUS OUT) on strips A, B, J, K, L
+   - each unit's CS into hole (x0+5, D)
+   - L1's DRDY onto L1's DRDY pin on top
+   - each cell cable's shield onto strip O
+
+The heel carrier is the same board with L3, L4, R3, R4 (CS ← D5, D6, D9, A2); leave its BUS OUT empty.
+
 Don't use a solderless breadboard for the carriers. A swing shakes the floor, and a loose contact on CS or MISO corrupts readings in ways that are hard to track down.
 
 ## 3. Chain the carriers to the UNO Q
