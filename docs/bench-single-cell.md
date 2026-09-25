@@ -15,22 +15,25 @@ You'll finish with numbers for [`VERIFIED.md`](VERIFIED.md): the register readba
 
 ![Bench wiring for one load cell](img/bench-single-cell.svg)
 
-| From | To | Notes |
+Pin names below are as printed on the purple ADS1220 breakout used in this build. Its left edge, top to bottom, is DRDY, MISO, MOSI, SCLK, CS, CLK, DVDD, DGND. Its right edge is AIN0, AIN1, AIN2, AIN3, REFN0, REFP0, AVDD, AGND.
+
+| From | To (breakout pin) | Notes |
 |---|---|---|
-| UNO Q **3V3** | ADS1220 AVDD (VCC) and DVDD | **3V3, not 5V** |
-| UNO Q **GND** | ADS1220 GND (AVSS/DGND) | |
-| UNO Q **D13** | SCLK | |
-| UNO Q **D11** | DIN | MOSI |
-| UNO Q **D12** | DOUT | MISO |
-| UNO Q **D3** | CS | L1's chip select |
 | UNO Q **D2** | DRDY | |
-| 3V3 | REFP0 | at the ADC board |
-| GND | REFN0 | at the ADC board |
-| 3V3 → **R1** → AIN1 → **R2** → GND | | completes the bridge; solder at the ADC board |
+| UNO Q **D12** | MISO | data from the ADC |
+| UNO Q **D11** | MOSI | data to the ADC |
+| UNO Q **D13** | SCLK | |
+| UNO Q **D3** | CS | L1's chip select |
+| GND | CLK | selects the internal oscillator |
+| UNO Q **3V3** | DVDD **and** AVDD | **3V3, not 5V.** Both supply pins. |
+| UNO Q **GND** | DGND **and** AGND | Both ground pins. |
+| 3V3 | REFP0 | |
+| GND | REFN0 | |
+| 3V3 → **R1** → AIN1 → **R2** → GND | | completes the bridge; solder at the breakout |
 | cell **E+** | 3V3 | |
 | cell **E−** | GND | |
 | cell **S** (centre tap) | **AIN0** | |
-| CLK | GND | only if your module breaks out CLK and doesn't already ground it |
+| — | AIN2, AIN3 | leave open |
 
 Leave **D10, D0 and D1** unconnected: D10 is the SPI hardware chip select and D0/D1 are the MCU console. See [`wiring.md`](wiring.md#pin-map-reference).
 
@@ -42,10 +45,10 @@ With a multimeter on resistance, measure all three pairs. The pair that reads **
 
 ### 2. Prepare the ADS1220 module
 
-1. Find the pin names on the silkscreen and match them to the table above.
+1. Match the silkscreen to the table above. On this breakout the supply and ground are split: DVDD/DGND on the left edge, AVDD/AGND on the right. Wire both pairs.
 2. **Check for a voltage regulator.** If the module has one designed for 5 V input, stop and ask before powering it from 3V3.
-3. Check with continuity whether REFP0/REFN0 are already tied to AVDD/GND on the board. If not, add those two jumpers.
-4. Solder **R1** from the 3V3 pad to AIN1 and **R2** from AIN1 to the GND pad, keeping the leads short.
+3. Check with continuity whether REFP0/REFN0 are already tied to AVDD/AGND on the board. If not, wire them as in the table.
+4. Solder **R1** from AVDD (3V3) to AIN1 and **R2** from AIN1 to AGND, keeping the leads short.
 
 ### 3. Connect everything, with the UNO Q unplugged
 
@@ -131,8 +134,8 @@ The counts-per-kg range assumes a 50 kg cell at about 0.5–1 mV/V. Your number 
 |---|---|
 | No output at all in step 7/8 | Sketch not flashed, or the board isn't on the network (`ping open-fp.local`) |
 | `E,no DRDY for 500 ms` | DRDY not on D2; ADC unpowered; readback failed |
-| Readback `FF FF FF FF` | DOUT not on D12, CS not on D3, or ADC unpowered |
-| Readback `00 00 00 00` | DOUT isn't reaching D12 (an unconnected D12 floats low and reads 00), DIN or SCLK not connected, or DOUT shorted to GND |
+| Readback `FF FF FF FF` | MISO not on D12, CS not on D3, or ADC unpowered (check both DVDD and AVDD) |
+| Readback `00 00 00 00` | MISO isn't reaching D12 (an unconnected D12 floats low and reads 00), MOSI or SCLK not connected, or MISO shorted to GND |
 | Reading pinned at ±8,388,607 | AIN0 or AIN1 floating; R1/R2 missing; S not connected |
 | Reading moves when you touch a wire | Noise pickup: shorten wires, twist the cell's three wires together |
 | Reading drifts steadily | Warm-up (give it 5 min), or the cell is touching something |
