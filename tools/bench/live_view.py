@@ -14,6 +14,8 @@ from __future__ import annotations
 import argparse
 import json
 import queue
+import signal
+import sys
 import threading
 import webbrowser
 from dataclasses import asdict
@@ -296,6 +298,8 @@ def main() -> int:
     args = ap.parse_args()
 
     mon = Monitor(args.host)
+    # On SIGTERM (e.g. pkill), exit through the normal path so the ssh monitor is closed too.
+    signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))
     hub = Hub()
     threading.Thread(target=pump, args=(mon, hub), daemon=True).start()
     mon.send("r")  # report the current mode and readback for the page

@@ -18,6 +18,7 @@ from __future__ import annotations
 import argparse
 import json
 import queue
+import signal
 import statistics
 import subprocess
 import sys
@@ -476,6 +477,8 @@ def main() -> int:
     ap.add_argument("--out", default=str(Path(__file__).resolve().parents[2] / "bench" / "results"))
     ap.add_argument("--stdin", action="store_true", help="analyse a saved log from stdin instead")
     args = ap.parse_args()
+    # On SIGTERM (e.g. pkill), exit through the normal path so the ssh monitor is closed too.
+    signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))
     try:
         return run_stdin() if args.stdin else run_live(args)
     except KeyboardInterrupt:
