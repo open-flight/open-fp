@@ -17,7 +17,7 @@ A unit is the one-cell bench circuit with the UNO Q replaced by a **6-wire conne
 - **Supplies and grounds:** DVDD and AVDD go to 3V3; DGND and AGND go to GND. Both of each pair.
 - **Reference:** REFP0 goes to 3V3, REFN0 to GND. The ADC then measures relative to its own supply, so supply drift cancels.
 - **CLK** goes to GND, selecting the internal oscillator.
-- **R1 and R2 (1 kΩ 0.1 %):** AVDD → R1 → AIN1 → R2 → AGND, soldered at the breakout.
+- **R1 and R2 (1 kΩ 0.1 %, or any matched equal pair from 680 Ω to 2 kΩ; never mixed values):** AVDD → R1 → AIN1 → R2 → AGND, soldered at the breakout.
 - **JST-XH socket for the cell:** pin 1 E+, pin 2 E−, pin 3 S → AIN0. **Red is S** on this build's cells. White/black are E+/E−; swapping them only flips the sign, which is a config setting.
 - **The cell cable's shield** goes to GND at this end only.
 

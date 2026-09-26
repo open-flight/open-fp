@@ -50,6 +50,9 @@ With a multimeter on resistance, measure all three pairs. The pair that reads **
 3. Check with continuity whether REFP0/REFN0 are already tied to AVDD/AGND on the board. If not, wire them as in the table.
 4. Solder **R1** from AVDD (3V3) to AIN1 and **R2** from AIN1 to AGND, keeping the leads short.
 
+> **R1/R2 value:** any **equal pair** from about 680 Ω to 2 kΩ works; the divider only has to put AIN1 at half the supply. **Never mix values** (1.5 kΩ + 680 Ω puts AIN1 hundreds of mV off, and the ADC saturates). Prefer the higher value (less current and self-heating), measure your resistors, and pair the two closest (within ~0.5 %). Keep each pair touching so they drift together. The final build should use 0.1 %, ≤25 ppm/°C parts (BOM).
+
+
 ### 3. Connect everything, with the UNO Q unplugged
 
 Wire the table above. The UNO Q's MCU header has the same layout as an UNO R3: **3V3 and GND** are on the power header, and **D2–D13** are on the digital header.
