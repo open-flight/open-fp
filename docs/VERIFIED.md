@@ -55,6 +55,8 @@ Achieved loop rate: — · `drdyMissed` over 10 min: —
 
 | Enclosure interior, measured from `03_centre_enclosure_base.step` | Outer 294.8 × 60.8 × 19.9 mm. Cavity about **55.8 mm wide**, 292 mm long, floor at z 2.6. **ADC pads** at each end: x ±47 to ±137 mm from centre, y ±25 (about **90 × 50 mm**), top at z 5.4, with a 7.5 mm grid of insert holes. **14.5 mm clearance** from the pad top to the rim. Lid posts at x = 0 and ±140, y ±23; UNO Q bosses near x ≈ 30. The ADS1220 breakout measures about 21 × 21 mm, with header columns 7 holes (17.8 mm) apart. **Carrier: 37 × 17-hole stripboard (~94 × 43 mm) with 4 breakouts in a row**, placed about x = 40–134 mm, clear of the UNO Q (|x| ≤ 34.3) and the lid posts (x ±140). Breakouts are soldered directly, with no sockets (sockets add ~8.5 mm). An earlier 2 × 2 idea was dropped: the paired pin rows make a single row fit. | CadQuery 2.8 probes of the STEP | 2026-09-25 |
 
+- **2026-09-25, second breakout (bench, single-ended):** readback OK and voltages correct (AIN0 1655 mV), but **conversions are bit-identical** (raw dump: 32 × `3FFD8A`), with occasional jumps of exactly ±257 (0x101). The first breakout showed ~110 counts of noise in the same mode. Suspects: another board sharing the bus with its CS not held high, or a faulty or non-genuine chip. Swap test pending.
+
 ## Performance
 
 | Item | Result | Checked against | Date |

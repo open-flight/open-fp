@@ -218,7 +218,7 @@ PAGE = r"""<!doctype html>
 const $ = (id) => document.getElementById(id);
 const N = 300;                               // 30 s of 100 ms windows
 const DEFAULT_CPK = { "single-ended": 120, "differential": 15000 };
-let t0 = null, tare = null, mode = null, recent = [];
+let t0 = null, tare = null, mode = null, recent = [], settle = 5;   // skip windows while a mode change settles
 const xs = [], ys = [], lo = [], hi = [];
 const fmt = (v) => (v >= 0 ? "+" : "−") + Math.abs(Math.round(v)).toLocaleString();
 
@@ -244,6 +244,7 @@ document.querySelectorAll("[data-key]").forEach((b) => (b.onclick = () => fetch(
 
 function onStats(e) {
   if (t0 === null) t0 = e.ms;
+  if (settle > 0) { settle--; return; }
   recent.push(e.mean); if (recent.length > 5) recent.shift();
   if (tare === null && recent.length === 5) doTare();
   const base = tare ?? e.mean;
@@ -267,7 +268,7 @@ es.onmessage = (m) => {
   const e = JSON.parse(m.data);
   if (e.type === "stats") onStats(e);
   else if (e.type === "mode") {
-    if (e.name !== mode) { mode = e.name; tare = null; recent = []; t0 = null; xs.length = ys.length = lo.length = hi.length = 0;
+    if (e.name !== mode) { mode = e.name; tare = null; recent = []; settle = 5; t0 = null; xs.length = ys.length = lo.length = hi.length = 0;
       $("cpk").value = DEFAULT_CPK[mode] ?? ""; }
     $("mode").textContent = e.name;
   } else if (e.type === "readback") {

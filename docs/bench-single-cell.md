@@ -110,6 +110,7 @@ Keys (type one, then Enter):
 | `s` | **Single-ended mode:** AIN0 against ground, gain 1. Works **before R1/R2 are fitted**. It tests wiring and response, not accuracy. |
 | `d` | **Differential mode:** AIN0 − AIN1, gain 128. The real configuration; needs R1/R2. |
 | `r` | Reset the ADC and re-check its registers. |
+| `x` | **Raw dump:** 32 consecutive conversions exactly as read over SPI (`X,<i>,<hex>,<value>`). A real ADS1220 always shows some sample-to-sample noise; identical codes mean something is wrong. |
 
 Ctrl-C exits.
 
@@ -166,6 +167,7 @@ The counts-per-kg range assumes a 50 kg cell at about 0.5–1 mV/V. Your number 
 | `V,REF,<AVDD/4…` | REFP0/REFN0 aren't connected to 3V3/GND |
 | Reading moves when you touch a wire | Noise pickup: shorten wires, twist the cell's three wires together |
 | Reading drifts steadily | Warm-up (give it 5 min), or the cell is touching something |
+| Noise 0 / identical raw codes (`x`), occasional jumps of exactly 257 | Not a real 24-bit reading. Another ADC board on the same SPI wires with its CS floating or low, or a faulty or non-genuine breakout. Swap in a known-good breakout to tell which. |
 
 ## When you're done
 

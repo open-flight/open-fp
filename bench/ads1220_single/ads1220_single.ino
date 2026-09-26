@@ -8,6 +8,7 @@
 //                                            (counted by interrupt; n < drdy while Monitor I/O blocks)
 //   M,<differential|single-ended>             measurement mode
 //   V,<name>,<millivolts>                    voltage check ('v'), measured by the ADC itself
+//   X,<i>,<b2><b1><b0>,<value>                raw dump ('x'): 32 consecutive conversions, bytes in hex
 //   E,<message>                              a problem to fix
 // Keys on the monitor: 'r' reset and re-check the ADC; 'd' differential AIN0-AIN1, gain 128
 // (the real configuration, needs R1/R2); 's' single-ended AIN0-GND, gain 1 (works before
@@ -82,6 +83,35 @@ void reportMv(const char *name, double mv, bool saturated) {
 
 // Voltage check with the ADC's internal 2.048 V reference (gain 1, PGA bypassed):
 // register 0 = MUX << 4 | 0x01; MUX 1101 = (AVDD-AVSS)/4, 1000 = AIN0-AVSS, 1001 = AIN1-AVSS.
+// Raw dump: 32 consecutive conversions exactly as read over SPI (diagnoses stuck or
+// correlated bytes). Output is sent after capture so the RPCs don't disturb the timing.
+void rawDump() {
+  uint32_t raw[32];
+  int got = 0;
+  uint32_t start = millis();
+  while (got < 32 && millis() - start < 500) {
+    if (digitalRead(DRDY_PIN) == LOW) {
+      SPI.beginTransaction(ads1220::SPI_CFG);
+      digitalWrite(CS_PIN, LOW);
+      SPI.transfer(ads1220::CMD_RDATA);
+      uint32_t v = (uint32_t)SPI.transfer(0) << 16;
+      v |= (uint32_t)SPI.transfer(0) << 8;
+      v |= SPI.transfer(0);
+      digitalWrite(CS_PIN, HIGH);
+      SPI.endTransaction();
+      raw[got++] = v;
+      while (digitalRead(DRDY_PIN) == LOW && millis() - start < 500) {}  // wait for DRDY to clear
+    }
+  }
+  char buf[48];
+  for (int i = 0; i < got; i++) {
+    int32_t sv = (raw[i] & 0x800000) ? (int32_t)(raw[i] | 0xFF000000) : (int32_t)raw[i];
+    snprintf(buf, sizeof buf, "X,%d,%06lX,%ld", i, (unsigned long)raw[i], (long)sv);
+    report(buf);
+  }
+  if (got < 32) report("E,raw dump: fewer than 32 conversions (DRDY?)");
+}
+
 void voltageCheck() {
   constexpr double FS = 8388608.0, VREF_INT_MV = 2048.0, SAT = 8388000.0;
   double c = 0, avddMv = 0;
@@ -127,6 +157,7 @@ void loop() {
       if (c == 's') cfg = ads1220::CFG_SINGLE_ENDED;
       if (c == 'r' || c == 'd' || c == 's') checkAdc();
       if (c == 'v') voltageCheck();
+      if (c == 'x') rawDump();
       now = millis();
     }
   }
