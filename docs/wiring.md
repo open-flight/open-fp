@@ -104,18 +104,18 @@ Cable runs go from the cradle's JST under the plate to the enclosure (there's 14
 
 That uses about 2.8 m of the 5 m cable. Cut each run 30–50 mm long so there's slack for re-terminating.
 
-Pick one color scheme for the 4 cores and keep it for all 8 runs, for example:
+Pick one color scheme for the 4 cores and keep it for all 8 runs. Matching the cell's own colors avoids mix-ups at the JST, for example:
 
 | Core | Signal |
 |---|---|
-| red | E+ (XH pin 1) |
-| black | E− (XH pin 2) |
-| white or green | S (XH pin 3) |
+| white | E+ (XH pin 1), same as the cell's white |
+| black | E− (XH pin 2), same as the cell's black |
+| red | S (XH pin 3), same as the cell's red centre tap |
 | remaining color | spare, cut back and insulate at both ends |
 | shield/drain | GND at the **ADC end only** |
 
-1. At the **cradle end**, solder red, black, and white to XH header pins 1, 2, 3. Heat-shrink each pin. Cut the shield back flush and cover it with heat-shrink, because it must **not** connect at this end.
-2. At the **ADC end**, strip about 30 mm of jacket, twist the shield/drain into a pigtail, and heat-shrink it up to where it'll reach GND.
+1. At the **cradle end**, solder white, black, and red to XH header pins 1, 2, 3. Heat-shrink each pin. Cut the shield back flush and cover it with heat-shrink, because it must **not** connect at this end.
+2. At the **ADC end**, thread the cable through its enclosure wall slot first (the slot is 6 × 6.7 mm, so nothing wider than the cable can pass), then strip about 30 mm of jacket, twist the shield/drain into a pigtail, and heat-shrink it up to where it'll reach GND.
 3. Label both ends.
 
 ## 5. Prepare each ADS1220 board
@@ -126,7 +126,7 @@ Generic ADS1220 modules vary, so check yours before soldering anything and write
 2. **Power:** check whether the board has a voltage regulator (a small 3- or 5-pin chip near the power pins). If it has a regulator that expects 5 V, **stop**: powering it from 3V3 may not work, and the reference would no longer match the bridge supply. Record it and ask before continuing.
 3. **CLK:** if CLK is broken out and isn't already tied to ground on the board, connect it to GND. This selects the internal oscillator. If it's not broken out, the board already handles it.
 4. **REFP0 / REFN0:** some modules tie REFP0 to AVDD and REFN0 to GND on the board. Check with continuity. If they aren't tied, you'll wire them in step 7.
-5. Don't fit pin headers. Solder wires directly to the pads, so everything fits under the enclosure lid (17.5 mm inside height).
+5. Fit the breakout's straight pin headers, pins down, only when it goes onto its carrier: the carrier solders them into the stripboard ([`harness.md`](harness.md)). Never fit sockets; they add ~8.5 mm and won't fit under the lid (14.5 mm from the ADC pad).
 6. Label the board L1…R4.
 
 ## 6. Complete each bridge with two 1 kΩ resistors
@@ -172,7 +172,7 @@ Full wiring for one corner (repeat ×8):
 
 The full harness has its own step-by-step guide with diagrams: **[`harness.md`](harness.md)**.
 
-1. **Build 8 identical units.** Each is a breakout, R1/R2, and a JST socket for its cell. Each exposes 6 wires (DRDY too on L1).
+1. **Build 8 identical units.** Each is a breakout, R1/R2, and its cell cable soldered straight on (the JST is at the cradle, §3). Each exposes 6 wires (DRDY too on L1).
 2. **Mount 4 units per carrier.** Each carrier has 5 bus rails with BUS IN / BUS OUT headers.
 3. **Chain it all together:** Q → toe carrier → heel carrier on the bus, plus a chip-select bundle to each carrier.
 
