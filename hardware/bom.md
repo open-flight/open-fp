@@ -36,7 +36,7 @@ Print on the Bambu H2D. The STL files are in `cad/stl/`, the STEP files in `cad/
 | `07_edge_ramp_left` | 4 | PETG/ABS | 3 walls, 20 % | flat bottom down. 24.5 mm rise, 45° mitre at the plate's outer corner |
 | `07_edge_ramp_right` | 4 | PETG/ABS | 3 walls, 20 % | flat bottom down. Mirror of the left piece |
 | `07_edge_ramp_inner` | 4 | PETG/ABS | 3 walls, 20 % | flat bottom down. Square-ended piece for the enclosure end of each plate's front and back side; the two plates' pieces stop 5 mm short of the gap centre, leaving a 10 mm channel (USB cable at the heel) |
-| `09_drill_template` | 1 | any | 100 % | lips up, **rotated 45° on the plate** (43 × 308 mm; needs about a 248 mm square on a 256 mm bed), no brim. A full-edge strip with all four guide holes for one plate edge: drill one edge, turn it 180° for the opposite edge |
+| `09_drill_template` | 1 | any | 100 % | lips up. One template does all four corners: two from the plate's top face, the other two with the plate flipped over |
 | `10_hub_foot_tpu` | 8 | TPU 95A | 100 % | flat, channel up. Ø18 × 4.7 mm, locates on the cell's centre strap; parametric source `cad/src/hub_foot.py` |
 | `11_cell_shim_tpu_1.5mm` | 8 | TPU 95A | 100 % | flat. Goes between the cell frame and the retainer. 1.5 mm chosen from the tuning set (2026-09-23); the other thicknesses are only for re-tuning with a different cell. Source `cad/src/cell_shim.py` |
 | `08_assembly_two_plates.step` | — | reference only | | |
