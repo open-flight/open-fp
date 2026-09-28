@@ -33,10 +33,10 @@ Print on the Bambu H2D. The STL files are in `cad/stl/`, the STEP files in `cad/
 | `02_cradle_retainer` | 8 | PETG/ABS | 3 walls | flat |
 | `03_centre_enclosure_base` | 1 | PETG/ABS | 3 walls, 20 % | open side up |
 | `04_centre_enclosure_lid` | 1 | PETG/ABS | 3 walls, 20 % | vents up |
-| `07_edge_ramp_left` | 6 | PETG/ABS | 3 walls, 20 % | flat bottom down |
-| `07_edge_ramp_right` | 6 | PETG/ABS | 3 walls, 20 % | flat bottom down |
-| `09_drill_template_a` | 1 | any | 100 % | lips up |
-| `09_drill_template_b` | 1 | any | 100 % | lips up |
+| `07_edge_ramp_left` | 4 | PETG/ABS | 3 walls, 20 % | flat bottom down. 24.5 mm rise, 45° mitre at the plate's outer corner |
+| `07_edge_ramp_right` | 4 | PETG/ABS | 3 walls, 20 % | flat bottom down. Mirror of the left piece |
+| `07_edge_ramp_inner` | 4 | PETG/ABS | 3 walls, 20 % | flat bottom down. Square-ended piece for the enclosure end of each plate's front and back side; the two plates' pieces stop 5 mm short of the gap centre, leaving a 10 mm channel (USB cable at the heel) |
+| `09_drill_template` | 1 | any | 100 % | lips up. One template does all four corners: two from the plate's top face, the other two with the plate flipped over |
 | `10_hub_foot_tpu` | 8 | TPU 95A | 100 % | flat, channel up. Ø18 × 4.7 mm, locates on the cell's centre strap; parametric source `cad/src/hub_foot.py` |
 | `11_cell_shim_tpu_1.5mm` | 8 | TPU 95A | 100 % | flat. Goes between the cell frame and the retainer. 1.5 mm chosen from the tuning set (2026-09-23); the other thicknesses are only for re-tuning with a different cell. Source `cad/src/cell_shim.py` |
 | `08_assembly_two_plates.step` | — | reference only | | |
