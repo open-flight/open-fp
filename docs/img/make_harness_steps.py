@@ -26,7 +26,7 @@ CELL, CELL_S = "#E9ECEF", "#56626F"
 def unit() -> Svg:
     s = Svg(1280, 760)
     s.step_title(1, "Build a unit (×8)", "A unit is one ADS1220 breakout, its two bridge resistors, "
-                 "and a JST socket for its load cell. Every unit is identical.")
+                 "and its load-cell cable, soldered on. The plug-in JST is at the cradle. Every unit is identical.")
     MX, MY, MW = 540, 150, 250
     left = [("DRDY", 120), ("MISO", 170), ("MOSI", 220), ("SCLK", 270), ("CS", 320),
             ("CLK", 370), ("DVDD", 430), ("DGND", 480)]
@@ -80,10 +80,10 @@ def unit() -> Svg:
     s.ground(NX, NY + 84)
     s.text(RX + 14, NY - 10, "≈1.65 V", 12, MUTED)
 
-    # JST socket for the cell, then the cell cable
+    # cable solder pads on the unit, then the cable to the cell (JST at the cradle end)
     JX, JY = 1010, MY - 30
     s.rect(JX, JY, 44, 130, "#FFFFFF", INK, 4, 1.8)
-    s.text(JX + 22, JY - 10, "JST", 12, INK, 700, "middle")
+    s.text(JX + 22, JY - 10, "solder", 12, INK, 700, "middle")
     pe, pn, ps = JY + 22, JY + 52, JY + 108
     s.line([(RX, y["AIN0"]), (RX + 40, y["AIN0"]), (RX + 40, ps), (JX, ps)], WIRE["sig"])
     s.text(JX - 8, ps - 8, "S → AIN0", 12, WIRE["sig"], 700, "end")
@@ -99,7 +99,10 @@ def unit() -> Svg:
     for yy, col, lab in ((pe, "#F4F4F4", "white"), (pn, "#222222", "black"), (ps, "#D64545", "red")):
         s.line([(JX + 44, yy), (CX, yy)], "#9AA5B1", 4.5)
         s.line([(JX + 44, yy), (CX, yy)], col, 2.6)
-        s.text(JX + 97, yy - 6, lab, 10, MUTED, 400, "middle")
+        s.text(JX + 123, yy - 6, lab, 10, MUTED, 400, "middle")
+    s.rect(JX + 66, JY + 6, 18, 118, "#FFFFFF", INK, 3, 1.6)
+    s.text(JX + 75, JY + 146, "JST", 11, INK, 700, "middle")
+    s.text(JX + 75, JY + 160, "at cradle", 10, MUTED, 400, "middle")
     s.text(CX + 50, JY + 160, "cable shield → GND,", 11, MUTED, 400, "middle")
     s.text(CX + 50, JY + 175, "this end only", 11, MUTED, 400, "middle")
 
@@ -118,7 +121,7 @@ def unit() -> Svg:
 def carrier() -> Svg:
     s = Svg(1280, 800)
     s.step_title(2, "Put four units on a carrier (×2)", "A carrier is a perfboard with 5 bus rails. "
-                 "Every unit taps all five rails; its CS and cell socket come out the bottom edge.")
+                 "Every unit taps all five rails; its CS wire and cell cable leave from the bottom edge.")
     X0, X1, Y0, Y1 = 70, 1210, 130, 640
     s.rect(X0, Y0, X1 - X0, Y1 - Y0, CAR, CAR_S, 12, 2)
     s.text((X0 + X1) / 2, Y0 + 28, "Toe carrier (perfboard). The heel carrier is identical, with L3, L4, R3, R4.",
@@ -147,7 +150,7 @@ def carrier() -> Svg:
             tx = ux + 40 + 30 * i
             s.line([(tx, UY), (tx, ry)], WIRE[key], 1.8)
             s.dot(tx, ry, WIRE[key])
-        # bottom edge: CS (and DRDY on L1) to the UNO Q, cell socket to the cell
+        # bottom edge: CS (and DRDY on L1) to the UNO Q, cell cable to its cradle JST
         cx = ux + 40
         s.line([(cx, UY + UH), (cx, Y1)], WIRE["cs"])
         s.pin(cx, Y1, "", "l", WIRE["cs"])
@@ -158,9 +161,8 @@ def carrier() -> Svg:
             s.pin(dx, Y1, "", "l", WIRE["drdy"])
             s.text(dx + 4, Y1 + 42, "DRDY → D2", 12, WIRE["drdy"], 700, "middle")
         jx = ux + 150
-        s.rect(jx - 16, UY + UH - 26, 32, 20, "#FFFFFF", INK, 3, 1.4)
-        s.text(jx, UY + UH - 12, "JST", 9, INK, 700, "middle")
         s.line([(jx, UY + UH - 6), (jx, Y1 + 60)], WIRE["cell"], 4)
+        s.dot(jx, UY + UH - 6, INK, 5)
         s.text(jx, Y1 + 78, f"cell {name}", 12, INK, 700, "middle")
         s.text(jx, Y1 + 94, cable, 11, MUTED, 400, "middle")
     s.text(640, Y1 + 118, "Dot = soldered joint. The 5 rails run the full width, so BUS IN and "
@@ -251,7 +253,7 @@ def system() -> Svg:
     cable([(1100, 825), (950, 825)])                                             # R4
     cable([(1285, 860), (1285, 878), (975, 878), (975, 845), (950, 845)])        # R3
     s.text(705, 975, "Grey: cell cables (outer corners ~450 mm, inner ~250 mm), each to its "
-           "unit's JST on the carrier.", 12, MUTED, 400, "middle")
+           "unit on the carrier. Each has its JST at the cradle end.", 12, MUTED, 400, "middle")
     s.legend(300, 1005, [(lab, k) for lab, k in BUS] + [("CS", "cs"), ("DRDY", "drdy")], cols=7, col_w=118)
     return s
 

@@ -103,7 +103,7 @@
 <path d="M1100,825 L950,825" fill="none" stroke="#E9ECEF" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
 <path d="M1285,860 L1285,878 L975,878 L975,845 L950,845" fill="none" stroke="#9AA5B1" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
 <path d="M1285,860 L1285,878 L975,878 L975,845 L950,845" fill="none" stroke="#E9ECEF" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-<text x="705" y="975" font-size="12" font-weight="400" fill="#5F6B78" text-anchor="middle">Grey: cell cables (outer corners ~450 mm, inner ~250 mm), each to its unit's JST on the carrier.</text>
+<text x="705" y="975" font-size="12" font-weight="400" fill="#5F6B78" text-anchor="middle">Grey: cell cables (outer corners ~450 mm, inner ~250 mm), each to its unit on the carrier. Each has its JST at the cradle end.</text>
 <path d="M300,1001 L326,1001" fill="none" stroke="#D64545" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
 <text x="334" y="1005" font-size="12" font-weight="400" fill="#1F2933" text-anchor="start">3V3</text>
 <path d="M418,1001 L444,1001" fill="none" stroke="#222222" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>

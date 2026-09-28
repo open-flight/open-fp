@@ -766,30 +766,34 @@
 <rect x="777" y="353" width="10" height="10" fill="#C9A227" stroke="#8A6D12"/>
 <rect x="945" y="353" width="10" height="10" fill="#C9A227" stroke="#8A6D12"/>
 <circle cx="902" cy="262" r="7" fill="none" stroke="#E2A400" stroke-width="3"/>
-<rect x="173" y="491" width="18" height="94" rx="3" fill="#FFFFFF" stroke="#1F2933" stroke-width="1.6"/>
-<rect x="178" y="498" width="8" height="8" fill="#1F2933"/>
-<rect x="178" y="522" width="8" height="8" fill="#1F2933"/>
-<rect x="178" y="546" width="8" height="8" fill="#1F2933"/>
-<rect x="178" y="570" width="8" height="8" fill="#1F2933"/>
-<text x="182" y="604" font-size="11" font-weight="700" fill="#1F2933" text-anchor="middle">JST · cell L1</text>
-<rect x="389" y="491" width="18" height="94" rx="3" fill="#FFFFFF" stroke="#1F2933" stroke-width="1.6"/>
-<rect x="394" y="498" width="8" height="8" fill="#1F2933"/>
-<rect x="394" y="522" width="8" height="8" fill="#1F2933"/>
-<rect x="394" y="546" width="8" height="8" fill="#1F2933"/>
-<rect x="394" y="570" width="8" height="8" fill="#1F2933"/>
-<text x="398" y="604" font-size="11" font-weight="700" fill="#1F2933" text-anchor="middle">JST · cell L2</text>
-<rect x="605" y="491" width="18" height="94" rx="3" fill="#FFFFFF" stroke="#1F2933" stroke-width="1.6"/>
-<rect x="610" y="498" width="8" height="8" fill="#1F2933"/>
-<rect x="610" y="522" width="8" height="8" fill="#1F2933"/>
-<rect x="610" y="546" width="8" height="8" fill="#1F2933"/>
-<rect x="610" y="570" width="8" height="8" fill="#1F2933"/>
-<text x="614" y="604" font-size="11" font-weight="700" fill="#1F2933" text-anchor="middle">JST · cell R1</text>
-<rect x="821" y="491" width="18" height="94" rx="3" fill="#FFFFFF" stroke="#1F2933" stroke-width="1.6"/>
-<rect x="826" y="498" width="8" height="8" fill="#1F2933"/>
-<rect x="826" y="522" width="8" height="8" fill="#1F2933"/>
-<rect x="826" y="546" width="8" height="8" fill="#1F2933"/>
-<rect x="826" y="570" width="8" height="8" fill="#1F2933"/>
-<text x="830" y="604" font-size="11" font-weight="700" fill="#1F2933" text-anchor="middle">JST · cell R2</text>
+<circle cx="182" cy="502" r="7" fill="none" stroke="#7A8796" stroke-width="2.8"/>
+<text x="171" y="506" font-size="10" font-weight="700" fill="#7A8796" text-anchor="end">E+</text>
+<circle cx="182" cy="526" r="7" fill="none" stroke="#7A8796" stroke-width="2.8"/>
+<text x="171" y="530" font-size="10" font-weight="700" fill="#7A8796" text-anchor="end">E−</text>
+<circle cx="182" cy="550" r="7" fill="none" stroke="#7A8796" stroke-width="2.8"/>
+<text x="171" y="554" font-size="10" font-weight="700" fill="#7A8796" text-anchor="end">S</text>
+<text x="182" y="604" font-size="11" font-weight="700" fill="#1F2933" text-anchor="middle">cable · cell L1</text>
+<circle cx="398" cy="502" r="7" fill="none" stroke="#7A8796" stroke-width="2.8"/>
+<text x="387" y="506" font-size="10" font-weight="700" fill="#7A8796" text-anchor="end">E+</text>
+<circle cx="398" cy="526" r="7" fill="none" stroke="#7A8796" stroke-width="2.8"/>
+<text x="387" y="530" font-size="10" font-weight="700" fill="#7A8796" text-anchor="end">E−</text>
+<circle cx="398" cy="550" r="7" fill="none" stroke="#7A8796" stroke-width="2.8"/>
+<text x="387" y="554" font-size="10" font-weight="700" fill="#7A8796" text-anchor="end">S</text>
+<text x="398" y="604" font-size="11" font-weight="700" fill="#1F2933" text-anchor="middle">cable · cell L2</text>
+<circle cx="614" cy="502" r="7" fill="none" stroke="#7A8796" stroke-width="2.8"/>
+<text x="603" y="506" font-size="10" font-weight="700" fill="#7A8796" text-anchor="end">E+</text>
+<circle cx="614" cy="526" r="7" fill="none" stroke="#7A8796" stroke-width="2.8"/>
+<text x="603" y="530" font-size="10" font-weight="700" fill="#7A8796" text-anchor="end">E−</text>
+<circle cx="614" cy="550" r="7" fill="none" stroke="#7A8796" stroke-width="2.8"/>
+<text x="603" y="554" font-size="10" font-weight="700" fill="#7A8796" text-anchor="end">S</text>
+<text x="614" y="604" font-size="11" font-weight="700" fill="#1F2933" text-anchor="middle">cable · cell R1</text>
+<circle cx="830" cy="502" r="7" fill="none" stroke="#7A8796" stroke-width="2.8"/>
+<text x="819" y="506" font-size="10" font-weight="700" fill="#7A8796" text-anchor="end">E+</text>
+<circle cx="830" cy="526" r="7" fill="none" stroke="#7A8796" stroke-width="2.8"/>
+<text x="819" y="530" font-size="10" font-weight="700" fill="#7A8796" text-anchor="end">E−</text>
+<circle cx="830" cy="550" r="7" fill="none" stroke="#7A8796" stroke-width="2.8"/>
+<text x="819" y="554" font-size="10" font-weight="700" fill="#7A8796" text-anchor="end">S</text>
+<text x="830" y="604" font-size="11" font-weight="700" fill="#1F2933" text-anchor="middle">cable · cell R2</text>
 <path d="M158,238 L158,214" fill="none" stroke="#D64545" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 <circle cx="158" cy="238" r="4.5" fill="#D64545"/>
 <circle cx="158" cy="214" r="4.5" fill="#D64545"/>
@@ -996,7 +1000,8 @@
 <text x="580" y="668" font-size="12" font-weight="600" fill="#E03131" text-anchor="start">✕ cut the strip at this hole (from the copper side)</text>
 <text x="40" y="690" font-size="12" font-weight="600" fill="#1F2933" text-anchor="start">○ solder a bus wire here (5 per end)</text>
 <text x="580" y="690" font-size="12" font-weight="600" fill="#E2A400" text-anchor="start">○ solder this unit's CS wire from the UNO Q here</text>
-<text x="40" y="712" font-size="12" font-weight="600" fill="#C9A227" text-anchor="start">■ breakout header pin (pins down, plastic spacer under the breakout)</text>
+<text x="40" y="712" font-size="12" font-weight="600" fill="#7A8796" text-anchor="start">○ solder the cell cable's E+ / E− / S here (JST is at the cradle)</text>
+<text x="580" y="712" font-size="12" font-weight="600" fill="#C9A227" text-anchor="start">■ breakout header pin (pins down, plastic spacer under the breakout)</text>
 <text x="40" y="740" font-size="11" font-weight="700" fill="#5B3B8C" text-anchor="start">Breakout pins by row (left|right column): A AGND|DGND · B AVDD|DVDD · C REFP0|CLK · D REFN0|CS · E AIN3|SCLK · F AIN2|MOSI · G AIN1|MISO · H AIN0|DRDY</text>
 <text x="40" y="760" font-size="12" font-weight="400" fill="#5F6B78" text-anchor="start">Fit all links before the breakouts: they run underneath them. The tie links in columns 10 and 19 pass over cut holes; links only touch copper at their ends.</text>
 <text x="40" y="786" font-size="12" font-weight="600" fill="#C2410C" text-anchor="start">Not shown: R1/R2 solder on top of each breakout (AVDD–AIN1 and AIN1–AGND pins). L1's DRDY wire solders to L1's DRDY pin on top. Cable shields solder to strip O.</text>

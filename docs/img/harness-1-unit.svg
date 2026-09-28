@@ -3,7 +3,7 @@
 <circle cx="58" cy="44" r="18" fill="#1F2933"/>
 <text x="58" y="50" font-size="18" font-weight="700" fill="#FFFFFF" text-anchor="middle">1</text>
 <text x="88" y="52" font-size="24" font-weight="700" fill="#1F2933" text-anchor="start">Build a unit (×8)</text>
-<text x="40" y="88" font-size="14" font-weight="400" fill="#5F6B78" text-anchor="start">A unit is one ADS1220 breakout, its two bridge resistors, and a JST socket for its load cell. Every unit is identical.</text>
+<text x="40" y="88" font-size="14" font-weight="400" fill="#5F6B78" text-anchor="start">A unit is one ADS1220 breakout, its two bridge resistors, and its load-cell cable, soldered on. The plug-in JST is at the cradle. Every unit is identical.</text>
 <rect x="540" y="190" width="250" height="480" rx="10" fill="#EFEAF7" stroke="#5B3B8C" stroke-width="2"/>
 <text x="665.0" y="222" font-size="16" font-weight="700" fill="#5B3B8C" text-anchor="middle">ADS1220 breakout</text>
 <text x="665.0" y="240" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">pins as printed on the board</text>
@@ -114,7 +114,7 @@
 <path d="M876,432 L884,432" fill="none" stroke="#222222" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
 <text x="804" y="310" font-size="12" font-weight="400" fill="#5F6B78" text-anchor="start">≈1.65 V</text>
 <rect x="1010" y="120" width="44" height="130" rx="4" fill="#FFFFFF" stroke="#1F2933" stroke-width="1.8"/>
-<text x="1032" y="110" font-size="12" font-weight="700" fill="#1F2933" text-anchor="middle">JST</text>
+<text x="1032" y="110" font-size="12" font-weight="700" fill="#1F2933" text-anchor="middle">solder</text>
 <path d="M790,270 L830,270 L830,228 L1010,228" fill="none" stroke="#00897B" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <text x="1002" y="220" font-size="12" font-weight="700" fill="#00897B" text-anchor="end">S → AIN0</text>
 <path d="M1010,142 L970,142" fill="none" stroke="#D64545" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
@@ -133,13 +133,16 @@
 <text x="1200" y="178" font-size="13" font-weight="700" fill="#56626F" text-anchor="middle">Load cell</text>
 <path d="M1054,142 L1150,142" fill="none" stroke="#9AA5B1" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"/>
 <path d="M1054,142 L1150,142" fill="none" stroke="#F4F4F4" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
-<text x="1107" y="136" font-size="10" font-weight="400" fill="#5F6B78" text-anchor="middle">white</text>
+<text x="1133" y="136" font-size="10" font-weight="400" fill="#5F6B78" text-anchor="middle">white</text>
 <path d="M1054,172 L1150,172" fill="none" stroke="#9AA5B1" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"/>
 <path d="M1054,172 L1150,172" fill="none" stroke="#222222" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
-<text x="1107" y="166" font-size="10" font-weight="400" fill="#5F6B78" text-anchor="middle">black</text>
+<text x="1133" y="166" font-size="10" font-weight="400" fill="#5F6B78" text-anchor="middle">black</text>
 <path d="M1054,228 L1150,228" fill="none" stroke="#9AA5B1" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"/>
 <path d="M1054,228 L1150,228" fill="none" stroke="#D64545" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
-<text x="1107" y="222" font-size="10" font-weight="400" fill="#5F6B78" text-anchor="middle">red</text>
+<text x="1133" y="222" font-size="10" font-weight="400" fill="#5F6B78" text-anchor="middle">red</text>
+<rect x="1076" y="126" width="18" height="118" rx="3" fill="#FFFFFF" stroke="#1F2933" stroke-width="1.6"/>
+<text x="1085" y="266" font-size="11" font-weight="700" fill="#1F2933" text-anchor="middle">JST</text>
+<text x="1085" y="280" font-size="10" font-weight="400" fill="#5F6B78" text-anchor="middle">at cradle</text>
 <text x="1200" y="280" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">cable shield → GND,</text>
 <text x="1200" y="295" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">this end only</text>
 <text x="60" y="700" font-size="12" font-weight="400" fill="#5F6B78" text-anchor="start">3V3 flag and ground symbol = the carrier's 3V3 and GND rails (step 2). Red is the centre tap S on this build's cells; which of white/black is E+ only sets the sign.</text>

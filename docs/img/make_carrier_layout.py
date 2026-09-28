@@ -10,9 +10,10 @@ Layout per breakout (x0 = its analog column; digital column is x0 + 7):
   rows A,B        GND and 3V3 rails (never cut)
   rows C-H        cut at x0+3 (between the header columns) and x0+8 (before the next breakout)
   links           REFP0 C->B, REFN0 D->A, CLK C->A, SCLK E->J, MOSI F->K, MISO G->L, AIN0 H->P
-  JST (4 pins)    column x0+2, rows N (E+ on 3V3b), O (E- on GNDb), P (S), Q (unused)
+  cell cable      column x0+2: E+ into N (3V3b), E- into O (GNDb), S into P; row Q spare.
+                  The plug-in JST is at the cradle, so the cable solders straight in here.
   row P           cut at x0 and x0+3 so each unit's S strip is separate
-Strips J,K,L are the SCLK/MOSI/MISO rails; N/O repeat 3V3/GND next to the JSTs and are
+Strips J,K,L are the SCLK/MOSI/MISO rails; N/O repeat 3V3/GND next to the cable pads and are
 tied to A/B by links at columns 10 and 19. Bus wires solder in at column 1 (BUS IN) and
 37 (BUS OUT).
 """
@@ -107,14 +108,14 @@ def draw() -> Svg:
         # CS flying lead (and DRDY on L1) — marked, not a link
         cx, cy = xy(x0 + 5, "D")
         s.add(f'<circle cx="{cx}" cy="{cy}" r="7" fill="none" stroke="{WIRE["cs"]}" stroke-width="3"/>')
-    # JSTs
+    # cell cable pads: the cable solders straight in (its JST is at the cradle)
     for name, x0, _ in MODULES:
-        (x, y1), (_, y2) = xy(x0 + 2, "N"), xy(x0 + 2, "Q")
-        s.rect(x - 9, y1 - 11, 18, (y2 - y1) + 22, "#FFFFFF", INK, 3, 1.6)
-        for r in "NOPQ":
+        for r, lab in (("N", "E+"), ("O", "E−"), ("P", "S")):
             xx, yy = xy(x0 + 2, r)
-            s.add(f'<rect x="{xx - 4}" y="{yy - 4}" width="8" height="8" fill="{INK}"/>')
-        s.text(x, y2 + 30, f"JST · cell {name}", 11, INK, 700, "middle")
+            s.add(f'<circle cx="{xx}" cy="{yy}" r="7" fill="none" stroke="{WIRE["cell"]}" stroke-width="2.8"/>')
+            s.text(xx - 11, yy + 4, lab, 10, WIRE["cell"], 700, "end")
+        x, y2 = xy(x0 + 2, "Q")
+        s.text(x, y2 + 30, f"cable · cell {name}", 11, INK, 700, "middle")
     # links
     for (c1, r1), (c2, r2), key, _ in links():
         (x1, y1), (x2, y2) = xy(c1, r1), xy(c2, r2)
@@ -140,6 +141,7 @@ def draw() -> Svg:
              ("✕ cut the strip at this hole (from the copper side)", "#E03131"),
              ("○ solder a bus wire here (5 per end)", INK),
              ("○ solder this unit's CS wire from the UNO Q here", WIRE["cs"]),
+             ("○ solder the cell cable's E+ / E− / S here (JST is at the cradle)", WIRE["cell"]),
              ("■ breakout header pin (pins down, plastic spacer under the breakout)", "#C9A227")]
     for i, (txt, col) in enumerate(items):
         s.text(40 + (i % 2) * 540, ky + (i // 2) * 22, txt, 12, col or INK, 600 if col else 400)
