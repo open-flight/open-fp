@@ -35,6 +35,7 @@ Achieved loop rate: — · `drdyMissed` over 10 min: —
 |---|---|---|---|
 | FQBN for `arduino-cli` | `arduino:zephyr:unoq` (core `arduino:zephyr`, "Arduino Q Boards") | arduino-cli 1.5.1, arduino:zephyr 1.0.0, `arduino-cli board list` | 2026-09-23 |
 | Board ports | USB serial `/dev/cu.usbmodem*` and network port (mDNS `open-fp.local`), both detected as Arduino UNO Q | `arduino-cli board list` | 2026-09-23 |
+| Compiling on this Mac | Arduino's builtin `ctags` 5.8-arduino11 is x86-only and fails (`bad CPU type`) without Rosetta. `tools/bench/flash.sh` swaps in a no-op stand-in when it can't run; ctags only generates function prototypes, and the bench sketches define every function before use. `bench/ads1220_all` compiles: 95 KB flash, 42 KB RAM | arduino-cli, arduino:zephyr 1.0.0, macOS (Darwin 27) on Apple Silicon | 2026-09-29 |
 
 ## Bench tooling
 
