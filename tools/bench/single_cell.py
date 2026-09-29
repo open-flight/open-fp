@@ -295,8 +295,9 @@ def _hex(regs) -> str:
 class Monitor:
     """Streams and parses `arduino-app-cli monitor` output from the board over SSH."""
 
-    def __init__(self, host: str, source=None):
+    def __init__(self, host: str, source=None, parse=None):
         self.q: queue.Queue = queue.Queue()
+        self.parse = parse or parse_line  # sketch-specific line parser
         self.proc = None
         if source is None:
             # Long-lived: the stream is read by a thread until close() terminates it.
@@ -314,7 +315,7 @@ class Monitor:
     def _pump(self, stream):
         seen: set[str] = set()
         for raw in stream:
-            item = parse_line(raw)
+            item = self.parse(raw)
             if isinstance(item, SketchError) and item.message not in seen:
                 seen.add(item.message)  # the sketch repeats errors; show each one once
                 print(f"  sketch: {item.message}")

@@ -111,3 +111,23 @@ With the UNO Q unplugged:
 - [ ] Each cable shield connects to GND at the carrier end and to nothing at the cell end.
 
 Then power up and bring units up **one at a time**: plug in one cell's JST at its cradle, check it, then the next. Each unit's bench-tested numbers (noise, readback) are the reference.
+
+## 5. Test the carrier
+
+With the UNO Q plugged into the dev machine by **USB-C** (flashing goes over USB) and on the network:
+
+```bash
+tools/bench/flash.sh bench/ads1220_all          # flash the all-channel bench sketch
+.venv/bin/python tools/bench/multi_cell.py      # toe carrier: L1, L2, R1, R2
+.venv/bin/python tools/bench/multi_cell.py --channels L3,L4,R3,R4   # heel carrier
+.venv/bin/python tools/bench/multi_cell.py --channels all           # both
+```
+
+It runs four checks, each unit in turn, and ends with a PASS/FAIL table and the reason for every failure:
+
+1. **Who answers.** Each unit must read back its registers on its own CS pin, and nothing may answer on a CS that isn't in `--channels`. If no unit answers, the shared wires are the suspect: 3V3, GND, SCLK (D13), MOSI (D11), MISO (D12) into BUS IN.
+2. **Voltages**, measured by each ADC: supply ~3.3 V, reference equal to the supply (the REFP0/REFN0 links), and the cell's centre tap near half supply (the cable's S wire). It also detects R1/R2 (AIN1 at half supply). If every unit has them it measures **differential**, the real configuration; otherwise **single-ended**, which still tests wiring and response. Use `--mode` to force one.
+3. **Baseline, hands off:** each unit must be neither stuck (a working ADS1220 always shows some noise; repeating the same value is the fault seen on the second breakout), noisy, at full scale, nor drifting.
+4. **Press test, one cell at a time:** the unit you press must move, and **only** that unit. If another unit moves instead, the two cables (or two CS wires) are swapped, and the message names them.
+
+Skip the press test with `--no-press`. The sketch paces on L1's DRDY; if L1 is missing it falls back to a 1 ms timer, so the other units can still be tested. `ssh -t arduino@open-fp.local arduino-app-cli monitor` shows the raw output; its keys are listed at the top of `bench/ads1220_all/ads1220_all.ino` (`x` dumps 16 raw reads per unit).

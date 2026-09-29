@@ -20,10 +20,26 @@ if [ -z "${PORT}" ]; then
   echo "(arduino-cli board list should show 'Arduino UNO Q' on a /dev/cu.usbmodem* port.)" >&2
   exit 1
 fi
+# Arduino's ctags (used only to generate function prototypes) is an Intel binary; on an Apple
+# Silicon Mac without Rosetta it can't run. The bench sketches define every function before use,
+# so a do-nothing stand-in is safe.
+EXTRA=()
+CTAGS="${HOME}/Library/Arduino15/packages/builtin/tools/ctags/5.8-arduino11/ctags"
+if [ -e "${CTAGS}" ] && ! "${CTAGS}" --version >/dev/null 2>&1; then
+  STUB="$(mktemp -d)"
+  printf '#!/bin/sh\nexit 0\n' > "${STUB}/ctags"
+  chmod +x "${STUB}/ctags"
+  EXTRA=(--build-property "tools.ctags.path=${STUB}" --build-property "tools.ctags.cmd.path=${STUB}/ctags")
+  echo "(Arduino's ctags can't run here, e.g. no Rosetta; using a no-op stand-in.)"
+fi
 echo "Compiling ${SKETCH}..."
-arduino-cli compile --fqbn "${FQBN}" "${SKETCH}"
+arduino-cli compile --fqbn "${FQBN}" ${EXTRA[@]+"${EXTRA[@]}"} "${SKETCH}"
 echo "Uploading to ${PORT}..."
 arduino-cli upload --fqbn "${FQBN}" -p "${PORT}" "${SKETCH}"
 echo
 echo "Flashed. Watch the output with:  ssh -t arduino@open-fp.local arduino-app-cli monitor"
-echo "Or run the guided test:        .venv/bin/python tools/bench/single_cell.py"
+if [ "${SKETCH%/}" = "bench/ads1220_all" ]; then
+  echo "Or run the guided test:        .venv/bin/python tools/bench/multi_cell.py"
+else
+  echo "Or run the guided test:        .venv/bin/python tools/bench/single_cell.py"
+fi
