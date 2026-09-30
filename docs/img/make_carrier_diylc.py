@@ -152,7 +152,15 @@ class Project:
       <edgeRadius value="1.0" unit="mm"/>
     </diylc.shapes.Rectangle>""")
 
-    def label(self, p, text: str, size: int = 10, color: str = "000000", bold: bool = False):
+    def label(
+        self,
+        p,
+        text: str,
+        size: int = 10,
+        color: str = "000000",
+        bold: bool = False,
+        align="CENTER",
+    ):
         self.parts.append(f"""    <diylc.misc.Label>
       <name>{self.name("L")}</name>
       {pt(p)}
@@ -160,10 +168,48 @@ class Project:
       <font name="Dialog" size="{size}" style="{1 if bold else 0}"/>
       <color hex="{color}"/>
       <center>false</center>
-      <horizontalAlignment>CENTER</horizontalAlignment>
+      <horizontalAlignment>{align}</horizontalAlignment>
       <verticalAlignment>CENTER</verticalAlignment>
       <orientation>DEFAULT</orientation>
     </diylc.misc.Label>""")
+
+    def resistor(self, a, b, name: str):
+        mid = (round((a[0] + b[0]) / 2, 3), round((a[1] + b[1]) / 2, 3))
+        self.parts.append(f"""    <diylc.passive.Resistor>
+      <name>{name}</name>
+      <alpha>127</alpha>
+      <length value="6.3" unit="mm"/>
+      <width value="2.3" unit="mm"/>
+      <points>
+        {pt(a)}
+        {pt(b)}
+        {pt(mid)}
+      </points>
+      <bodyColor hex="82cffd"/>
+      <borderColor hex="5b90b1"/>
+      <labelColor hex="000000"/>
+      <leadColor hex="cccccc"/>
+      <display>BOTH</display>
+      <flipStanding>false</flipStanding>
+      <labelOriantation>Directional</labelOriantation>
+      <moveLabel>false</moveLabel>
+      <hideShortLeads>false</hideShortLeads>
+      <value value="1.0" unit="K"/>
+      <power>HALF</power>
+      <colorCode>NONE</colorCode>
+      <shape>Standard</shape>
+    </diylc.passive.Resistor>""")
+
+    def pad(self, p, color: str = "c9a227"):
+        self.parts.append(f"""    <diylc.connectivity.SolderPad>
+      <name>{self.name("Pad")}</name>
+      <size value="0.09" unit="in"/>
+      <color hex="{color}"/>
+      {pt(p)}
+      <type>SQUARE</type>
+      <holeSize value="0.8" unit="mm"/>
+      <layer>_1</layer>
+    </diylc.connectivity.SolderPad>""")
 
     def xml(self) -> str:
         body = "\n".join(self.parts)
@@ -176,7 +222,7 @@ class Project:
   </fileVersion>
   <title>open-fp ADC carrier (toe)</title>
   <author>open-fp</author>
-  <width value="29.0" unit="cm"/>
+  <width value="36.0" unit="cm"/>
   <height value="21.0" unit="cm"/>
   <gridSpacing value="0.1" unit="in"/>
   <dotSpacing>1</dotSpacing>
@@ -190,6 +236,53 @@ class Project:
   <font name="Dialog" size="12" style="0"/>
 </project>
 """
+
+
+def inset(p: Project):
+    """Zoomed top view of one breakout: pin names, R1/R2 and the wires soldered on top."""
+    left = ["AGND", "AVDD", "REFP0", "REFN0", "AIN3", "AIN2", "AIN1", "AIN0"]
+    right = ["DGND", "DVDD", "CLK", "CS", "SCLK", "MOSI", "MISO", "DRDY"]
+    lx, rx, y0, dy = 9.3, 10.7, 1.2, 0.2
+    ys = [round(y0 + dy * i, 3) for i in range(8)]
+    p.label((10.0, 0.62), "Top of each breakout (all four alike)", 11, bold=True)
+    p.label((10.0, 0.8), "the same pins as rows A-H on the board; R1/R2 solder on top", 8, "444444")
+    p.rect(
+        (round(lx - 0.15, 3), round(y0 - 0.15, 3)),
+        (round(rx + 0.15, 3), round(ys[-1] + 0.15, 3)),
+        "7b4fb8",
+        40,
+    )
+    for y, a, b in zip(ys, left, right):
+        p.pad((lx, y))
+        p.pad((rx, y))
+        p.label((round(lx + 0.1, 3), y), a, 8, align="LEFT")
+        p.label((round(rx - 0.1, 3), y), b, 8, align="RIGHT")
+    for y, row in zip(ys, "ABCDEFGH"):
+        p.label((round(lx - 0.9, 3), y), row, 8, "888888")
+    # R1: AVDD -> AIN1, R2: AIN1 -> AGND, side by side left of the pin column
+    r1x, r2x = round(lx - 0.35, 3), round(lx - 0.7, 3)
+    avdd, ain1, agnd = ys[1], ys[6], ys[0]
+    p.resistor((r1x, avdd), (r1x, ain1), "R1")
+    p.wire((r1x, avdd), (lx, avdd), hexc(WIRE["3v3"]))
+    p.wire((r1x, ain1), (lx, ain1), hexc(WIRE["ref"]))
+    p.resistor((r2x, agnd), (r2x, ain1), "R2")
+    p.wire((r2x, agnd), (lx, agnd), hexc(WIRE["gnd"]))
+    p.wire((r2x, ain1), (r1x, ain1), hexc(WIRE["ref"]))
+    # wires soldered to the top of pins
+    for y, text, key in (
+        (ys[3], "CS wire from the UNO Q", "cs"),
+        (ys[7], "L1 only: DRDY -> D2", "drdy"),
+    ):
+        p.wire((rx, y), (round(rx + 0.45, 3), y), hexc(WIRE[key]))
+        p.label((round(rx + 0.5, 3), y), text, 8, hexc(WIRE[key]), True, "LEFT")
+    notes = [
+        "R1 AVDD-AIN1 and R2 AIN1-AGND: 1 k 0.1 %, a matched pair",
+        "(any equal pair 680 R - 2 k; never mixed values). AIN1 then sits",
+        "at ~1.65 V, the other half of the bridge.",
+        "Every pin also goes through to its strip below (rows A-H).",
+    ]
+    for i, n in enumerate(notes):
+        p.label((round(lx - 0.75, 3), round(ys[-1] + 0.45 + 0.14 * i, 3)), n, 8, align="LEFT")
 
 
 def build() -> str:
@@ -224,37 +317,71 @@ def build() -> str:
         sh = at(x0 + 3, "O")
         p.wire(sh, (round(sh[0] + 0.1, 3), below), CABLE["shield"])
         p.label(
-            (round(ax + 0.2, 3), round(Y0 + 0.1 * (ROWS + 1) + 0.5, 3)),
-            f"cell {name}",
+            (round(ax + 0.15, 3), round(Y0 + 0.1 * (ROWS + 1) + 0.5, 3)),
+            f"{name} cable",
             9,
+            bold=True,
         )
     # L1's DRDY off the top of its DRDY pin
     name, x0, _ = MODULES[0]
     drdy = at(x0 + 7, "H")
     p.wire(drdy, (round(drdy[0] - 0.15, 3), round(Y0 - 0.25, 3)), hexc(WIRE["drdy"]))
     p.label((round(drdy[0] - 0.15, 3), round(Y0 - 0.35, 3)), "L1 DRDY -> D2", 8, hexc(WIRE["drdy"]))
-    # bus in/out and rail names
-    for col, dx, text in ((1, -0.4, "BUS IN (from UNO Q)"), (COLS, 0.4, "BUS OUT (to heel)")):
-        for row in "ABJKL":
-            a = at(col, row)
-            p.wire(a, (round(a[0] + dx, 3), a[1]), hexc(WIRE[RAILS[row][1]]))
-        x, y = at(col, "M")
-        p.label((round(x + dx, 3), y), text, 8, bold=True)
-    for row, (rail, key) in RAILS.items():
+    # bus in/out, with the UNO Q pin on each incoming wire
+    uno = {"A": "GND", "B": "3V3", "J": "SCLK <- D13", "K": "MOSI <- D11", "L": "MISO <- D12"}
+    for row in "ABJKL":
+        key = hexc(WIRE[RAILS[row][1]])
+        a = at(1, row)
+        p.wire(a, (round(a[0] - 0.4, 3), a[1]), key)
+        p.label((round(a[0] - 0.45, 3), a[1]), uno[row], 8, key, True, "RIGHT")
+        b = at(COLS, row)
+        p.wire(b, (round(b[0] + 0.4, 3), b[1]), key)
+    x, y = at(1, "M")
+    p.label((round(x - 0.45, 3), y), "BUS IN from UNO Q", 8, bold=True, align="RIGHT")
+    # what every strip is for, left-aligned beside the board
+    strips = {
+        "A": ("AGND | DGND pins; GND rail, never cut. BUS OUT ->", "gnd"),
+        "B": ("AVDD | DVDD pins; 3V3 rail, never cut. BUS OUT ->", "3v3"),
+        "C": ("REFP0 | CLK   (link C->B, CLK link C->A)", None),
+        "D": ("REFN0 | CS    (link D->A; CS wire on top of the pin)", None),
+        "E": ("AIN3 | SCLK   (SCLK link E->J)", None),
+        "F": ("AIN2 | MOSI   (MOSI link F->K)", None),
+        "G": ("AIN1 | MISO   (MISO link G->L; R1/R2 meet at AIN1)", None),
+        "H": ("AIN0 | DRDY   (link H->P to the cable's S)", None),
+        "I": ("spare: mounting holes", None),
+        "J": ("SCLK rail. BUS OUT ->", "sck"),
+        "K": ("MOSI rail. BUS OUT ->", "mosi"),
+        "L": ("MISO rail. BUS OUT ->", "miso"),
+        "M": ("spare: mounting holes", None),
+        "N": ("3V3 (tie link col 19 to B): cable E+", "3v3"),
+        "O": ("GND (tie link col 10 to A): cable E- and shield", "gnd"),
+        "P": ("cable S -> AIN0; cut so each unit has its own", "sig"),
+        "Q": ("spare", None),
+    }
+    for row, (text, key) in strips.items():
         x, y = at(COLS, row)
-        p.label((round(x + 0.75, 3), y), rail, 9, hexc(WIRE[key]), True)
+        color = hexc(WIRE[key]) if key else "444444"
+        p.label((round(x + 0.5, 3), y), f"{row}  {text}", 8, color, key is not None, "LEFT")
+    p.label(
+        (round(at(1, "A")[0] + 1.8, 3), round(Y0 - 0.62, 3)),
+        "open-fp ADC carrier: toe (L1 L2 R1 R2), component side",
+        13,
+        bold=True,
+    )
+    inset(p)
     bottom = Y0 + 0.1 * (ROWS + 1)
     notes = [
-        "open-fp ADC carrier, toe (L1 L2 R1 R2). Heel: same board with L3 L4 R3 R4, CS <- "
+        "Heel carrier: the same board with L3 L4 R3 R4 (CS <- "
         + ", ".join(HEEL_CS)
-        + "; BUS OUT unused.",
-        "Cell cable (JST at the cradle): E+ white on N, E- black on O, S red on P, shield grey to O.",
-        "Fit all links before the breakouts (they run underneath). Red = cut the strip at that hole.",
-        "Breakouts: pins down, header spacer under. R1 (AVDD-AIN1) and R2 (AIN1-AGND) solder on top.",
-        "Mount with ~3 mm nylon standoffs in strips I or M. Steps: docs/harness.md.",
+        + "); leave BUS OUT empty.",
+        "Each cell has 3 wires; its JST at the cradle joins them to a shielded cable. White E+ -> N, black E- -> O,",
+        "red S -> P. Grey is the cable's shield (drain wire), not a cell wire: GND on strip O here, nothing at the cradle.",
+        "Pale circles = cut the strip at that hole (from the copper side; check with a meter).",
+        "Fit all links before the breakouts: they run underneath. Breakouts pins down, header spacer under.",
+        "Mount with ~3 mm nylon standoffs in strip I or M. Full steps: docs/harness.md.",
     ]
     for i, n in enumerate(notes):
-        p.label((round(X0 + 1.9, 3), round(bottom + 0.8 + 0.15 * i, 3)), n, 9)
+        p.label((round(X0, 3), round(bottom + 0.8 + 0.15 * i, 3)), n, 9, align="LEFT")
     return p.xml()
 
 
