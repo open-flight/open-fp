@@ -104,6 +104,15 @@ That's **14 UNO Q pins, one wire each**. The 5 bus signals reach all 8 units thr
 
 ## 4. Check before power
 
+A guided version of these checks, stage by stage as you build, asks for each meter reading and says what's wrong:
+
+```bash
+.venv/bin/python tools/bench/carrier_check.py --units L1 --stage units   # one unit, breakout + R1/R2 fitted
+.venv/bin/python tools/bench/carrier_check.py                            # toe carrier, wired to the Q
+```
+
+Stages: `bare` (cuts and links), `units` (breakouts and R1/R2), `cables` (cells plugged in), `uno` (wired to the Q, which is unplugged from USB). Each stage includes the ones before it.
+
 With the UNO Q unplugged:
 
 - [ ] **3V3 to GND ≈ 125 Ω.** That's 8 corners of 1 kΩ in parallel. Near 0 Ω is a short.
