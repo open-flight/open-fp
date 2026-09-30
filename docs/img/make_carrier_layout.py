@@ -105,8 +105,9 @@ def draw() -> Svg:
             for col, labels in ((x0, ANALOG), (x0 + 7, DIGITAL)):
                 x, y = xy(col, r)
                 s.add(f'<rect x="{x - 5}" y="{y - 5}" width="10" height="10" fill="#C9A227" stroke="#8A6D12"/>')
-        # CS flying lead (and DRDY on L1) — marked, not a link
-        cx, cy = xy(x0 + 5, "D")
+        # CS wire: soldered to the top of the CS header pin (the holes under the breakout
+        # are covered once it's on), like L1's DRDY
+        cx, cy = xy(x0 + 7, "D")
         s.add(f'<circle cx="{cx}" cy="{cy}" r="7" fill="none" stroke="{WIRE["cs"]}" stroke-width="3"/>')
     # cell cable pads: the cable solders straight in (its JST is at the cradle)
     for name, x0, _ in MODULES:
@@ -140,7 +141,7 @@ def draw() -> Svg:
     items = [("wire link (component side; touches copper only at its dotted ends)", None),
              ("✕ cut the strip at this hole (from the copper side)", "#E03131"),
              ("○ solder a bus wire here (5 per end)", INK),
-             ("○ solder this unit's CS wire from the UNO Q here", WIRE["cs"]),
+             ("○ CS wire from the UNO Q: solder to the top of the CS pin", WIRE["cs"]),
              ("○ solder the cell cable's E+ / E− / S here (JST is at the cradle)", WIRE["cell"]),
              ("■ breakout header pin (pins down, plastic spacer under the breakout)", "#C9A227")]
     for i, (txt, col) in enumerate(items):
