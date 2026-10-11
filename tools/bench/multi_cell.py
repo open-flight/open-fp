@@ -262,7 +262,9 @@ def check_channel(ch: str, windows: list[Window], mode: Mode) -> ChanBaseline:
     b.noise = statistics.median(s.std for s in ws)
     b.drift = ws[-1].mean - ws[0].mean
     b.repeat_fraction = sum(s.rep for s in ws) / total
-    if b.repeat_fraction > STUCK_REPEAT_FRACTION or b.noise < 1:
+    # A reading pinned at full scale is constant too; report that as saturation, not as stuck.
+    pinned = all(s.vmax >= FULL_SCALE - 1 or s.vmin <= -FULL_SCALE for s in ws)
+    if not pinned and (b.repeat_fraction > STUCK_REPEAT_FRACTION or b.noise < 1):
         b.problems.append(
             f"{ch}: readings are stuck ({100 * b.repeat_fraction:.0f} % repeat the previous value, "
             f"noise {b.noise:.0f}). A working ADS1220 always shows some noise; this is the fault "

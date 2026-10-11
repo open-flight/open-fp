@@ -135,6 +135,7 @@ def test_saturated_differential_channel_is_caught():
     sat = [win(i * 250, L2=cs(8388607, std=0, rep=239, spread=0)) for i in range(8)]
     b = check_channel("L2", sat, DIFFERENTIAL)
     assert not b.ok and any("full scale" in p and "R1/R2" in p for p in b.problems)
+    assert not any("stuck" in p for p in b.problems)  # saturation, not the stuck-breakout fault
 
 
 def test_missing_channel():
