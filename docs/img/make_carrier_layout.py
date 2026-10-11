@@ -8,11 +8,18 @@ AVDD|DVDD, ...), which lets strip A be the GND rail and strip B the 3V3 rail und
 
 Layout per breakout (x0 = its analog column; digital column is x0 + 7):
   rows A,B        GND and 3V3 rails (never cut)
-  rows C-H        cut at x0+3 (between the header columns) and x0+8 (before the next breakout)
-  links           REFP0 C->B, REFN0 D->A, CLK C->A, SCLK E->J, MOSI F->K, MISO G->L, AIN0 H->P
+  rows C-H        cut at x0+4 (between the header columns) and x0+8 (before the next breakout)
+  links           REFP0 C->B, REFN0 D->A, CLK C->A, MOSI F->K, MISO G->L, AIN0 H->P, and
+                  SCLK E->J as a diagonal (x0+6, E) -> (x0+4, J): its column is blocked by
+                  MOSI/MISO, so use insulated wire for it
   cell cable      column x0+2: E+ into N (3V3b), E- into O (GNDb), S into P; row Q spare.
                   The plug-in JST is at the cradle, so the cable solders straight in here.
-  row P           cut at x0 and x0+3 so each unit's S strip is separate
+  row P           cut at x0+4 and x0+7 so each unit's S strip (x0-1..x0+3) is separate
+
+The first carrier was cut from the copper side while reading this component-side view, which
+mirrors it. The cuts were adopted as built (2026-10-11): the between-unit cuts are symmetric and
+unchanged, the in-unit cut moved from x0+3 to x0+4 (so SCLK became a diagonal), and the row P
+cuts moved from x0, x0+3 to x0+4, x0+7. Cut from the COPPER side using the mirrored guide.
 Strips J,K,L are the SCLK/MOSI/MISO rails; N/O repeat 3V3/GND next to the cable pads and are
 tied to A/B by links at columns 10 and 19. Bus wires solder in at column 1 (BUS IN) and
 37 (BUS OUT).
@@ -44,8 +51,8 @@ def xy(col, row):
 def cuts():
     out = []
     for _, x0, _ in MODULES:
-        out += [(x0 + 3, r) for r in "CDEFGH"]
-        out += [(x0, "P"), (x0 + 3, "P")]
+        out += [(x0 + 4, r) for r in "CDEFGH"]
+        out += [(x0 + 4, "P"), (x0 + 7, "P")]
     for _, x0, _ in MODULES[:-1]:
         out += [(x0 + 8, r) for r in "CDEFGH"]
     return out
@@ -59,7 +66,7 @@ def links():
             ((x0 + 1, "C"), (x0 + 1, "B"), "3v3", "REFP0"),
             ((x0 + 2, "D"), (x0 + 2, "A"), "gnd", "REFN0"),
             ((x0 + 6, "C"), (x0 + 6, "A"), "gnd", "CLK"),
-            ((x0 + 4, "E"), (x0 + 4, "J"), "sck", "SCLK"),
+            ((x0 + 6, "E"), (x0 + 4, "J"), "sck", "SCLK"),
             ((x0 + 5, "F"), (x0 + 5, "K"), "mosi", "MOSI"),
             ((x0 + 6, "G"), (x0 + 6, "L"), "miso", "MISO"),
             ((x0 + 1, "H"), (x0 + 1, "P"), "sig", "S"),

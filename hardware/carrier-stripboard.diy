@@ -89,9 +89,9 @@
       <name>L1 SCLK</name>
       <alpha>127</alpha>
       <points>
-        <point x="1.6" y="1.5"/>
+        <point x="1.8" y="1.5"/>
         <point x="1.6" y="2.0"/>
-        <point x="1.6" y="1.75"/>
+        <point x="1.7" y="1.75"/>
       </points>
       <bodyColor hex="ffffff"/>
       <borderColor hex="000000"/>
@@ -208,9 +208,9 @@
       <name>L2 SCLK</name>
       <alpha>127</alpha>
       <points>
-        <point x="2.5" y="1.5"/>
+        <point x="2.7" y="1.5"/>
         <point x="2.5" y="2.0"/>
-        <point x="2.5" y="1.75"/>
+        <point x="2.6" y="1.75"/>
       </points>
       <bodyColor hex="ffffff"/>
       <borderColor hex="000000"/>
@@ -327,9 +327,9 @@
       <name>R1 SCLK</name>
       <alpha>127</alpha>
       <points>
-        <point x="3.4" y="1.5"/>
+        <point x="3.6" y="1.5"/>
         <point x="3.4" y="2.0"/>
-        <point x="3.4" y="1.75"/>
+        <point x="3.5" y="1.75"/>
       </points>
       <bodyColor hex="ffffff"/>
       <borderColor hex="000000"/>
@@ -446,9 +446,9 @@
       <name>R2 SCLK</name>
       <alpha>127</alpha>
       <points>
-        <point x="4.3" y="1.5"/>
+        <point x="4.5" y="1.5"/>
         <point x="4.3" y="2.0"/>
-        <point x="4.3" y="1.75"/>
+        <point x="4.4" y="1.75"/>
       </points>
       <bodyColor hex="ffffff"/>
       <borderColor hex="000000"/>
@@ -553,7 +553,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="1.5" y="1.3"/>
+      <point x="1.6" y="1.3"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut2</name>
@@ -564,7 +564,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="1.5" y="1.4"/>
+      <point x="1.6" y="1.4"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut3</name>
@@ -575,7 +575,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="1.5" y="1.5"/>
+      <point x="1.6" y="1.5"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut4</name>
@@ -586,7 +586,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="1.5" y="1.6"/>
+      <point x="1.6" y="1.6"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut5</name>
@@ -597,7 +597,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="1.5" y="1.7"/>
+      <point x="1.6" y="1.7"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut6</name>
@@ -608,7 +608,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="1.5" y="1.8"/>
+      <point x="1.6" y="1.8"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut7</name>
@@ -619,7 +619,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="1.2" y="2.6"/>
+      <point x="1.6" y="2.6"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut8</name>
@@ -630,7 +630,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="1.5" y="2.6"/>
+      <point x="1.9" y="2.6"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut9</name>
@@ -641,7 +641,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="2.4" y="1.3"/>
+      <point x="2.5" y="1.3"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut10</name>
@@ -652,7 +652,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="2.4" y="1.4"/>
+      <point x="2.5" y="1.4"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut11</name>
@@ -663,7 +663,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="2.4" y="1.5"/>
+      <point x="2.5" y="1.5"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut12</name>
@@ -674,7 +674,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="2.4" y="1.6"/>
+      <point x="2.5" y="1.6"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut13</name>
@@ -685,7 +685,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="2.4" y="1.7"/>
+      <point x="2.5" y="1.7"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut14</name>
@@ -696,7 +696,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="2.4" y="1.8"/>
+      <point x="2.5" y="1.8"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut15</name>
@@ -707,7 +707,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="2.1" y="2.6"/>
+      <point x="2.5" y="2.6"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut16</name>
@@ -718,7 +718,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="2.4" y="2.6"/>
+      <point x="2.8" y="2.6"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut17</name>
@@ -729,7 +729,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="3.3" y="1.3"/>
+      <point x="3.4" y="1.3"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut18</name>
@@ -740,7 +740,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="3.3" y="1.4"/>
+      <point x="3.4" y="1.4"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut19</name>
@@ -751,7 +751,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="3.3" y="1.5"/>
+      <point x="3.4" y="1.5"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut20</name>
@@ -762,7 +762,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="3.3" y="1.6"/>
+      <point x="3.4" y="1.6"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut21</name>
@@ -773,7 +773,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="3.3" y="1.7"/>
+      <point x="3.4" y="1.7"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut22</name>
@@ -784,7 +784,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="3.3" y="1.8"/>
+      <point x="3.4" y="1.8"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut23</name>
@@ -795,7 +795,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="3.0" y="2.6"/>
+      <point x="3.4" y="2.6"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut24</name>
@@ -806,7 +806,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="3.3" y="2.6"/>
+      <point x="3.7" y="2.6"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut25</name>
@@ -817,7 +817,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="4.2" y="1.3"/>
+      <point x="4.3" y="1.3"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut26</name>
@@ -828,7 +828,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="4.2" y="1.4"/>
+      <point x="4.3" y="1.4"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut27</name>
@@ -839,7 +839,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="4.2" y="1.5"/>
+      <point x="4.3" y="1.5"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut28</name>
@@ -850,7 +850,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="4.2" y="1.6"/>
+      <point x="4.3" y="1.6"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut29</name>
@@ -861,7 +861,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="4.2" y="1.7"/>
+      <point x="4.3" y="1.7"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut30</name>
@@ -872,7 +872,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="4.2" y="1.8"/>
+      <point x="4.3" y="1.8"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut31</name>
@@ -883,7 +883,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="3.9" y="2.6"/>
+      <point x="4.3" y="2.6"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut32</name>
@@ -894,7 +894,7 @@
       <cutBetweenHoles>false</cutBetweenHoles>
       <orientation>HORIZONTAL</orientation>
       <holeSpacing value="0.1" unit="in"/>
-      <point x="4.2" y="2.6"/>
+      <point x="4.6" y="2.6"/>
     </diylc.connectivity.TraceCut>
     <diylc.connectivity.TraceCut>
       <name>Cut33</name>
@@ -2074,7 +2074,7 @@
     <diylc.misc.Label>
       <name>L24</name>
       <point x="5.2" y="1.5"/>
-      <text>E  AIN3 | SCLK   (SCLK link E-&gt;J)</text>
+      <text>E  AIN3 | SCLK   (SCLK link E-&gt;J, diagonal, insulated)</text>
       <font name="Dialog" size="8" style="0"/>
       <color hex="444444"/>
       <center>false</center>
