@@ -456,6 +456,10 @@ def run_live(args) -> int:
     rep = Report(expected)
     try:
         print(f"Connecting to arduino@{args.host} (arduino-app-cli monitor)...")
+        # Keys sent before the monitor is attached are lost: wait for the sketch's first output.
+        for _ in range(20):
+            if mon.collect(0.5):
+                break
         mon.send("r")
         items = mon.collect(4.0)
         rep.readbacks = latest_readbacks(items)
