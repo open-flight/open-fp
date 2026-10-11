@@ -67,3 +67,11 @@ def test_run_and_summary():
     text = summarize(results)
     assert "1 failed" in text and "bridge" in text and "Fix the failures" in text
     assert "Safe to power" in summarize(run(checks[1:], ask=lambda _: "y"))
+
+
+def test_resistor_value_scales_the_expected_readings():
+    r680 = _find(checks_for(["L1"], "units", r_each=680), "no cells plugged in")
+    r1k5 = _find(checks_for(["L1"], "units", r_each=1500), "no cells plugged in")
+    assert r680.lo < 1360 < r680.hi and r1k5.lo < 3000 < r1k5.hi
+    ain1 = _find(checks_for(["L1"], "units", r_each=1500), "AIN1 pin")
+    assert ain1.lo < 1500 < ain1.hi

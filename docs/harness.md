@@ -54,11 +54,11 @@ Use single-sided 2.54 mm stripboard, 37 × 17 holes (about 94 × 43 mm). That fi
 Build order:
 
 1. **Cut the strips (✕):**
-   - rows C–H at columns 5, 14, 23, 32, which falls between each breakout's two header columns
+   - rows C–H at columns 6, 15, 24, 33 (x0+4), which falls between each breakout's two header columns
    - rows C–H at columns 10, 19, 28, between breakouts
-   - row P at columns 2, 5, 11, 14, 20, 23, 29, 32, so each unit's S strip is separate
+   - row P at columns 6, 9, 15, 18, 24, 27, 33, 36 (x0+4 and x0+7), so each unit's S strip is separate
 
-   Cut from the copper side and count columns carefully, because the board is mirrored when flipped. Check every cut with a meter.
+   **The drawing is the component side.** Cutting from the copper side mirrors it: on the copper side, column 1 (BUS IN) is on the **right**. Count columns from that edge. Check every cut with a meter. (The first carrier was cut mirrored; the layout was changed on 2026-10-11 to match that board, which is why the in-unit cut is at x0+4 and SCLK is a diagonal.)
 2. **Fit the wire links**, all of them before any breakout, since they run underneath. Per breakout, with x0 = its left header column (2, 11, 20, 29):
 
    | Link | From | To |
@@ -66,7 +66,7 @@ Build order:
    | REFP0 → 3V3 | x0+1, C | x0+1, B |
    | REFN0 → GND | x0+2, D | x0+2, A |
    | CLK → GND | x0+6, C | x0+6, A |
-   | SCLK → rail | x0+4, E | x0+4, J |
+   | SCLK → rail | x0+6, E | x0+4, J (diagonal; **insulated wire**, it crosses MOSI) |
    | MOSI → rail | x0+5, F | x0+5, K |
    | MISO → rail | x0+6, G | x0+6, L |
    | AIN0 → S | x0+1, H | x0+1, P |

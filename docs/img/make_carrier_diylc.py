@@ -344,7 +344,7 @@ def build() -> str:
         "B": ("AVDD | DVDD pins; 3V3 rail, never cut. BUS OUT ->", "3v3"),
         "C": ("REFP0 | CLK   (link C->B, CLK link C->A)", None),
         "D": ("REFN0 | CS    (link D->A; CS wire on top of the pin)", None),
-        "E": ("AIN3 | SCLK   (SCLK link E->J)", None),
+        "E": ("AIN3 | SCLK   (SCLK link E->J, diagonal, insulated)", None),
         "F": ("AIN2 | MOSI   (MOSI link F->K)", None),
         "G": ("AIN1 | MISO   (MISO link G->L; R1/R2 meet at AIN1)", None),
         "H": ("AIN0 | DRDY   (link H->P to the cable's S)", None),

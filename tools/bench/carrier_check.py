@@ -42,7 +42,7 @@ CS_PIN = {
 }
 TOE = ("L1", "L2", "R1", "R2")
 STAGES = ("bare", "units", "cables", "uno")
-R_PAIR = 2_000.0  # R1 + R2 in series, ohms
+R_EACH = 1_000.0  # R1 = R2, ohms (any matched pair 680 Ω-2 kΩ; set with --resistor)
 R_CELL = 2_000.0  # the cell's E+ to E- (docs/wiring.md: 2 kΩ, 1 kΩ per corner with R1+R2)
 OPEN = float("inf")
 
@@ -88,7 +88,9 @@ def parallel(r: float, n: int) -> float:
     return r / n
 
 
-def checks_for(units: list[str], stage: str, heel_chained: bool = False) -> list[Check]:
+def checks_for(
+    units: list[str], stage: str, heel_chained: bool = False, r_each: float = R_EACH
+) -> list[Check]:
     """Every check up to and including `stage`, in build order."""
     upto = STAGES[: STAGES.index(stage) + 1]
     n = len(units)
@@ -152,7 +154,11 @@ def checks_for(units: list[str], stage: str, heel_chained: bool = False) -> list
             ),
         ]
     if "units" in upto:
-        r = parallel(R_PAIR, n)
+        r_pair = 2 * r_each
+        r = parallel(r_pair, n)
+        # AIN1 to AGND: R2 in parallel with R1 plus the rest of the 3V3-GND network
+        rest = r_pair / (n - 1) if n > 1 else float("inf")
+        ain1 = 1 / (1 / r_each + 1 / (r_each + rest))
         out.append(
             Check(
                 "units",
@@ -162,7 +168,7 @@ def checks_for(units: list[str], stage: str, heel_chained: bool = False) -> list
                 1.15 * r,
                 hint=f"expect ~{r:.0f} Ω once the reading settles (the capacitors charge; a power "
                 "LED on the breakouts reads lower). Near 0: a short. Higher: an R1/R2 missing or unsoldered "
-                "(measure each unit's AVDD to AGND pins on top: ~2 kΩ)",
+                f"(measure each unit's AVDD to AGND pins on top: ~{r_pair:.0f} Ω)",
             )
         )
         for u in units:
@@ -171,9 +177,10 @@ def checks_for(units: list[str], stage: str, heel_chained: bool = False) -> list
                     "units",
                     f"{u}: AIN1 pin (on top) to AGND pin: R2, with R1 and the rest in parallel",
                     "ohms",
-                    0.3 * 1000,
-                    1.05 * 1000,
-                    hint="R2 missing or on the wrong pin (R1 AVDD-AIN1, R2 AIN1-AGND)",
+                    0.7 * ain1,
+                    1.1 * ain1,
+                    hint=f"expect ~{ain1:.0f} Ω. R2 missing or on the wrong pin "
+                    "(R1 AVDD-AIN1, R2 AIN1-AGND), or R1/R2 not the same value",
                 ),
                 Check(
                     "units",
@@ -225,7 +232,7 @@ def checks_for(units: list[str], stage: str, heel_chained: bool = False) -> list
                 ),
             ]
     if "cables" in upto:
-        r = 1 / (n / R_PAIR + n / R_CELL)
+        r = 1 / (n / (2 * r_each) + n / R_CELL)
         out.append(
             Check(
                 "cables",
@@ -233,7 +240,8 @@ def checks_for(units: list[str], stage: str, heel_chained: bool = False) -> list
                 "ohms",
                 0.8 * r,
                 1.2 * r,
-                hint=f"expect ~{r:.0f} Ω ({n} x 1 kΩ in parallel). Same as without cells: a cable's "
+                hint=f"expect ~{r:.0f} Ω (each cell ~{R_CELL:.0f} Ω in parallel with each R1+R2). "
+                "Same as without cells: a cable's "
                 "E+/E- not reaching N/O, or a JST not seated",
             )
         )
@@ -398,8 +406,17 @@ def main() -> int:
     ap.add_argument(
         "--stage", choices=STAGES, default="uno", help="how far the build has got (default: uno)"
     )
+    ap.add_argument(
+        "--resistor",
+        default="1k",
+        help="value of each R1/R2 (they must match), e.g. 680, 1k, 1.5k (default 1k)",
+    )
     ap.add_argument("--out", default=str(Path(__file__).resolve().parents[2] / "bench" / "results"))
     args = ap.parse_args()
+    r_each = parse_reading(args.resistor)
+    if not isinstance(r_each, float) or not 100 <= r_each <= 1e5:
+        print(f"--resistor {args.resistor!r}: give a value like 680, 1k or 1.5k")
+        return 2
     units = args.units.split(",")
     bad = [u for u in units if u not in CHANNELS]
     if bad:
@@ -407,7 +424,7 @@ def main() -> int:
         return 2
     print("Power off: the UNO Q unplugged from USB. Meter on resistance / continuity.")
     try:
-        results = run(checks_for(units, args.stage))
+        results = run(checks_for(units, args.stage, r_each=r_each))
     except (KeyboardInterrupt, EOFError):
         print("\nStopped.")
         return 130
