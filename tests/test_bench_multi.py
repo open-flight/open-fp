@@ -190,7 +190,7 @@ def test_summary_pass_and_fail():
     rep = Report(["L1", "R1"], readbacks={"L1": ChanReadback("L1", True, OK_REGS)})
     rep.bus_problems = check_bus(rep.readbacks, rep.expected)
     text = summarize(rep)
-    assert "FAIL: 2 unit(s)" in text and "R1 doesn't answer on CS D7" in text
+    assert "FAIL: R1 (1 of 2 units)" in text and "R1 doesn't answer on CS D7" in text
     ok = Report(["L1"], readbacks={"L1": ChanReadback("L1", True, OK_REGS)})
     ok.baselines["L1"] = check_channel(
         "L1", [win(i * 250, L1=cs(4195000)) for i in range(8)], SINGLE_ENDED
