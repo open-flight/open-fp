@@ -58,7 +58,7 @@ Build order:
    - rows C–H at columns 10, 19, 28, between breakouts
    - row P at columns 6, 9, 15, 18, 24, 27, 33, 36 (x0+4 and x0+7), so each unit's S strip is separate
 
-   **The drawing is the component side.** Cutting from the copper side mirrors it: on the copper side, column 1 (BUS IN) is on the **right**. Count columns from that edge. Check every cut with a meter. (The first carrier was cut mirrored; the layout was changed on 2026-10-11 to match that board, which is why the in-unit cut is at x0+4 and SCLK is a diagonal.)
+   **The drawing is the component side.** Cutting from the copper side mirrors it: on the copper side, column 1 (BUS IN) is on the **right**. Count columns from that edge. Check every cut with a meter. (The first carrier was cut mirrored; the layout was changed on 2026-10-11 to match that board, which is why the in-unit cut is at x0+4 and SCLK is a diagonal.) A mirrored board also mirrors the **unit order**: L1 ends up where R2 should be. The press test in §5 catches that, and swapping the CS wires at the Q fixes it.
 2. **Fit the wire links**, all of them before any breakout, since they run underneath. Per breakout, with x0 = its left header column (2, 11, 20, 29):
 
    | Link | From | To |
@@ -141,4 +141,74 @@ It runs four checks, each unit in turn, and ends with a PASS/FAIL table and the 
 3. **Baseline, hands off:** each unit must be neither stuck (a working ADS1220 always shows some noise; repeating the same value is the fault seen on the second breakout), noisy, at full scale, nor drifting.
 4. **Press test, one cell at a time:** the unit you press must move, and **only** that unit. If another unit moves instead, the two cables (or two CS wires) are swapped, and the message names them.
 
+Once every unit passes, watch all four cells live in the browser (each cell's load on a plan of the plates, total, left/right split, a 30 s chart, and a one-step calibration with a known weight):
+
+```bash
+.venv/bin/python tools/bench/live_multi.py      # http://localhost:7072
+```
+
 Skip the press test with `--no-press`. The sketch paces on L1's DRDY; if L1 is missing it falls back to a 1 ms timer, so the other units can still be tested. `ssh -t arduino@open-fp.local arduino-app-cli monitor` shows the raw output; its keys are listed at the top of `bench/ads1220_all/ads1220_all.ino` (`x` dumps 16 raw reads per unit).
+
+## 6. Pitfalls from the first build
+
+Everything below happened on the first toe carrier (2026-10-11/12). Each fault took a while to find, so here is the symptom each one produced, from `multi_cell.py`, and how it was found. Work through faults **one at a time** and re-run the test after each fix: one fault can hide or imitate another.
+
+### Fault → symptom
+
+| What was wrong | What the test showed | How it was found |
+|---|---|---|
+| Solder bridge **DVDD–DGND** on top of a breakout | The UNO Q **switches off** as soon as the carrier is connected (3V3 shorted to GND) | 3V3 ↔ GND reads ~0 Ω. Look between each breakout's top two pin pairs |
+| Strips **cut mirrored** (cut from the copper side while reading the component-side drawing) | Everything electrically fine, but the press test said **L1↔R2 and L2↔R1 swapped** | Press test. Fixed by swapping the CS wires at the Q (D3↔D8, D4↔D7); the layout was also updated to the mirrored cuts |
+| **REFN0 link** not soldered to strip A | Voltage check: REF far from AVDD | Meter: REFN0 pin ↔ AGND should beep |
+| **MOSI–MISO** bridge on one unit (rows F/G at its digital header, or strips K/L) | **Every** unit reads back `00 00 00 00`, including ones that passed before; L1's DRDY still ticks (writes still work) | K ↔ L reads 0.3 Ω. Lift each unit's MOSI link from K in turn until K ↔ L opens; the unit whose link clears it has the bridge |
+| **DRDY–MISO** bridge on one unit (rows G/H at its digital header) | **Every** unit reads back `FF FF FF FF`; strip L sits at 3.3 V even with every CS high, but L ↔ 3V3 is **not** a short on the meter | `bench/spi_diag` (below) shows MISO driven high with all CS high. Meter: strip L ↔ each unit's DRDY pin; the bridged one reads ~0 Ω. Every breakout's DRDY is always driven, selected or not |
+| MISO header joint **cracked** by the rework above | That one unit reads `00 00 00 00`, the rest are fine | Meter: the unit's MISO pin ↔ strip L, then hop by hop: pin → strip G → link → strip L |
+| A unit's **R1/R2** not connected, and a weak **REFP0/REFN0** joint | AIN1 0 mV, REF 3100 mV (others 3317) | Reflow the reference links and the resistor joints |
+| Stray wire ends on the **underside** touching strips | One unit's AIN0 = 1 mV (S held at ground), pinned at −full scale | P ↔ GND = 0 Ω on the meter. Trim and flatten everything on the copper side |
+| **Cold joint** on a cell's E+ (white) wire | Same symptom: AIN0 ≈ 0 mV. Nothing pulls S up, so the bridge drags it to E− | White ↔ red on the bare wire is fine but white ↔ black **at the board** is open: reflow the joint until the solder wets the pad |
+| A unit's R1/R2 pair 8 mV off centre | Offset ≈ −2.5 M counts (30 % of range) | Not a fault: a cell only swings ~±3 mV at full load. Use 0.1 % resistors if you want it centred |
+
+### Reading the symptoms
+
+- **All units fail the same way → look at the shared bus first** (strips J/K/L and A/B, the bus wires, or one unit loading the bus). One unit failing → that unit.
+- **`00 00 00 00` vs `FF FF FF FF`.** `00` means MISO is held low or tied to MOSI. `FF` means MISO is held high (a DRDY bridge), or no chip is driving it while it floats high. Heel slots with nothing fitted read `00`.
+- **DRDY still ticking at ~944 Hz** (the third number on each `S,` line, ×10) means power, SCLK, MOSI and L1's CS all work: L1 accepted its configuration. The fault is on the way back (MISO).
+- **AIN0 ≈ 600 mV** with no cell plugged in is just a floating input: expected. **AIN0 ≈ 0** with a cell plugged in means S is at ground: E+ not connected, or S shorted to GND.
+- **"noise 0, repeats 100 %"** while pinned at ±8,388,608 is saturation, not a stuck ADC: fix the input (usually AIN0 far from AIN1).
+
+### Using the meter
+
+- **Use ohms, not only the beep.** With chips and capacitors on the board, the continuity beeper can chirp through protection diodes and charging capacitors. A real short reads the same as touching the probes together (~0.3 Ω) **in both probe directions**; a reading that drifts, or changes when you swap the probes, is the circuit, not a short.
+- A reading that **jumps up then falls back** on an input with nothing connected is the meter charging the input capacitance. Not a short.
+- To localise a short between two rails, **lift one link at a time** and re-measure. On stripboard you can't see along a strip, but you can cut it out of the circuit.
+
+### Soldering
+
+- Use **flux paste** (tan or clear, greasy) to clean up bridges, not **solder paste** (grey, metallic; it adds solder balls). The flux in fresh solder wire also works.
+- After any rework, **re-check the neighbouring joints**. Cleaning the DRDY bridge cracked the MISO joint next to it.
+- Drag a knife blade along every strip gap near new joints, and brush the copper side clean of solder balls.
+- Fit **header pins** (not sockets) when soldering breakouts to stripboard, and keep the copper side tidy. Clipped wire ends and stray strands under the board caused one fault.
+
+### `bench/spi_diag`: who is driving MISO?
+
+When every unit fails readback, flash this instead of `ads1220_all`:
+
+```bash
+tools/bench/flash.sh bench/spi_diag
+ssh -t arduino@open-fp.local arduino-app-cli monitor
+```
+
+It bit-bangs the bus (no SPI peripheral) and every 3 s prints:
+
+- `P,A4,1,0`: a control pin, proving the pull-down works.
+- `I,<pull-up>,<pull-down>`: MISO with every CS high. `1,0` is right: nothing drives it. `1,1` means something holds it high (a DRDY bridge). `0,0` means something holds it low (MOSI or GND).
+- `C,<unit>,...` per CS: the MISO level and the registers read with each pull. Registers that read the same with both pulls are real data.
+
+Flash `bench/ads1220_all` again afterwards.
+
+### Workflow gotchas
+
+- **Flashing needs USB-C to the Mac**; the tests and live views run over the network (SSH). `flash.sh` says "No UNO Q found on USB" right after the Q is replugged; wait a few seconds and run it again.
+- **`Permission denied (publickey)`** from SSH: the key lives in a password manager's SSH agent (1Password here) that has locked. Unlock it and retry.
+- A key sent to the sketch in the first second or two after `arduino-app-cli monitor` connects is lost. The tools wait for output before sending.
+- The bench loop misses ~30 % of conversions and reads ~10 % twice (`repeats`), because each `Monitor` print blocks it. Expected for the bench sketch; the real firmware batches its output.
