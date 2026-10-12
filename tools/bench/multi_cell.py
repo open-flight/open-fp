@@ -441,7 +441,13 @@ def summarize(rep: Report) -> str:
         out.append("")
         out += [f"  - {p}" for p in problems]
     out.append("")
-    out.append(f"  {'PASS' if rep.ok() else 'FAIL'}: {len(rep.expected)} unit(s)")
+    failed = [ch for ch in rep.expected if not rep.unit_ok(ch)]
+    if rep.ok():
+        out.append(f"  PASS: {len(rep.expected)} unit(s)")
+    elif failed:
+        out.append(f"  FAIL: {', '.join(failed)} ({len(failed)} of {len(rep.expected)} units)")
+    else:
+        out.append("  FAIL: shared bus or pacing (see above)")
     return "\n".join(out)
 
 
