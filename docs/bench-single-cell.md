@@ -167,6 +167,7 @@ The counts-per-kg range assumes a 50 kg cell at about 0.5–1 mV/V. Your number 
 | `V,REF,<AVDD/4…` | REFP0/REFN0 aren't connected to 3V3/GND |
 | Reading moves when you touch a wire | Noise pickup: shorten wires, twist the cell's three wires together |
 | Reading drifts steadily | Warm-up (give it 5 min), or the cell is touching something |
+| Readback `FF` or `00` on **every** unit of a carrier | A bridge on the shared bus (DRDY–MISO gives `FF`, MOSI–MISO gives `00`): see [harness.md §6](harness.md#6-pitfalls-from-the-first-build) |
 | Noise 0 / identical raw codes (`x`), occasional jumps of exactly 257 | Not a real 24-bit reading. Another ADC board on the same SPI wires with its CS floating or low, or a faulty or non-genuine breakout. Swap in a known-good breakout to tell which. |
 
 ## When you're done
