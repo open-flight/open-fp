@@ -88,7 +88,7 @@ def pump(mon: Monitor, hub: Hub):
         hub.publish(to_event(item))
 
 
-def make_handler(mon: Monitor, hub: Hub):
+def make_handler(mon: Monitor, hub: Hub, page: str | None = None, keys=KEYS):
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, *_):  # keep the terminal quiet
             pass
@@ -103,7 +103,7 @@ def make_handler(mon: Monitor, hub: Hub):
 
         def do_GET(self):  # noqa: N802 (http.server API)
             if self.path == "/":
-                self._send(PAGE.encode(), "text/html; charset=utf-8")
+                self._send((page or PAGE).encode(), "text/html; charset=utf-8")
             elif self.path in ("/uPlot.iife.min.js", "/uPlot.min.css"):
                 ctype = "text/javascript" if self.path.endswith(".js") else "text/css"
                 self._send((VENDOR / self.path.lstrip("/")).read_bytes(), ctype)
@@ -114,7 +114,7 @@ def make_handler(mon: Monitor, hub: Hub):
 
         def do_POST(self):  # noqa: N802 (http.server API)
             key = self.path.rsplit("/", 1)[-1]
-            if self.path.startswith("/key/") and key in KEYS:
+            if self.path.startswith("/key/") and key in keys:
                 mon.send(key)
                 self._send(b"", "text/plain", 204)
             else:

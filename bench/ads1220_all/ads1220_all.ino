@@ -11,7 +11,7 @@
 //   M,<differential|single-ended>                 measurement mode
 //   R,<ch>,<ok 0|1>,<reg0>,<reg1>,<reg2>,<reg3>   readback per channel (hex), all 8 channels
 //   S,<ms>,<ticks>,<drdy>,<ch>:<n>:<mean>:<std>:<min>:<max>:<rep>,...
-//                                                 one line per 250 ms window: ticks the loop caught,
+//                                                 one line per 100 ms window: ticks the loop caught,
 //                                                 L1 DRDY pulses counted by interrupt (0 if L1 absent),
 //                                                 then each present channel; rep = reads equal to the
 //                                                 previous read of that channel
@@ -28,7 +28,7 @@ constexpr uint8_t NCH = 8;
 const char *const NAMES[NCH] = {"L1", "L2", "L3", "L4", "R1", "R2", "R3", "R4"};
 const uint8_t CS[NCH] = {3, 4, 5, 6, 7, 8, 9, A2};  // docs/harness.md; never D10 (SPI NSS)
 constexpr uint8_t DRDY_PIN = 2;                      // L1's DRDY only
-constexpr uint32_t WINDOW_MS = 250;
+constexpr uint32_t WINDOW_MS = 100;
 constexpr uint32_t KEY_POLL_MS = 200;  // each Monitor call is a blocking RPC to Linux (~13 ms)
 constexpr uint32_t TIMER_TICK_US = 1000;
 
