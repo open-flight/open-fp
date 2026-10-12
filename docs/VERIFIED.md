@@ -18,16 +18,16 @@ This file records the answer to every **VERIFY** item in [`PROJECT_INIT.md`](PRO
 
 | Channel | Unloaded mean (counts) | Std dev (counts) | Register readback | Notes |
 |---|---|---|---|---|
-| L1 | 4,204,513 (single-ended, gain 1, no R1/R2) | 116 | OK (`81 C4 40 00`) | Thumb press −343 counts (falls under load). 945 conversions/s. Drift −176 counts over 10 s. Differential (gain 128) test pending R1/R2. 2026-09-25 |
-| L2 | | | | |
+| L1 | 172,789 (differential) | 606 | OK (`81 C4 40 00`) | AIN0 1660 / AIN1 1660 mV; 13 % repeated reads (bench loop). Earlier: single-ended 4,204,513, std 116, thumb press −343 (2026-09-25). toe carrier on stripboard, differential gain 128 with 1.5 kΩ R1/R2; press test pending. 2026-10-12 |
+| L2 | 1,405,031 (differential) | 1,076 | OK (`81 C4 40 00`) | AIN0 1659 / AIN1 1655 mV. toe carrier on stripboard, differential gain 128 with 1.5 kΩ R1/R2; press test pending. 2026-10-12 |
 | L3 | | | | |
 | L4 | | | | |
-| R1 | | | | |
-| R2 | | | | |
+| R1 | −2,509,256 (differential) | 2,018 | OK (`81 C4 40 00`) | AIN0 1661 / AIN1 1669 mV: the R1/R2 pair is about 8 mV off centre, so about 30 % of the range goes to offset. toe carrier on stripboard, differential gain 128 with 1.5 kΩ R1/R2; press test pending. 2026-10-12 |
+| R2 | 198,719 (differential) | 814 | OK (`81 C4 40 00`) | AIN0 1660 / AIN1 1660 mV. toe carrier on stripboard, differential gain 128 with 1.5 kΩ R1/R2; press test pending. 2026-10-12 |
 | R3 | | | | |
 | R4 | | | | |
 
-Achieved loop rate: — · `drdyMissed` over 10 min: —
+Achieved loop rate: L1 DRDY 944 Hz; the bench sketch reads about 71 % of conversions with four channels (Monitor output blocks it) · `drdyMissed` over 10 min: —
 
 ## Toolchain
 
