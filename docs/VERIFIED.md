@@ -86,6 +86,12 @@ Achieved loop rate: L1 DRDY 944 Hz; the bench sketch reads about 71 % of convers
   - All still single valid solids; STLs watertight. `08_assembly_two_plates.step` was not regenerated.
   - **Still open:** the USB-C slot is in the heel end wall, about 110 mm from the Q's USB-C port (board edge at x −34.3), so the cable has to run inside past the heel carrier.
 
+- **2026-10-12, enclosure raised for the assembled ADC board** (`hardware/pcb/adc-board`, which sits on the Q's headers with its top at z 21.6). Edited in CadQuery 2.8 from the committed STEP files; both are still single valid solids.
+  - **Base: walls and lid posts raised 2.4 mm** (wall top z 19.9 → 22.3, outer height 21.9 → 24.3 with the lid, still below the 24.5 mm ramps). Done by splitting at z 17 and inserting a 2.4 mm copy of the wall section, so the lid-post insert holes stay at the top (now 7.9 mm deep). 4325 mm³ added.
+  - **Base: the eight cable slots now run z 2.4 → 19.0** (were 2.4 → 9.4), same 6 mm width at x ±85, ±125 in both long walls, so a cable leaves its JST plug (just under the board) straight through the wall. 1106 mm³ removed.
+  - **Lid: locating lip removed on both long sides for x −34 … +34** (y 24.5 … 29), clearing the board's header tabs (y ±27.35 at x −18 … +32). Cut symmetric in x so the lid can go on either way round. 490 mm³ removed.
+  - The stripboard carriers fit the taller enclosure unchanged. `08_assembly_two_plates.step` was not regenerated.
+
 ## Notes found during scaffolding
 
 - App Lab's generated skeleton puts the web client libs in `app/assets/libs/` (`arduino.js`, `socket.io.min.js`), not `assets/vendor/` as §2 planned. Keep `libs/` from the brick and put uPlot in `vendor/`.

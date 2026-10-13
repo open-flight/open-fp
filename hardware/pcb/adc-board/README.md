@@ -87,10 +87,10 @@ Support: four M2.5 holes at (±54.5, 0) and (±129.5, 0), on the ADC pads' inser
 
 The USB-C cable to the Q runs along the floor/pads under the board (z 5.4 – ~10). Route it beside the two heel standoffs at y = 0. Nothing else under the board comes below z ≈ 13.9.
 
-## Enclosure changes required (don't edit the CAD here; these are for `hardware/cad/src`)
+## Enclosure changes (applied to the STEP/STL on 2026-10-12, see `docs/VERIFIED.md`)
 
 1. **Raise the base walls by 2.4 mm:** wall top z 19.9 → **22.3**. Lid posts (±140, ±23) grow by the same amount, so the M2.5 inserts stay at the top. The lid plate stays 2.0 mm thick, so the outer height goes 21.9 → **24.3** (ramps rise 24.5). The Q bosses, ADC pads and inserts stay as they are.
-2. **Cut the lid's locating lip away along both long sides for x −20 … +34.** The board has tabs out to y ±27.35 under the shield headers (x −18 … +32). The SMD header pads need them, because the Q's headers sit only 2.5 mm from its edge. Elsewhere the board stays inside y ±25.0, clear of the lip ring (inner edge ±25.3). After the raise, the lip spans z 20.8 – 22.3 and would hit the tabs (board top 21.6).
+2. **Cut the lid's locating lip away along both long sides for x −20 … +34** (applied as x −34 … +34, so the lid fits either way round). The board has tabs out to y ±27.35 under the shield headers (x −18 … +32). The SMD header pads need them, because the Q's headers sit only 2.5 mm from its edge. Elsewhere the board stays inside y ±25.0, clear of the lip ring (inner edge ±25.3). After the raise, the lip spans z 20.8 – 22.3 and would hit the tabs (board top 21.6).
 3. **Make the eight cable slots taller:** z 2.4 … 9.4 → **z 2.4 … 19.0**, same 6 mm width, at x ±85 and ±125 in both long walls. The plug and cable leave the JST at about z 15 – 18 (just under the board), 7 mm in from the wall, so a tall slot lets the cable run straight out instead of kinking down to the floor. If you'd rather keep the slots, the cable needs an S-bend of about 8 mm in the last 10 mm (**VERIFY** with a real plug).
 4. Board corner notches (x beyond ±135.5, |y| beyond 18.5) clear the lid posts. Nothing to change there.
 
