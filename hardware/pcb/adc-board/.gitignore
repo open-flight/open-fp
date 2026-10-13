@@ -1,0 +1,6 @@
+.scratch/
+*-backups/
+*.lck
+fp-info-cache
+_autosave-*
+*.kicad_prl

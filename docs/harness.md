@@ -6,6 +6,8 @@ How 8 load cells, 8 ADS1220 breakouts and the UNO Q connect. The build is in thr
 2. **Mount 4 units on each of two carriers.** A carrier is a perfboard whose 5 bus rails join its units.
 3. **Chain the carriers to the UNO Q.** One bus runs from the Q to the toe carrier and on to the heel carrier. Each carrier also gets a bundle of chip-select wires.
 
+**No-solder alternative:** the assembled ADC board in [`hardware/pcb/adc-board`](../hardware/pcb/adc-board/README.md) replaces all three steps (units, carriers, harness): it plugs onto the UNO Q and each cell plugs into its own JST.
+
 Test each unit on the bench before it goes on a carrier: see [`bench-single-cell.md`](bench-single-cell.md). Pin assignments and the reasoning behind them are in [`wiring.md`](wiring.md).
 
 ## 1. Build a unit (×8)

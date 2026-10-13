@@ -1,0 +1,7 @@
+(version 1)
+
+# The ADS1220's TSSOP-16 pads are 0.45 mm wide on a 0.65 mm pitch (0.2 mm gaps). Let a
+# track approach those pads at 0.15 mm, the fab minimum, instead of the 0.2 mm default.
+(rule "tssop_fine_pitch"
+	(condition "A.Type == 'track' && B.Type == 'pad' && B.memberOfFootprint('U*')")
+	(constraint clearance (min 0.15)))
