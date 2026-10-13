@@ -22,6 +22,7 @@ Everything here has already been purchased. The source is [`docs/PROJECT_INIT.md
 | — | CA glue, heat-shrink, 22–24 AWG hookup wire, labels | |
 | — | Calibration mass: 20 kg / 45 lb plate (known mass) + bathroom scale | |
 | opt | 8 × 10 kΩ resistor | CS pull-ups |
+| opt | Assembled ADC board ([`pcb/adc-board`](pcb/adc-board/README.md)), PCBWay | no-solder alternative: replaces the 8 breakouts, 16 resistors, both stripboard carriers and the harness |
 | 2 | BusBoard ST2 stripboard, 100 × 80 mm, uncut strips, 2.54 mm | ADC carriers: cut one 37 × 17-hole piece from each, strips along the 37 (see `docs/harness.md`). Ordered 2026-09-28 |
 
 ## Printed parts
