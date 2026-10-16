@@ -2,22 +2,22 @@
 
 Everything needed for one pair of plates. The original build's parts list is in [`docs/PROJECT_INIT.md` §3](../docs/PROJECT_INIT.md#3-bill-of-materials-already-purchased).
 
-The **Buy** links are Amazon searches for each part, not specific listings, so check the spec in the Notes column before you order.
+The **Buy** links marked *used in the build* go to the exact listings the original plates were built from. The rest are Amazon searches, so check the spec in the Notes column before you order.
 
 *As an Amazon Associate I earn from qualifying purchases. The links cost you nothing extra and help fund the project.*
 
 | Qty | Part | Notes | Buy |
 |---|---|---|---|
 | 1 | Arduino UNO Q | 3.3 V logic on MCU header | [Amazon](https://www.amazon.com/s?k=Arduino+UNO+Q&tag=colemangolfs-20) |
-| 8 | 50 kg half-bridge load cell, 34 × 34 × 7.8 mm, 3-wire | two 4-packs; bundled HX711s unused | [Amazon](https://www.amazon.com/s?k=50kg+half+bridge+load+cell+3+wire+4+pack&tag=colemangolfs-20) |
-| 8 | ADS1220 24-bit ADC breakout (generic module) | one per corner | [Amazon](https://www.amazon.com/s?k=ADS1220+ADC+module&tag=colemangolfs-20) |
+| 8 | 50 kg half-bridge load cell, 34 × 34 × 7.8 mm, 3-wire | two 4-packs; bundled HX711s unused | [Amazon (used in the build)](https://www.amazon.com/dp/B079FTXR7Y?tag=colemangolfs-20) |
+| 8 | ADS1220 24-bit ADC breakout (generic module) | one per corner | [Amazon (used in the build)](https://www.amazon.com/dp/B0DPMKMGNN?tag=colemangolfs-20) |
 | 16 | 1 kΩ 0.1 % metal-film resistor | two per corner, completes each bridge | [Amazon](https://www.amazon.com/s?k=1k+ohm+0.1%25+metal+film+resistor&tag=colemangolfs-20) |
-| 2 | 12" × 12" × 1/4" 6061 aluminum plate | | [Amazon](https://www.amazon.com/s?k=6061+aluminum+plate+12+x+12+x+1%2F4&tag=colemangolfs-20) |
+| 2 | 12" × 12" × 1/4" 6061 aluminum plate | | [Amazon (used in the build)](https://www.amazon.com/dp/B0DS5X5F51?tag=colemangolfs-20) |
 | 2 | 12" × 12" × 1/16" textured (fabric-finish) neoprene, 60A | top surface | [Amazon](https://www.amazon.com/s?k=neoprene+sheet+1%2F16+12x12+fabric+finish+60A&tag=colemangolfs-20) |
 | 1 | 3M 468MP transfer tape, 12" wide | bonds neoprene to plate | [Amazon](https://www.amazon.com/s?k=3M+468MP+adhesive+transfer+tape+12+inch&tag=colemangolfs-20) |
 | 1 | Right-angle USB-C cable, 2 m | power + dev | [Amazon](https://www.amazon.com/s?k=right+angle+USB-C+cable+2m&tag=colemangolfs-20) |
 | 1 | Shielded 4-conductor 24 AWG cable, 5 m | cell leads | [Amazon](https://www.amazon.com/s?k=shielded+4+conductor+24+AWG+cable&tag=colemangolfs-20) |
-| 1 | JST-XH 4-pin connector kit | cells swappable at the cradle end | [Amazon](https://www.amazon.com/s?k=JST-XH+connector+kit&tag=colemangolfs-20) |
+| 1 | JST-XH 4-pin connector kit | cells swappable at the cradle end | [Amazon (used in the build)](https://www.amazon.com/dp/B08G188ZQ8?tag=colemangolfs-20) |
 | — | 3/8" rubber gym flooring | must cover the **whole** footprint, ~500 × 900 mm | [Amazon](https://www.amazon.com/s?k=3%2F8+rubber+gym+flooring&tag=colemangolfs-20) |
 | 16 | M4 × 12 flat-head (90° countersunk) + 16 M4 heat-set inserts | cradle → plate | [Amazon](https://www.amazon.com/s?k=M4+heat+set+insert+and+countersunk+screw+kit&tag=colemangolfs-20) |
 | 32 | M2 × 5 countersunk + 32 M2 heat-set inserts | retainers | [Amazon](https://www.amazon.com/s?k=M2+heat+set+insert+and+countersunk+screw+kit&tag=colemangolfs-20) |
