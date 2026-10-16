@@ -37,16 +37,16 @@ Work in this order. Wire and test **one corner (L1) completely** before building
 
 Channel, position, and CS pin together:
 
-| Ch | ID | Plate | Corner | CS pin | ADC pad in enclosure |
+| Ch | ID | Plate | Corner | CS pin | Stripboard carrier |
 |---|---|---|---|---|---|
-| 0 | L1 | L | toe, outer | D3 | +y (toe) end |
-| 1 | L2 | L | toe, inner | D4 | +y (toe) end |
-| 2 | L3 | L | heel, inner | D5 | −y (heel) end |
-| 3 | L4 | L | heel, outer | D6 | −y (heel) end |
-| 4 | R1 | R | toe, inner | D7 | +y (toe) end |
-| 5 | R2 | R | toe, outer | D8 | +y (toe) end |
-| 6 | R3 | R | heel, outer | D9 | −y (heel) end |
-| 7 | R4 | R | heel, inner | A2 | −y (heel) end |
+| 0 | L1 | L | toe, outer | D3 | plate L |
+| 1 | L2 | L | toe, inner | D4 | plate L |
+| 2 | L3 | L | heel, inner | D5 | plate L |
+| 3 | L4 | L | heel, outer | D6 | plate L |
+| 4 | R1 | R | toe, inner | D7 | plate R |
+| 5 | R2 | R | toe, outer | D8 | plate R |
+| 6 | R3 | R | heel, outer | D9 | plate R |
+| 7 | R4 | R | heel, inner | A2 | plate R |
 
 ---
 
@@ -151,9 +151,9 @@ Full wiring for one corner (repeat ×8):
 ```
                  UNO Q 3V3 ─────┬──────────────┬───────────── AVDD, DVDD, REFP0
                                 │              │
-   cable red  (E+) ─────────────┘             R1 1 kΩ
+   cable white (E+) ────────────┘             R1 1 kΩ
                                                │
-   cable white (S) ─────────── AIN0            ├──────────── AIN1
+   cable red  (S) ──────────── AIN0            ├──────────── AIN1
                                                │
    cable black (E−) ────────────┐             R2 1 kΩ
                                 │              │
@@ -161,9 +161,9 @@ Full wiring for one corner (repeat ×8):
    cable shield ─────────────── GND  (this end only)
 ```
 
-1. **Red (E+)** goes to the board's 3V3/AVDD pad, the same node as the top of R1.
+1. **White (E+)** goes to the board's 3V3/AVDD pad, the same node as the top of R1.
 2. **Black (E−)** goes to the board's GND pad, the same node as the bottom of R2.
-3. **White (S)** goes to **AIN0**.
+3. **Red (S)** goes to **AIN0**. Red is the centre tap on this build's cells (§3); check yours with the meter.
 4. **Shield** goes to GND.
 5. If step 5 found REFP0/REFN0 not tied on the board, jumper **REFP0 to 3V3** and **REFN0 to GND** at the board. This makes the measurement ratiometric, so supply drift cancels out.
 6. Leave AIN2 and AIN3 unconnected.
@@ -174,7 +174,7 @@ The full harness has its own step-by-step guide with diagrams: **[`harness.md`](
 
 1. **Build 8 identical units.** Each is a breakout, R1/R2, and its cell cable soldered straight on (the JST is at the cradle, §3). Each exposes 6 wires (DRDY too on L1).
 2. **Mount 4 units per carrier.** Each carrier has 5 bus rails with BUS IN / BUS OUT headers.
-3. **Chain it all together:** Q → toe carrier → heel carrier on the bus, plus a chip-select bundle to each carrier.
+3. **Chain it all together:** Q → plate L carrier → plate R carrier on the bus, plus a chip-select bundle to each carrier. Each unit's CS pin must match the corner its cell is at (pin map above).
 
 That's 14 UNO Q pins, one wire each. **Nothing goes to D10, D0 or D1, and only L1's DRDY is wired (to D2).** Whether 4 breakouts fit side by side on a pad depends on the breakout's size, which is still open (VERIFIED item 7). If they don't fit, mount them in two stacked pairs, as §6.7 of the spec allows.
 

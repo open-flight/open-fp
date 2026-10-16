@@ -14,7 +14,7 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 from _svg import WIRE
-from make_carrier_layout import COLS, HEEL_CS, MODULES, RAILS, ROW_NAMES, ROWS, cuts, links
+from make_carrier_layout import COLS, MODULES, RAILS, RIGHT_CS, ROW_NAMES, ROWS, cuts, links
 
 OUT = Path(__file__).resolve().parents[2] / "hardware" / "carrier-stripboard.diy"
 X0, Y0 = 1.0, 1.0  # board corner, inches
@@ -220,7 +220,7 @@ class Project:
     <minor>34</minor>
     <build>0</build>
   </fileVersion>
-  <title>open-fp ADC carrier (toe)</title>
+  <title>open-fp ADC carrier (left plate)</title>
   <author>open-fp</author>
   <width value="36.0" unit="cm"/>
   <height value="21.0" unit="cm"/>
@@ -364,15 +364,15 @@ def build() -> str:
         p.label((round(x + 0.5, 3), y), f"{row}  {text}", 8, color, key is not None, "LEFT")
     p.label(
         (round(at(1, "A")[0] + 1.8, 3), round(Y0 - 0.62, 3)),
-        "open-fp ADC carrier: toe (L1 L2 R1 R2), component side",
+        "open-fp ADC carrier: left plate (L1 L2 L3 L4), component side",
         13,
         bold=True,
     )
     inset(p)
     bottom = Y0 + 0.1 * (ROWS + 1)
     notes = [
-        "Heel carrier: the same board with L3 L4 R3 R4 (CS <- "
-        + ", ".join(HEEL_CS)
+        "Right-plate carrier: the same board with R1 R2 R3 R4 (CS <- "
+        + ", ".join(RIGHT_CS)
         + "); leave BUS OUT empty.",
         "Each cell has 3 wires; its JST at the cradle joins them to a shielded cable. White E+ -> N, black E- -> O,",
         "red S -> P. Grey is the cable's shield (drain wire), not a cell wire: GND on strip O here, nothing at the cradle.",
