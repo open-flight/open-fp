@@ -1,0 +1,42 @@
+name: Bug report
+description: Something in the app, firmware, simulator or tools doesn't work.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what happened instead. Paste error messages as text.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Run `tools/sim/sim_server.py`
+        2. ...
+    validations:
+      required: true
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where does it happen?
+      options:
+        - On the board (UNO Q)
+        - Simulator / dev machine
+        - Bench tools (tools/bench, bench/ sketches)
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Commit
+      description: Output of `git rev-parse --short HEAD`.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: For example `tools/logs.sh` output or the bench tool's output.
+      render: text

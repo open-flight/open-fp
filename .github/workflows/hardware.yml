@@ -1,0 +1,33 @@
+name: Hardware
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - hardware/pcb/**
+      - .github/workflows/hardware.yml
+  pull_request:
+    paths:
+      - hardware/pcb/**
+      - .github/workflows/hardware.yml
+
+permissions:
+  contents: read
+
+jobs:
+  adc-board:
+    name: ADC board ERC + DRC
+    runs-on: ubuntu-latest
+    container:
+      image: kicad/kicad:10.0
+      options: --user root
+    defaults:
+      run:
+        working-directory: hardware/pcb/adc-board
+    steps:
+      - uses: actions/checkout@v7
+      - name: ERC
+        run: kicad-cli sch erc --exit-code-violations -o erc.rpt adc-board.kicad_sch || { cat erc.rpt; exit 1; }
+      - name: DRC (with schematic parity)
+        run: kicad-cli pcb drc --schematic-parity --exit-code-violations -o drc.rpt adc-board.kicad_pcb || { cat drc.rpt; exit 1; }

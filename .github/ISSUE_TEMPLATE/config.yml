@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and ideas
+    url: https://github.com/open-flight/open-fp/discussions
+    about: Ask a question or float an idea before opening an issue.
+  - name: Security vulnerability
+    url: https://github.com/open-flight/open-fp/security/advisories/new
+    about: Report security problems privately, not as a public issue.

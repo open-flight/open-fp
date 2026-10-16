@@ -1,0 +1,35 @@
+name: Build report or hardware problem
+description: Building the plates, a part that doesn't fit, a measurement that differs, or a bench test that fails.
+labels: [hardware]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Printed parts / CAD
+        - Load cells and cradles
+        - ADC wiring (stripboard carriers)
+        - ADC board (PCB)
+        - Calibration
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What did you build or measure, and what went wrong?
+      description: Include numbers (mm, mV, counts) and photos where you can. The pitfalls table in docs/harness.md §6 covers the common wiring faults.
+    validations:
+      required: true
+  - type: textarea
+    id: bench
+    attributes:
+      label: Bench output
+      description: For ADC problems, the output of `tools/bench/multi_cell.py` or the `bench/spi_diag` sketch.
+      render: text
+  - type: textarea
+    id: parts
+    attributes:
+      label: Parts that differ from the BOM
+      description: Substituted load cells, ADC modules, printer or filament, etc.

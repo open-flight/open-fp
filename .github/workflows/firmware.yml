@@ -1,0 +1,38 @@
+name: Firmware
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - app/sketch/**
+      - bench/**
+      - .github/workflows/firmware.yml
+  pull_request:
+    paths:
+      - app/sketch/**
+      - bench/**
+      - .github/workflows/firmware.yml
+
+permissions:
+  contents: read
+
+jobs:
+  compile:
+    name: Compile ${{ matrix.sketch }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        sketch: [app/sketch, bench/ads1220_single, bench/ads1220_all, bench/spi_diag]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: arduino/setup-arduino-cli@v2
+      - name: Install the UNO Q core and libraries
+        # Same versions as a dev machine set up with tools/dev_setup.sh (docs/VERIFIED.md).
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install arduino:zephyr@1.0.0
+          arduino-cli lib install Arduino_RouterBridge@0.4.3
+      - name: Compile
+        run: arduino-cli compile --fqbn arduino:zephyr:unoq --warnings default "${{ matrix.sketch }}"

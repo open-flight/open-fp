@@ -8,3 +8,4 @@ tools/sim/.data/
 build/
 app/.cache/
 bench/results/
+.claude/

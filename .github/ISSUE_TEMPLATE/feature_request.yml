@@ -1,0 +1,21 @@
+name: Feature request
+description: Suggest a metric, UI feature or hardware improvement.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Proposed solution
+      description: Note that the plates measure vertical force only (see README "Limitations"), so shear or torque metrics aren't possible.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered

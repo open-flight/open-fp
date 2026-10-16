@@ -1,7 +1,7 @@
 (export
 	(version "E")
 	(design
-		(source "/Users/colemanrollins/code/open-fp/.claude/worktrees/agent-a65d1e6046b1dcb80/hardware/pcb/adc-board/adc-board.kicad_sch")
+		(source "hardware/pcb/adc-board/adc-board.kicad_sch")
 		(date "2026-10-12T18:05:55")
 		(tool "Eeschema 10.0.4")
 		(sheet

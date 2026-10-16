@@ -1,5 +1,7 @@
 # open-fp
 
+[![Tests](https://github.com/open-flight/open-fp/actions/workflows/tests.yml/badge.svg)](https://github.com/open-flight/open-fp/actions/workflows/tests.yml) [![Lint](https://github.com/open-flight/open-fp/actions/workflows/lint.yml/badge.svg)](https://github.com/open-flight/open-fp/actions/workflows/lint.yml) [![Firmware](https://github.com/open-flight/open-fp/actions/workflows/firmware.yml/badge.svg)](https://github.com/open-flight/open-fp/actions/workflows/firmware.yml) [![Hardware](https://github.com/open-flight/open-fp/actions/workflows/hardware.yml/badge.svg)](https://github.com/open-flight/open-fp/actions/workflows/hardware.yml)
+
 Open source force plates for golf performance.
 
 Two low-profile golf force plates, one per foot. Each plate has four load cells, eight in total. A single Arduino UNO Q reads them, and a web dashboard on the LAN shows live weight shift and swing replay.
@@ -26,7 +28,8 @@ Two low-profile golf force plates, one per foot. Each plate has four load cells,
 ## Hardware
 
 - 2 × 12" × 12" × 1/4" 6061 aluminum plates, 8 × 50 kg half-bridge load cells, 8 × ADS1220 24-bit ADCs, 1 × Arduino UNO Q
-- Bill of materials: [`hardware/bom.md`](hardware/bom.md)
+- Bill of materials: [`hardware/bom.md`](hardware/bom.md) (its Buy column uses Amazon affiliate links)
+- ADC wiring: hand-built stripboard carriers ([`docs/harness.md`](docs/harness.md)), or the assembled, no-solder ADC board in [`hardware/pcb/adc-board/`](hardware/pcb/adc-board/README.md)
 - Print files: [`hardware/cad/`](hardware/cad/) (STL, STEP, and the CadQuery sources)
 - Assembly: [`docs/assembly.md`](docs/assembly.md) · Wiring: [`docs/wiring.md`](docs/wiring.md) · System wiring, step by step: [`docs/harness.md`](docs/harness.md) · One-cell bench test: [`docs/bench-single-cell.md`](docs/bench-single-cell.md) · Calibration: [`docs/calibration.md`](docs/calibration.md)
 
@@ -52,6 +55,10 @@ tools/board_setup.sh        # install your SSH key on the board
 tools/deploy.sh             # push app/ and restart; UI at http://open-fp.local:7000
 tools/logs.sh               # follow the app's Python logs
 ```
+
+## Contributing
+
+Build reports, fixes and new features are welcome. Start with [`CONTRIBUTING.md`](CONTRIBUTING.md): it covers the dev setup (no hardware needed), the checks CI runs, and how hardware changes are recorded. Please follow the [Code of Conduct](CODE_OF_CONDUCT.md), and report security issues privately as described in [`SECURITY.md`](SECURITY.md).
 
 ## License
 
