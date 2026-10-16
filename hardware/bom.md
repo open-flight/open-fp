@@ -27,7 +27,7 @@ The **Buy** links marked *used in the build* go to the exact listings the origin
 | — | Calibration mass: 20 kg / 45 lb plate (known mass) + bathroom scale | | [Amazon](https://www.amazon.com/s?k=45+lb+weight+plate&tag=colemangolfs-20) |
 | opt | 8 × 10 kΩ resistor | CS pull-ups | [Amazon](https://www.amazon.com/s?k=10k+ohm+resistor+kit&tag=colemangolfs-20) |
 | opt | Assembled ADC board ([`pcb/adc-board`](pcb/adc-board/README.md)), PCBWay | no-solder alternative: replaces the 8 breakouts, 16 resistors, both stripboard carriers and the harness | [PCBWay](https://www.pcbway.com/) (upload the files in `pcb/adc-board`) |
-| 2 | BusBoard ST2 stripboard, 100 × 80 mm, uncut strips, 2.54 mm | ADC carriers: cut one 37 × 17-hole piece from each, strips along the 37 (see `docs/harness.md`). Ordered 2026-09-28 | [Amazon](https://www.amazon.com/s?k=BusBoard+stripboard+ST2&tag=colemangolfs-20) |
+| 2 | BusBoard ST2 stripboard, 100 × 80 mm, uncut strips, 2.54 mm | ADC carriers: cut one 37 × 17-hole piece from each, strips along the 37 (see `docs/harness.md`). Ordered 2026-09-28 | [Amazon (used in the build)](https://www.amazon.com/dp/B00PBGKTTA?tag=colemangolfs-20) |
 | opt | JST XHP-3 housings + SXH-001T-P0.6 crimp contacts (~10 of each) and a JST-XH crimper | ADC board only: one plug per cell at the board end | [Amazon](https://www.amazon.com/s?k=JST+XH+2.5mm+crimp+housing+terminal+kit&tag=colemangolfs-20) [Amazon](https://www.amazon.com/s?k=JST+XH+crimping+tool&tag=colemangolfs-20) |
 | opt | 4 × M2.5 × 15 mm standoffs | ADC board only: board supports (design asks 14.6 mm, see `pcb/adc-board/README.md`) | [Amazon](https://www.amazon.com/s?k=M2.5+15mm+standoff&tag=colemangolfs-20) |
 
