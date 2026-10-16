@@ -1,6 +1,7 @@
 name: Hardware
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -27,6 +28,12 @@ jobs:
         working-directory: hardware/pcb/adc-board
     steps:
       - uses: actions/checkout@v7
+      - name: Install KiCad's default library tables
+        # A fresh container has no sym-lib-table/fp-lib-table, so every symbol and footprint
+        # would raise a "library not configured" warning.
+        run: |
+          mkdir -p "$HOME/.config/kicad/10.0"
+          cp /usr/share/kicad/template/sym-lib-table /usr/share/kicad/template/fp-lib-table "$HOME/.config/kicad/10.0/"
       - name: ERC
         run: kicad-cli sch erc --exit-code-violations -o erc.rpt adc-board.kicad_sch || { cat erc.rpt; exit 1; }
       - name: DRC (with schematic parity)
