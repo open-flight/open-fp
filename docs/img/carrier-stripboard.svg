@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 920" width="1120" height="920" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
 <rect width="1120" height="920" fill="#FFFFFF"/>
-<text x="40" y="46" font-size="24" font-weight="700" fill="#1F2933" text-anchor="start">ADC carrier on stripboard (toe carrier shown)</text>
+<text x="40" y="46" font-size="24" font-weight="700" fill="#1F2933" text-anchor="start">ADC carrier on stripboard (left-plate carrier shown)</text>
 <text x="40" y="72" font-size="14" font-weight="400" fill="#5F6B78" text-anchor="start">Component side. Copper strips run left–right underneath; red ✕ = cut the strip at that hole. 37 × 17 holes ≈ 94 × 43 mm.</text>
 <rect x="86" y="166" width="912" height="432" rx="6" fill="#F3EBDD" stroke="#B99C6B" stroke-width="1.5"/>
 <rect x="98.0" y="181.36" width="888" height="17.28" rx="3" fill="#E4C9A0" opacity="0.55"/>
@@ -726,8 +726,8 @@
 <circle cx="518" cy="262" r="7" fill="none" stroke="#E2A400" stroke-width="3"/>
 <rect x="551.12" y="175.12" width="197.76" height="197.76" rx="4" fill="#7B4FB8" stroke="#5B3B8C" stroke-width="1.5"/>
 <rect x="551.12" y="175.12" width="197.76" height="197.76" rx="4" fill="#FFFFFF" opacity="0.72"/>
-<text x="650.0" y="132" font-size="18" font-weight="700" fill="#5B3B8C" text-anchor="middle">R1</text>
-<text x="650.0" y="146" font-size="11" font-weight="700" fill="#E2A400" text-anchor="middle">CS ← D7</text>
+<text x="650.0" y="132" font-size="18" font-weight="700" fill="#5B3B8C" text-anchor="middle">L3</text>
+<text x="650.0" y="146" font-size="11" font-weight="700" fill="#E2A400" text-anchor="middle">CS ← D5</text>
 <rect x="561" y="185" width="10" height="10" fill="#C9A227" stroke="#8A6D12"/>
 <rect x="729" y="185" width="10" height="10" fill="#C9A227" stroke="#8A6D12"/>
 <rect x="561" y="209" width="10" height="10" fill="#C9A227" stroke="#8A6D12"/>
@@ -747,8 +747,8 @@
 <circle cx="734" cy="262" r="7" fill="none" stroke="#E2A400" stroke-width="3"/>
 <rect x="767.12" y="175.12" width="197.76" height="197.76" rx="4" fill="#7B4FB8" stroke="#5B3B8C" stroke-width="1.5"/>
 <rect x="767.12" y="175.12" width="197.76" height="197.76" rx="4" fill="#FFFFFF" opacity="0.72"/>
-<text x="866.0" y="132" font-size="18" font-weight="700" fill="#5B3B8C" text-anchor="middle">R2</text>
-<text x="866.0" y="146" font-size="11" font-weight="700" fill="#E2A400" text-anchor="middle">CS ← D8</text>
+<text x="866.0" y="132" font-size="18" font-weight="700" fill="#5B3B8C" text-anchor="middle">L4</text>
+<text x="866.0" y="146" font-size="11" font-weight="700" fill="#E2A400" text-anchor="middle">CS ← D6</text>
 <rect x="777" y="185" width="10" height="10" fill="#C9A227" stroke="#8A6D12"/>
 <rect x="945" y="185" width="10" height="10" fill="#C9A227" stroke="#8A6D12"/>
 <rect x="777" y="209" width="10" height="10" fill="#C9A227" stroke="#8A6D12"/>
@@ -786,14 +786,14 @@
 <text x="603" y="530" font-size="10" font-weight="700" fill="#7A8796" text-anchor="end">E−</text>
 <circle cx="614" cy="550" r="7" fill="none" stroke="#7A8796" stroke-width="2.8"/>
 <text x="603" y="554" font-size="10" font-weight="700" fill="#7A8796" text-anchor="end">S</text>
-<text x="614" y="604" font-size="11" font-weight="700" fill="#1F2933" text-anchor="middle">cable · cell R1</text>
+<text x="614" y="604" font-size="11" font-weight="700" fill="#1F2933" text-anchor="middle">cable · cell L3</text>
 <circle cx="830" cy="502" r="7" fill="none" stroke="#7A8796" stroke-width="2.8"/>
 <text x="819" y="506" font-size="10" font-weight="700" fill="#7A8796" text-anchor="end">E+</text>
 <circle cx="830" cy="526" r="7" fill="none" stroke="#7A8796" stroke-width="2.8"/>
 <text x="819" y="530" font-size="10" font-weight="700" fill="#7A8796" text-anchor="end">E−</text>
 <circle cx="830" cy="550" r="7" fill="none" stroke="#7A8796" stroke-width="2.8"/>
 <text x="819" y="554" font-size="10" font-weight="700" fill="#7A8796" text-anchor="end">S</text>
-<text x="830" y="604" font-size="11" font-weight="700" fill="#1F2933" text-anchor="middle">cable · cell R2</text>
+<text x="830" y="604" font-size="11" font-weight="700" fill="#1F2933" text-anchor="middle">cable · cell L4</text>
 <path d="M158,238 L158,214" fill="none" stroke="#D64545" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 <circle cx="158" cy="238" r="4.5" fill="#D64545"/>
 <circle cx="158" cy="214" r="4.5" fill="#D64545"/>
@@ -1005,5 +1005,5 @@
 <text x="40" y="740" font-size="11" font-weight="700" fill="#5B3B8C" text-anchor="start">Breakout pins by row (left|right column): A AGND|DGND · B AVDD|DVDD · C REFP0|CLK · D REFN0|CS · E AIN3|SCLK · F AIN2|MOSI · G AIN1|MISO · H AIN0|DRDY</text>
 <text x="40" y="760" font-size="12" font-weight="400" fill="#5F6B78" text-anchor="start">Fit all links before the breakouts: they run underneath them. The tie links in columns 10 and 19 pass over cut holes; links only touch copper at their ends.</text>
 <text x="40" y="786" font-size="12" font-weight="600" fill="#C2410C" text-anchor="start">Not shown: R1/R2 solder on top of each breakout (AVDD–AIN1 and AIN1–AGND pins). L1's DRDY wire solders to L1's DRDY pin on top. Cable shields solder to strip O.</text>
-<text x="40" y="806" font-size="12" font-weight="400" fill="#5F6B78" text-anchor="start">Heel carrier: identical board with L3, L4, R3, R4 (CS ← D5, D6, D9, A2); its BUS OUT pads stay empty.</text>
+<text x="40" y="806" font-size="12" font-weight="400" fill="#5F6B78" text-anchor="start">Right-plate carrier: identical board with R1, R2, R3, R4 (CS ← D7, D8, D9, A2); its BUS OUT pads stay empty.</text>
 </svg>

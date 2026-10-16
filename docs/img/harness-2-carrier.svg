@@ -5,11 +5,11 @@
 <text x="88" y="52" font-size="24" font-weight="700" fill="#1F2933" text-anchor="start">Put four units on a carrier (×2)</text>
 <text x="40" y="88" font-size="14" font-weight="400" fill="#5F6B78" text-anchor="start">A carrier is a perfboard with 5 bus rails. Every unit taps all five rails; its CS wire and cell cable leave from the bottom edge.</text>
 <rect x="70" y="130" width="1140" height="510" rx="12" fill="#F6F4EF" stroke="#7A7063" stroke-width="2"/>
-<text x="640.0" y="158" font-size="13" font-weight="700" fill="#7A7063" text-anchor="middle">Toe carrier (perfboard). The heel carrier is identical, with L3, L4, R3, R4.</text>
+<text x="640.0" y="158" font-size="13" font-weight="700" fill="#7A7063" text-anchor="middle">Left-plate carrier (perfboard). The right-plate carrier is identical, with R1, R2, R3, R4.</text>
 <rect x="86" y="184" width="60" height="120" rx="4" fill="#FFFFFF" stroke="#1F2933" stroke-width="1.8"/>
 <text x="86" y="174" font-size="12" font-weight="700" fill="#1F2933" text-anchor="start">BUS IN ← UNO Q</text>
 <rect x="1134" y="184" width="60" height="120" rx="4" fill="#FFFFFF" stroke="#1F2933" stroke-width="1.8"/>
-<text x="1194" y="174" font-size="12" font-weight="700" fill="#1F2933" text-anchor="end">BUS OUT → heel carrier</text>
+<text x="1194" y="174" font-size="12" font-weight="700" fill="#1F2933" text-anchor="end">BUS OUT → right-plate carrier</text>
 <path d="M146,200 L1134,200" fill="none" stroke="#D64545" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
 <circle cx="146" cy="200" r="4.5" fill="#D64545"/>
 <circle cx="1134" cy="200" r="4.5" fill="#D64545"/>
@@ -79,9 +79,9 @@
 <text x="620" y="718" font-size="12" font-weight="700" fill="#1F2933" text-anchor="middle">cell L2</text>
 <text x="620" y="734" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">250 mm</text>
 <rect x="710" y="330" width="200" height="150" rx="8" fill="#EFEAF7" stroke="#5B3B8C" stroke-width="1.8"/>
-<text x="810.0" y="374" font-size="22" font-weight="700" fill="#5B3B8C" text-anchor="middle">R1</text>
+<text x="810.0" y="374" font-size="22" font-weight="700" fill="#5B3B8C" text-anchor="middle">L3</text>
 <text x="810.0" y="394" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">unit (step 1)</text>
-<text x="810.0" y="412" font-size="11" font-weight="400" fill="#1F2933" text-anchor="middle">toe inner</text>
+<text x="810.0" y="412" font-size="11" font-weight="400" fill="#1F2933" text-anchor="middle">heel inner</text>
 <path d="M750,330 L750,200" fill="none" stroke="#D64545" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
 <circle cx="750" cy="200" r="3.6" fill="#D64545"/>
 <path d="M780,330 L780,222" fill="none" stroke="#222222" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
@@ -95,15 +95,15 @@
 <path d="M750,480 L750,640" fill="none" stroke="#E2A400" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <circle cx="750" cy="640" r="5" fill="#FFFFFF" stroke="#E2A400" stroke-width="2"/>
 <text x="762" y="644" font-size="13" font-weight="700" fill="#E2A400" text-anchor="start"></text>
-<text x="750" y="664" font-size="12" font-weight="700" fill="#E2A400" text-anchor="middle">CS ← D7</text>
+<text x="750" y="664" font-size="12" font-weight="700" fill="#E2A400" text-anchor="middle">CS ← D5</text>
 <path d="M860,474 L860,700" fill="none" stroke="#7A8796" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 <circle cx="860" cy="474" r="5" fill="#1F2933"/>
-<text x="860" y="718" font-size="12" font-weight="700" fill="#1F2933" text-anchor="middle">cell R1</text>
-<text x="860" y="734" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">250 mm</text>
+<text x="860" y="718" font-size="12" font-weight="700" fill="#1F2933" text-anchor="middle">cell L3</text>
+<text x="860" y="734" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">~500 mm</text>
 <rect x="950" y="330" width="200" height="150" rx="8" fill="#EFEAF7" stroke="#5B3B8C" stroke-width="1.8"/>
-<text x="1050.0" y="374" font-size="22" font-weight="700" fill="#5B3B8C" text-anchor="middle">R2</text>
+<text x="1050.0" y="374" font-size="22" font-weight="700" fill="#5B3B8C" text-anchor="middle">L4</text>
 <text x="1050.0" y="394" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">unit (step 1)</text>
-<text x="1050.0" y="412" font-size="11" font-weight="400" fill="#1F2933" text-anchor="middle">toe outer</text>
+<text x="1050.0" y="412" font-size="11" font-weight="400" fill="#1F2933" text-anchor="middle">heel outer</text>
 <path d="M990,330 L990,200" fill="none" stroke="#D64545" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
 <circle cx="990" cy="200" r="3.6" fill="#D64545"/>
 <path d="M1020,330 L1020,222" fill="none" stroke="#222222" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
@@ -117,10 +117,10 @@
 <path d="M990,480 L990,640" fill="none" stroke="#E2A400" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
 <circle cx="990" cy="640" r="5" fill="#FFFFFF" stroke="#E2A400" stroke-width="2"/>
 <text x="1002" y="644" font-size="13" font-weight="700" fill="#E2A400" text-anchor="start"></text>
-<text x="990" y="664" font-size="12" font-weight="700" fill="#E2A400" text-anchor="middle">CS ← D8</text>
+<text x="990" y="664" font-size="12" font-weight="700" fill="#E2A400" text-anchor="middle">CS ← D6</text>
 <path d="M1100,474 L1100,700" fill="none" stroke="#7A8796" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 <circle cx="1100" cy="474" r="5" fill="#1F2933"/>
-<text x="1100" y="718" font-size="12" font-weight="700" fill="#1F2933" text-anchor="middle">cell R2</text>
-<text x="1100" y="734" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">450 mm</text>
+<text x="1100" y="718" font-size="12" font-weight="700" fill="#1F2933" text-anchor="middle">cell L4</text>
+<text x="1100" y="734" font-size="11" font-weight="400" fill="#5F6B78" text-anchor="middle">~700 mm</text>
 <text x="640" y="758" font-size="12" font-weight="400" fill="#5F6B78" text-anchor="middle">Dot = soldered joint. The 5 rails run the full width, so BUS IN and BUS OUT are the same 5 signals: that is what lets carriers chain.</text>
 </svg>

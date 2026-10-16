@@ -34,9 +34,9 @@ COLS, ROWS = 37, 17
 ROW_NAMES = "ABCDEFGHIJKLMNOPQ"
 P = 24                      # px per 2.54 mm hole pitch
 GX, GY = 110, 190           # grid origin (column 1, row A)
-MODULES = [("L1", 2, "D3"), ("L2", 11, "D4"), ("R1", 20, "D7"), ("R2", 29, "D8")]
-HEEL = ["L3", "L4", "R3", "R4"]
-HEEL_CS = ["D5", "D6", "D9", "A2"]
+MODULES = [("L1", 2, "D3"), ("L2", 11, "D4"), ("L3", 20, "D5"), ("L4", 29, "D6")]
+RIGHT = ["R1", "R2", "R3", "R4"]
+RIGHT_CS = ["D7", "D8", "D9", "A2"]
 ANALOG = ["AGND", "AVDD", "REFP0", "REFN0", "AIN3", "AIN2", "AIN1", "AIN0"]
 DIGITAL = ["DGND", "DVDD", "CLK", "CS", "SCLK", "MOSI", "MISO", "DRDY"]
 RAILS = {"A": ("GND", "gnd"), "B": ("3V3", "3v3"), "J": ("SCLK", "sck"), "K": ("MOSI", "mosi"),
@@ -77,7 +77,7 @@ def links():
 
 def draw() -> Svg:
     s = Svg(1120, 920)
-    s.text(40, 46, "ADC carrier on stripboard (toe carrier shown)", 24, INK, 700)
+    s.text(40, 46, "ADC carrier on stripboard (left-plate carrier shown)", 24, INK, 700)
     s.text(40, 72, "Component side. Copper strips run left–right underneath; red ✕ = cut the strip at "
            "that hole. 37 × 17 holes ≈ 94 × 43 mm.", 14, MUTED)
     # board and strips
@@ -160,7 +160,7 @@ def draw() -> Svg:
     s.text(40, ky + 118, "Not shown: R1/R2 solder on top of each breakout (AVDD–AIN1 and AIN1–AGND pins). "
            "L1's DRDY wire solders to L1's DRDY pin on top. Cable shields solder to strip O.",
            12, ACCENT, 600)
-    s.text(40, ky + 138, "Heel carrier: identical board with L3, L4, R3, R4 (CS ← " + ", ".join(HEEL_CS) +
+    s.text(40, ky + 138, "Right-plate carrier: identical board with R1, R2, R3, R4 (CS ← " + ", ".join(RIGHT_CS) +
            "); its BUS OUT pads stay empty.", 12, MUTED)
     return s
 

@@ -3,7 +3,7 @@
 
   harness-1-unit.svg     one unit: ADS1220 breakout + R1/R2 + cell connector, 6 wires out
   harness-2-carrier.svg  four units on a carrier: 5 bus rails, BUS IN / BUS OUT, CS and cells
-  harness-3-system.svg   the whole system: UNO Q -> toe carrier -> heel carrier, 8 cells
+  harness-3-system.svg   the whole system: UNO Q -> left-plate carrier -> right-plate carrier, 8 cells
 
 Breakout pin names/order are the purple ADS1220 board used in this build; UNO Q pins follow
 docs/wiring.md (R4's CS is A2, not D10).
@@ -124,12 +124,12 @@ def carrier() -> Svg:
                  "Every unit taps all five rails; its CS wire and cell cable leave from the bottom edge.")
     X0, X1, Y0, Y1 = 70, 1210, 130, 640
     s.rect(X0, Y0, X1 - X0, Y1 - Y0, CAR, CAR_S, 12, 2)
-    s.text((X0 + X1) / 2, Y0 + 28, "Toe carrier (perfboard). The heel carrier is identical, with L3, L4, R3, R4.",
+    s.text((X0 + X1) / 2, Y0 + 28, "Left-plate carrier (perfboard). The right-plate carrier is identical, with R1, R2, R3, R4.",
            13, CAR_S, 700, "middle")
     rails = [Y0 + 70 + 22 * i for i in range(5)]
     # BUS IN / BUS OUT headers
     for hx, title, anchor, tx in ((X0 + 16, "BUS IN ← UNO Q", "start", X0 + 16),
-                                  (X1 - 76, "BUS OUT → heel carrier", "end", X1 - 16)):
+                                  (X1 - 76, "BUS OUT → right-plate carrier", "end", X1 - 16)):
         s.rect(hx, rails[0] - 16, 60, rails[-1] - rails[0] + 32, "#FFFFFF", INK, 4, 1.8)
         s.text(tx, rails[0] - 26, title, 12, INK, 700, anchor)
     for (label, key), ry in zip(BUS, rails):
@@ -138,7 +138,7 @@ def carrier() -> Svg:
         s.dot(X1 - 76, ry, WIRE[key], 4.5)
         s.text(X0 + 84, ry - 5, label, 11, WIRE[key], 700)
     units = [("L1", "toe outer", "D3", "450 mm"), ("L2", "toe inner", "D4", "250 mm"),
-             ("R1", "toe inner", "D7", "250 mm"), ("R2", "toe outer", "D8", "450 mm")]
+             ("L3", "heel inner", "D5", "~500 mm"), ("L4", "heel outer", "D6", "~700 mm")]
     UW, UY, UH = 200, 330, 150
     for k, (name, where, cs_pin, cable) in enumerate(units):
         ux = 230 + k * 240
@@ -196,7 +196,7 @@ def system() -> Svg:
     s.rect(400, 150, 610, 760, "none", "#9AA5B1", 10, 1.6, "8 6")
     s.text(705, 935, "Centre enclosure", 13, MUTED, 700, "middle")
     TY, HY = 190, 690
-    for yy, name, units in ((TY, "Toe carrier", "L1 L2 R1 R2"), (HY, "Heel carrier", "L3 L4 R3 R4")):
+    for yy, name, units in ((TY, "Plate L carrier", "L1 L2 L3 L4"), (HY, "Plate R carrier", "R1 R2 R3 R4")):
         s.rect(450, yy, 500, 170, CAR, CAR_S, 10, 2)
         s.text(700, yy + 30, name, 15, CAR_S, 700, "middle")
         for k, u in enumerate(units.split()):
@@ -212,11 +212,11 @@ def system() -> Svg:
             s.line([(xx, y0), (xx, y1)], WIRE[key], 2.4)
 
     bus_keys = [k for _, k in BUS]
-    # ① Q -> toe BUS IN, ③ Q -> toe CS + DRDY, ④ Q -> heel CS
+    # ① Q -> plate L carrier BUS IN, ③ Q -> its CS + DRDY, ④ Q -> plate R carrier CS
     bundle_v(610, 450, TY + 170, bus_keys)
     bundle_v(760, 450, TY + 170, ["cs", "cs", "cs", "cs", "drdy"])
     bundle_v(760, 600, HY, ["cs", "cs", "cs", "cs"])
-    # ② toe BUS OUT -> heel BUS IN, around the right of the UNO Q (nested, no crossings)
+    # ② plate L BUS OUT -> plate R BUS IN, around the right of the UNO Q (nested, no crossings)
     for i, key in enumerate(bus_keys):
         y_top = TY + 128 + 5 * i
         x_v = 990 - 5 * i
@@ -230,14 +230,14 @@ def system() -> Svg:
         s.text(tx, yy - 2, title, 13, INK, 700, anchor)
         s.text(tx, yy + 14, sub, 11, MUTED, 400, anchor)
 
-    tag(588, 405, "1", "BUS → toe BUS IN", "3V3 GND SCLK MOSI MISO", "end")
-    tag(790, 405, "3", "CS + DRDY → toe", "D3 D4 D7 D8 + D2")
+    tag(588, 405, "1", "BUS → L carrier BUS IN", "3V3 GND SCLK MOSI MISO", "end")
+    tag(790, 405, "3", "CS + DRDY → L carrier", "D3 D4 D5 D6 + D2")
     s.add(f'<circle cx="{955}" cy="{495}" r="11" fill="{INK}"/>')
     s.text(955, 500, "2", 12, "#FFFFFF", 700, "middle")
-    for i, (txt, size, col, wt) in enumerate((("toe BUS OUT", 12, INK, 700), ("→ heel BUS IN", 12, INK, 700),
+    for i, (txt, size, col, wt) in enumerate((("L BUS OUT", 12, INK, 700), ("→ R BUS IN", 12, INK, 700),
                                               ("same 5 wires,", 11, MUTED, 400), ("chained", 11, MUTED, 400))):
         s.text(960, 530 + 16 * i, txt, size, col, wt, "end")
-    tag(790, 650, "4", "CS → heel", "D5 D6 D9 A2")
+    tag(790, 650, "4", "CS → R carrier", "D7 D8 D9 A2")
 
     # cell cables: each cell to its carrier; outer cells route around the inner ones
     def cable(pts):
@@ -246,14 +246,16 @@ def system() -> Svg:
 
     cable([(115, 200), (115, 182), (425, 182), (425, 225), (450, 225)])          # L1
     cable([(300, 245), (450, 245)])                                              # L2
-    cable([(1285, 200), (1285, 182), (975, 182), (975, 225), (950, 225)])        # R2
-    cable([(1100, 245), (950, 245)])                                             # R1
-    cable([(300, 825), (450, 825)])                                              # L3
-    cable([(115, 860), (115, 878), (425, 878), (425, 845), (450, 845)])          # L4
+    # plate L's heel cells run up the enclosure's left wall to its carrier at the toe end,
+    # plate R's toe cells down the right wall to its carrier at the heel end
+    cable([(300, 825), (405, 825), (405, 265), (450, 265)])                     # L3
+    cable([(115, 860), (115, 878), (415, 878), (415, 285), (450, 285)])          # L4
+    cable([(1285, 200), (1285, 182), (1000, 182), (1000, 765), (950, 765)])      # R2
+    cable([(1100, 245), (1006, 245), (1006, 785), (950, 785)])                   # R1
     cable([(1100, 825), (950, 825)])                                             # R4
     cable([(1285, 860), (1285, 878), (975, 878), (975, 845), (950, 845)])        # R3
-    s.text(705, 975, "Grey: cell cables (outer corners ~450 mm, inner ~250 mm), each to its "
-           "unit on the carrier. Each has its JST at the cradle end.", 12, MUTED, 400, "middle")
+    s.text(705, 975, "Grey: cell cables to their plate's carrier. Far-corner cables run ~250 mm along the "
+           "enclosure wall. Each has its JST at the cradle end.", 12, MUTED, 400, "middle")
     s.legend(300, 1005, [(lab, k) for lab, k in BUS] + [("CS", "cs"), ("DRDY", "drdy")], cols=7, col_w=118)
     return s
 

@@ -3,8 +3,8 @@
 How 8 load cells, 8 ADS1220 breakouts and the UNO Q connect. The build is in three steps:
 
 1. **Build 8 identical units.** A unit is one breakout, its two bridge resistors, and a socket for its cell.
-2. **Mount 4 units on each of two carriers.** A carrier is a perfboard whose 5 bus rails join its units.
-3. **Chain the carriers to the UNO Q.** One bus runs from the Q to the toe carrier and on to the heel carrier. Each carrier also gets a bundle of chip-select wires.
+2. **Mount 4 units on each of two carriers, one carrier per plate.** A carrier is a perfboard whose 5 bus rails join its units.
+3. **Chain the carriers to the UNO Q.** One bus runs from the Q to the left-plate carrier and on to the right-plate carrier. Each carrier also gets a bundle of chip-select wires.
 
 **No-solder alternative:** the assembled ADC board in [`hardware/pcb/adc-board`](../hardware/pcb/adc-board/README.md) replaces all three steps (units, carriers, harness): it plugs onto the UNO Q and each cell plugs into its own JST.
 
@@ -33,13 +33,17 @@ Each carrier is a strip of 2.54 mm perfboard:
 
 - **5 bus rails** run the full width: 3V3, GND, SCLK, MOSI, MISO. Use 22 AWG for 3V3 and GND.
 - **Each unit taps all 5 rails** with short wires (the dots in the drawing).
-- **BUS IN / BUS OUT:** a 5-pin header at each end of the rails. BUS IN takes the bus from the Q (toe carrier) or from the other carrier (heel carrier). BUS OUT passes it on. **This is what lets the carriers chain:** the rails are continuous, so BUS OUT carries the same 5 signals as BUS IN.
+- **BUS IN / BUS OUT:** a 5-pin header at each end of the rails. BUS IN takes the bus from the Q (left-plate carrier) or from the other carrier (right-plate carrier). BUS OUT passes it on. **This is what lets the carriers chain:** the rails are continuous, so BUS OUT carries the same 5 signals as BUS IN.
 - **Along the bottom edge:** each unit's **CS** pin (and L1's **DRDY**), and the three wires of each unit's **cell cable** (E+, E−, S) plus its shield.
 
 | Carrier | Units | CS pins on the UNO Q | Extra |
 |---|---|---|---|
-| Toe (+y end pad) | L1, L2, R1, R2 | D3, D4, D7, D8 | L1's DRDY → D2 |
-| Heel (−y end pad) | L3, L4, R3, R4 | D5, D6, D9, **A2** | BUS OUT not used |
+| Plate L (toe-end pad) | L1, L2, L3, L4 | D3, D4, D5, D6 | L1's DRDY → D2 |
+| Plate R (heel-end pad) | R1, R2, R3, R4 | D7, D8, D9, **A2** | BUS OUT not used |
+
+**What makes a unit L3 is its CS wire, not its place on the board.** The firmware reads each CS pin as one channel name, and the software puts each name at one corner ([`wiring.md`](wiring.md#pin-map-reference)): L1 toe outer, L2 toe inner, L3 heel inner, L4 heel outer, and on the right plate R1 toe inner, R2 toe outer, R3 heel outer, R4 heel inner. So give each unit the CS pin for the corner its cable goes to. Any split of the 8 units across the two carriers works if that holds; one carrier per plate is what the first build used. The ADC board (no-solder alternative) has a labelled JST per name instead.
+
+Each carrier sits on one of the enclosure's end pads, and its four cables enter through the slots in its plate's wall (+y for plate L, −y for plate R). The two near corners use the slots at that end; the two far-corner cables come in through the slots at the other end and run about 250 mm along the inside of the wall, past the UNO Q, so leave them that much longer and tie them down along the wall.
 
 ### Building a carrier on stripboard
 
@@ -60,7 +64,7 @@ Build order:
    - rows C–H at columns 10, 19, 28, between breakouts
    - row P at columns 6, 9, 15, 18, 24, 27, 33, 36 (x0+4 and x0+7), so each unit's S strip is separate
 
-   **The drawing is the component side.** Cutting from the copper side mirrors it: on the copper side, column 1 (BUS IN) is on the **right**. Count columns from that edge. Check every cut with a meter. (The first carrier was cut mirrored; the layout was changed on 2026-10-11 to match that board, which is why the in-unit cut is at x0+4 and SCLK is a diagonal.) A mirrored board also mirrors the **unit order**: L1 ends up where R2 should be. The press test in §5 catches that, and swapping the CS wires at the Q fixes it.
+   **The drawing is the component side.** Cutting from the copper side mirrors it: on the copper side, column 1 (BUS IN) is on the **right**. Count columns from that edge. Check every cut with a meter. (The first carrier was cut mirrored; the layout was changed on 2026-10-11 to match that board, which is why the in-unit cut is at x0+4 and SCLK is a diagonal.) A mirrored board also mirrors the **unit order**, so the CS wires land on the wrong units. The press test in §5 catches that, and swapping the CS wires at the Q fixes it.
 2. **Fit the wire links**, all of them before any breakout, since they run underneath. Per breakout, with x0 = its left header column (2, 11, 20, 29):
 
    | Link | From | To |
@@ -82,7 +86,7 @@ Build order:
    - each cell cable, threaded through its wall slot first as bare cable: **E+ into (x0+2, N), E− into (x0+2, O), S into (x0+2, P)**. Row Q is spare. Tie each cable to the board or a standoff with a small cable tie so a tug doesn't land on the joints.
    - each cell cable's shield onto strip O
 
-The heel carrier is the same board with L3, L4, R3, R4 (CS ← D5, D6, D9, A2); leave its BUS OUT empty.
+The right-plate carrier is the same board with R1, R2, R3, R4 (CS ← D7, D8, D9, A2); leave its BUS OUT empty.
 
 Don't use a solderless breadboard for the carriers. A swing shakes the floor, and a loose contact on CS or MISO corrupts readings in ways that are hard to track down.
 
@@ -94,11 +98,11 @@ Four bundles leave the UNO Q's header area, plus the cell cables:
 
 | # | From | To | Wires |
 |---|---|---|---|
-| ① | UNO Q **3V3, GND, D13, D11, D12** | toe carrier **BUS IN** | 3V3, GND, SCLK, MOSI, MISO |
-| ② | toe carrier **BUS OUT** | heel carrier **BUS IN** | the same 5, chained |
-| ③ | UNO Q **D3, D4, D7, D8, D2** | toe carrier bottom edge | CS L1, L2, R1, R2 + L1's DRDY |
-| ④ | UNO Q **D5, D6, D9, A2** | heel carrier bottom edge | CS L3, L4, R3, R4 |
-| — | each cell, via its JST at the cradle | its unit's cable pads on the carrier (soldered) | ~450 mm outer corners, ~250 mm inner |
+| ① | UNO Q **3V3, GND, D13, D11, D12** | plate L carrier **BUS IN** | 3V3, GND, SCLK, MOSI, MISO |
+| ② | plate L carrier **BUS OUT** | plate R carrier **BUS IN** | the same 5, chained |
+| ③ | UNO Q **D3, D4, D5, D6, D2** | plate L carrier bottom edge | CS L1, L2, L3, L4 + L1's DRDY |
+| ④ | UNO Q **D7, D8, D9, A2** | plate R carrier bottom edge | CS R1, R2, R3, R4 |
+| — | each cell, via its JST at the cradle | its unit's cable pads on its plate's carrier (soldered) | near corners ~250–450 mm; far corners ~250 mm more, along the wall |
 
 That's **14 UNO Q pins, one wire each**. The 5 bus signals reach all 8 units through the chain, not through 8 wires on each pin.
 
@@ -110,16 +114,17 @@ A guided version of these checks, stage by stage as you build, asks for each met
 
 ```bash
 .venv/bin/python tools/bench/carrier_check.py --units L1 --stage units   # one unit, breakout + R1/R2 fitted
-.venv/bin/python tools/bench/carrier_check.py                            # toe carrier, wired to the Q
+.venv/bin/python tools/bench/carrier_check.py --units L1,L2,L3,L4       # plate L carrier, wired to the Q
+.venv/bin/python tools/bench/carrier_check.py --units R1,R2,R3,R4       # plate R carrier
 ```
 
 Stages: `bare` (cuts and links), `units` (breakouts and R1/R2), `cables` (cells plugged in), `uno` (wired to the Q, which is unplugged from USB). Each stage includes the ones before it.
 
 With the UNO Q unplugged:
 
-- [ ] **3V3 to GND ≈ 125 Ω.** That's 8 corners of 1 kΩ in parallel. Near 0 Ω is a short.
+- [ ] **3V3 to GND ≈ 125 Ω** with both carriers chained: 8 corners of 1 kΩ in parallel (≈ 250 Ω for one carrier on its own). Near 0 Ω is a short.
 - [ ] Each CS pin reaches **only** its own unit (D3 → L1 … D9 → R3, A2 → R4).
-- [ ] BUS IN and BUS OUT on each carrier show continuity rail by rail, and the heel carrier's rails match the toe carrier's.
+- [ ] BUS IN and BUS OUT on each carrier show continuity rail by rail, and the second carrier's rails match the first's.
 - [ ] Only L1's DRDY reaches D2; nothing connects to D10, D0 or D1.
 - [ ] Each cable shield connects to GND at the carrier end and to nothing at the cell end.
 
@@ -131,8 +136,8 @@ With the UNO Q plugged into the dev machine by **USB-C** (flashing goes over USB
 
 ```bash
 tools/bench/flash.sh bench/ads1220_all          # flash the all-channel bench sketch
-.venv/bin/python tools/bench/multi_cell.py      # toe carrier: L1, L2, R1, R2
-.venv/bin/python tools/bench/multi_cell.py --channels L3,L4,R3,R4   # heel carrier
+.venv/bin/python tools/bench/multi_cell.py --channels L1,L2,L3,L4   # plate L carrier
+.venv/bin/python tools/bench/multi_cell.py --channels R1,R2,R3,R4   # plate R carrier
 .venv/bin/python tools/bench/multi_cell.py --channels all           # both
 ```
 
@@ -153,14 +158,14 @@ Skip the press test with `--no-press`. The sketch paces on L1's DRDY; if L1 is m
 
 ## 6. Pitfalls from the first build
 
-Everything below happened on the first toe carrier (2026-10-11/12). Each fault took a while to find, so here is the symptom each one produced, from `multi_cell.py`, and how it was found. Work through faults **one at a time** and re-run the test after each fix: one fault can hide or imitate another.
+Everything below happened on the first carrier (2026-10-11/12), which holds one plate's four corners. Each fault took a while to find, so here is the symptom each one produced, from `multi_cell.py`, and how it was found. Work through faults **one at a time** and re-run the test after each fix: one fault can hide or imitate another.
 
 ### Fault → symptom
 
 | What was wrong | What the test showed | How it was found |
 |---|---|---|
 | Solder bridge **DVDD–DGND** on top of a breakout | The UNO Q **switches off** as soon as the carrier is connected (3V3 shorted to GND) | 3V3 ↔ GND reads ~0 Ω. Look between each breakout's top two pin pairs |
-| Strips **cut mirrored** (cut from the copper side while reading the component-side drawing) | Everything electrically fine, but the press test said **L1↔R2 and L2↔R1 swapped** | Press test. Fixed by swapping the CS wires at the Q (D3↔D8, D4↔D7); the layout was also updated to the mirrored cuts |
+| Strips **cut mirrored** (cut from the copper side while reading the component-side drawing) | Everything electrically fine, but the press test showed the units in mirrored order (the CS wires on the wrong units) | Press test. Fixed by swapping the CS wires at the Q (D3↔D8, D4↔D7 under the CS assignment used then); the layout was also updated to the mirrored cuts |
 | **REFN0 link** not soldered to strip A | Voltage check: REF far from AVDD | Meter: REFN0 pin ↔ AGND should beep |
 | **MOSI–MISO** bridge on one unit (rows F/G at its digital header, or strips K/L) | **Every** unit reads back `00 00 00 00`, including ones that passed before; L1's DRDY still ticks (writes still work) | K ↔ L reads 0.3 Ω. Lift each unit's MOSI link from K in turn until K ↔ L opens; the unit whose link clears it has the bridge |
 | **DRDY–MISO** bridge on one unit (rows G/H at its digital header) | **Every** unit reads back `FF FF FF FF`; strip L sits at 3.3 V even with every CS high, but L ↔ 3V3 is **not** a short on the meter | `bench/spi_diag` (below) shows MISO driven high with all CS high. Meter: strip L ↔ each unit's DRDY pin; the bridged one reads ~0 Ω. Every breakout's DRDY is always driven, selected or not |

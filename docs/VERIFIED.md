@@ -58,6 +58,8 @@ Achieved loop rate: L1 DRDY 944 Hz; the bench sketch reads about 71 % of convers
 
 - **2026-09-25, second breakout (bench, single-ended):** readback OK and voltages correct (AIN0 1655 mV), but **conversions are bit-identical** (raw dump: 32 × `3FFD8A`), with occasional jumps of exactly ±257 (0x101). The first breakout showed ~110 counts of noise in the same mode. Suspects: another board sharing the bus with its CS not held high, or a faulty or non-genuine chip. Swap test pending.
 
+- **2026-10-16, carrier split is one per plate.** The first carrier holds all four corners of one plate, not the toe corners of both plates as `docs/harness.md` first described. The L1/L2/R1/R2 names in the table above are the CS slots each unit was on at the time (D3, D4, D7, D8), not its corner. Before the plates are used, re-wire the CS lines by corner (plate L carrier on D3–D6, plate R on D7, D8, D9, A2) and confirm each with a press test. Docs and diagrams updated to match.
+
 ## Performance
 
 | Item | Result | Checked against | Date |
