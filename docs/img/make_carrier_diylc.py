@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
-"""Generate hardware/carrier-stripboard.diy: the ADC carrier as a DIY Layout Creator project.
+"""Generate the two ADC carriers as DIY Layout Creator projects, one per plate.
 
-Same layout as docs/img/carrier-stripboard.svg (the cuts, links and breakout positions are
+hardware/carrier-stripboard.diy is plate L's carrier (L1-L4, BUS IN from the UNO Q) and
+hardware/carrier-stripboard-right.diy is plate R's (R1-R4, BUS IN from plate L's BUS OUT,
+BUS OUT empty). Same board as docs/img/carrier-stripboard.svg (the cuts, links and breakout positions are
 imported from make_carrier_layout.py), for editing in DIYLC (https://github.com/bancika/diy-layout-creator).
 Open it with File > Open. Coordinates are in inches; the board's top-left corner is at (1, 1)
 and hole (column c, row r) sits at (1 + 0.1 c, 1 + 0.1 (r + 1)), which is how DIYLC places
@@ -14,11 +16,20 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 from _svg import WIRE
-from make_carrier_layout import COLS, MODULES, RAILS, RIGHT_CS, ROW_NAMES, ROWS, cuts, links
+from make_carrier_layout import COLS, MODULES, RAILS, RIGHT, RIGHT_CS, ROW_NAMES, ROWS, cuts, links
 
-OUT = Path(__file__).resolve().parents[2] / "hardware" / "carrier-stripboard.diy"
+HARDWARE = Path(__file__).resolve().parents[2] / "hardware"
+OUT = {"L": HARDWARE / "carrier-stripboard.diy", "R": HARDWARE / "carrier-stripboard-right.diy"}
+PLATE_NAME = {"L": "left", "R": "right"}
 X0, Y0 = 1.0, 1.0  # board corner, inches
 CABLE = {"E+": "f4f4f4", "E−": "222222", "S": "d64545", "shield": "9aa5b1"}
+
+
+def modules(plate: str) -> list[tuple[str, int, str]]:
+    """(unit, x0, CS pin on the UNO Q) for each breakout: the same board positions on both."""
+    if plate == "L":
+        return list(MODULES)
+    return [(name, x0, cs) for name, (_, x0, _), cs in zip(RIGHT, MODULES, RIGHT_CS)]
 
 
 def at(col: int, row: str) -> tuple[float, float]:
@@ -34,7 +45,8 @@ def pt(p) -> str:
 
 
 class Project:
-    def __init__(self):
+    def __init__(self, title: str):
+        self.title = title
         self.parts: list[str] = []
         self.count: dict[str, int] = {}
 
@@ -220,7 +232,7 @@ class Project:
     <minor>34</minor>
     <build>0</build>
   </fileVersion>
-  <title>open-fp ADC carrier (left plate)</title>
+  <title>{escape(self.title)}</title>
   <author>open-fp</author>
   <width value="36.0" unit="cm"/>
   <height value="21.0" unit="cm"/>
@@ -238,7 +250,7 @@ class Project:
 """
 
 
-def inset(p: Project):
+def inset(p: Project, plate: str):
     """Zoomed top view of one breakout: pin names, R1/R2 and the wires soldered on top."""
     left = ["AGND", "AVDD", "REFP0", "REFN0", "AIN3", "AIN2", "AIN1", "AIN0"]
     right = ["DGND", "DVDD", "CLK", "CS", "SCLK", "MOSI", "MISO", "DRDY"]
@@ -269,10 +281,10 @@ def inset(p: Project):
     p.wire((r2x, agnd), (lx, agnd), hexc(WIRE["gnd"]))
     p.wire((r2x, ain1), (r1x, ain1), hexc(WIRE["ref"]))
     # wires soldered to the top of pins
-    for y, text, key in (
-        (ys[3], "CS wire from the UNO Q", "cs"),
-        (ys[7], "L1 only: DRDY -> D2", "drdy"),
-    ):
+    on_top = [(ys[3], "CS wire from the UNO Q", "cs")]
+    if plate == "L":
+        on_top.append((ys[7], "L1 only: DRDY -> D2", "drdy"))
+    for y, text, key in on_top:
         p.wire((rx, y), (round(rx + 0.45, 3), y), hexc(WIRE[key]))
         p.label((round(rx + 0.5, 3), y), text, 8, hexc(WIRE[key]), True, "LEFT")
     notes = [
@@ -285,17 +297,19 @@ def inset(p: Project):
         p.label((round(lx - 0.75, 3), round(ys[-1] + 0.45 + 0.14 * i, 3)), n, 8, align="LEFT")
 
 
-def build() -> str:
-    p = Project()
+def build(plate: str = "L") -> str:
+    mods = modules(plate)
+    units = " ".join(name for name, _, _ in mods)
+    p = Project(f"open-fp ADC carrier ({PLATE_NAME[plate]} plate)")
     p.board()
     # links first: they run under the breakouts
     for (c1, r1), (c2, r2), key, lab in links():
-        unit = next((n for n, x0, _ in MODULES if x0 <= c1 < x0 + 9 and lab != "tie"), "")
+        unit = next((n for n, x0, _ in mods if x0 <= c1 < x0 + 9 and lab != "tie"), "")
         name = f"{unit} {lab}" if unit else f"tie {r1}-{r2} col {c1}"
         p.jumper(at(c1, r1), at(c2, r2), hexc(WIRE[key]), name)
     for c, r in cuts():
         p.cut(at(c, r))
-    for name, x0, cs in MODULES:
+    for name, x0, cs in mods:
         (ax, ay), (dx, hy) = at(x0, "A"), at(x0 + 7, "H")
         p.rect(
             (round(ax - 0.06, 3), round(ay - 0.06, 3)),
@@ -322,36 +336,51 @@ def build() -> str:
             9,
             bold=True,
         )
-    # L1's DRDY off the top of its DRDY pin
-    name, x0, _ = MODULES[0]
-    drdy = at(x0 + 7, "H")
-    p.wire(drdy, (round(drdy[0] - 0.15, 3), round(Y0 - 0.25, 3)), hexc(WIRE["drdy"]))
-    p.label((round(drdy[0] - 0.15, 3), round(Y0 - 0.35, 3)), "L1 DRDY -> D2", 8, hexc(WIRE["drdy"]))
-    # bus in/out, with the UNO Q pin on each incoming wire
-    uno = {"A": "GND", "B": "3V3", "J": "SCLK <- D13", "K": "MOSI <- D11", "L": "MISO <- D12"}
+    if plate == "L":
+        # L1's DRDY off the top of its DRDY pin
+        name, x0, _ = mods[0]
+        drdy = at(x0 + 7, "H")
+        p.wire(drdy, (round(drdy[0] - 0.15, 3), round(Y0 - 0.25, 3)), hexc(WIRE["drdy"]))
+        p.label(
+            (round(drdy[0] - 0.15, 3), round(Y0 - 0.35, 3)), "L1 DRDY -> D2", 8, hexc(WIRE["drdy"])
+        )
+    # bus in/out: plate L's BUS IN comes from the UNO Q (pin on each wire) and its BUS OUT
+    # goes on to plate R's BUS IN; plate R's BUS OUT stays empty
+    if plate == "L":
+        bus_in = {"A": "GND", "B": "3V3", "J": "SCLK <- D13", "K": "MOSI <- D11", "L": "MISO <- D12"}
+        in_from, out_to = "BUS IN from UNO Q", "-> plate R BUS IN"
+    else:
+        bus_in = {"A": "GND", "B": "3V3", "J": "SCLK", "K": "MOSI", "L": "MISO"}
+        in_from, out_to = "BUS IN from plate L BUS OUT", "empty"
     for row in "ABJKL":
         key = hexc(WIRE[RAILS[row][1]])
         a = at(1, row)
         p.wire(a, (round(a[0] - 0.4, 3), a[1]), key)
-        p.label((round(a[0] - 0.45, 3), a[1]), uno[row], 8, key, True, "RIGHT")
-        b = at(COLS, row)
-        p.wire(b, (round(b[0] + 0.4, 3), b[1]), key)
+        p.label((round(a[0] - 0.45, 3), a[1]), bus_in[row], 8, key, True, "RIGHT")
+        if plate == "L":
+            b = at(COLS, row)
+            p.wire(b, (round(b[0] + 0.4, 3), b[1]), key)
     x, y = at(1, "M")
-    p.label((round(x - 0.45, 3), y), "BUS IN from UNO Q", 8, bold=True, align="RIGHT")
+    p.label((round(x - 0.45, 3), y), in_from, 8, bold=True, align="RIGHT")
     # what every strip is for, left-aligned beside the board
+    bus_out = f"BUS OUT {out_to}"
     strips = {
-        "A": ("AGND | DGND pins; GND rail, never cut. BUS OUT ->", "gnd"),
-        "B": ("AVDD | DVDD pins; 3V3 rail, never cut. BUS OUT ->", "3v3"),
+        "A": (f"AGND | DGND pins; GND rail, never cut. {bus_out}", "gnd"),
+        "B": (f"AVDD | DVDD pins; 3V3 rail, never cut. {bus_out}", "3v3"),
         "C": ("REFP0 | CLK   (link C->B, CLK link C->A)", None),
         "D": ("REFN0 | CS    (link D->A; CS wire on top of the pin)", None),
         "E": ("AIN3 | SCLK   (SCLK link E->J, diagonal, insulated)", None),
         "F": ("AIN2 | MOSI   (MOSI link F->K)", None),
         "G": ("AIN1 | MISO   (MISO link G->L; R1/R2 meet at AIN1)", None),
-        "H": ("AIN0 | DRDY   (link H->P to the cable's S)", None),
+        "H": (
+            "AIN0 | DRDY   (link H->P to the cable's S)"
+            + ("" if plate == "L" else "; DRDY not wired on plate R"),
+            None,
+        ),
         "I": ("spare: mounting holes", None),
-        "J": ("SCLK rail. BUS OUT ->", "sck"),
-        "K": ("MOSI rail. BUS OUT ->", "mosi"),
-        "L": ("MISO rail. BUS OUT ->", "miso"),
+        "J": (f"SCLK rail. {bus_out}", "sck"),
+        "K": (f"MOSI rail. {bus_out}", "mosi"),
+        "L": (f"MISO rail. {bus_out}", "miso"),
         "M": ("spare: mounting holes", None),
         "N": ("3V3 (tie link col 19 to B): cable E+", "3v3"),
         "O": ("GND (tie link col 10 to A): cable E- and shield", "gnd"),
@@ -364,16 +393,25 @@ def build() -> str:
         p.label((round(x + 0.5, 3), y), f"{row}  {text}", 8, color, key is not None, "LEFT")
     p.label(
         (round(at(1, "A")[0] + 1.8, 3), round(Y0 - 0.62, 3)),
-        "open-fp ADC carrier: left plate (L1 L2 L3 L4), component side",
+        f"open-fp ADC carrier: {PLATE_NAME[plate]} plate ({units}), component side",
         13,
         bold=True,
     )
-    inset(p)
+    inset(p, plate)
     bottom = Y0 + 0.1 * (ROWS + 1)
-    notes = [
-        "Right-plate carrier: the same board with R1 R2 R3 R4 (CS <- "
-        + ", ".join(RIGHT_CS)
-        + "); leave BUS OUT empty.",
+    cs_wires = ", ".join(f"{name} <- {cs}" for name, _, cs in mods)
+    if plate == "L":
+        first = [
+            f"To the UNO Q: the 5 bus wires into BUS IN and the CS wires ({cs_wires}), plus L1 DRDY -> D2.",
+            "BUS OUT chains to the plate R carrier's BUS IN, strip to strip (hardware/carrier-stripboard-right.diy).",
+        ]
+    else:
+        first = [
+            f"To the UNO Q: only the 4 CS wires ({cs_wires}). A2, not D10. No DRDY on this carrier.",
+            "BUS IN: 5 wires from the plate L carrier's BUS OUT, strip to strip (A GND, B 3V3, J SCLK, K MOSI, L MISO).",
+            "BUS OUT stays empty. The plate L carrier is hardware/carrier-stripboard.diy.",
+        ]
+    notes = first + [
         "Each cell has 3 wires; its JST at the cradle joins them to a shielded cable. White E+ -> N, black E- -> O,",
         "red S -> P. Grey is the cable's shield (drain wire), not a cell wire: GND on strip O here, nothing at the cradle.",
         "Pale circles = cut the strip at that hole (from the copper side; check with a meter).",
@@ -386,5 +424,6 @@ def build() -> str:
 
 
 if __name__ == "__main__":
-    OUT.write_text(build(), encoding="utf-8")
-    print(f"wrote {OUT}")
+    for plate, path in OUT.items():
+        path.write_text(build(plate), encoding="utf-8")
+        print(f"wrote {path}")
