@@ -3,9 +3,10 @@
 
 Flash bench/ads1220_all first (tools/bench/flash.sh bench/ads1220_all), then run:
 
-    python tools/bench/multi_cell.py                       # toe carrier: L1, L2, R1, R2
-    python tools/bench/multi_cell.py --channels L3,L4,R3,R4
+    python tools/bench/multi_cell.py                       # plate L carrier: L1-L4
+    python tools/bench/multi_cell.py --channels R          # plate R carrier: R1-R4
     python tools/bench/multi_cell.py --channels all        # both carriers
+    python tools/bench/multi_cell.py --channels L1,R2      # any units, by name
 
 For every unit it checks, in order:
   1. it answers on its own chip-select (register readback), and nothing answers on a CS
@@ -58,7 +59,29 @@ CS_PIN = {
     "R3": "D9",
     "R4": "A2",
 }
-TOE = ("L1", "L2", "R1", "R2")
+DEFAULT_CHANNELS = "L"  # one carrier per plate (docs/harness.md): plate L's is built first
+
+
+def parse_channels(spec: str) -> list[str]:
+    """'L' / 'R' -> that plate's four units, 'all' -> all eight, else names like 'L1,R2'.
+
+    Parts combine ('L,R1'); duplicates are dropped. Raises ValueError on an unknown name.
+    """
+    out: list[str] = []
+    for part in spec.replace(" ", "").split(","):
+        name = part.upper()
+        if name == "ALL":
+            names = list(CHANNELS)
+        elif name in ("L", "R"):
+            names = [ch for ch in CHANNELS if ch[0] == name]
+        elif name in CHANNELS:
+            names = [name]
+        else:
+            raise ValueError(
+                f"unknown channel {part!r}; use L, R, all or names from {', '.join(CHANNELS)}"
+            )
+        out += [ch for ch in names if ch not in out]
+    return out
 EXPECTED_RATE_HZ = 1000.0
 STUCK_REPEAT_FRACTION = 0.5  # a working ADC repeats a value only occasionally
 MAX_DRIFT = {"differential": 20_000, "single-ended": 1_000}  # counts over the baseline
@@ -455,10 +478,10 @@ def summarize(rep: Report) -> str:
 
 
 def run_live(args) -> int:
-    expected = list(CHANNELS) if args.channels == "all" else args.channels.split(",")
-    unknown = [c for c in expected if c not in CHANNELS]
-    if unknown:
-        print(f"Unknown channel(s) {unknown}; use names from {', '.join(CHANNELS)}")
+    try:
+        expected = parse_channels(args.channels or DEFAULT_CHANNELS)
+    except ValueError as e:
+        print(f"--channels: {e}")
         return 2
     mon = Monitor(args.host, parse=parse_line)
     rep = Report(expected)
@@ -570,13 +593,17 @@ def run_live(args) -> int:
         mon.close()
 
 
-def run_stdin(channels: str) -> int:
+def run_stdin(channels: str | None) -> int:
+    """Check a saved log; with no `channels`, expect the units that answered in it."""
+    try:
+        expected_set = parse_channels(channels) if channels else None
+    except ValueError as e:
+        print(f"--channels: {e}")
+        return 2
     items = [i for i in (parse_line(line) for line in sys.stdin) if i is not None]
     readbacks = latest_readbacks(items)
     expected = (
-        [ch for ch, rb in readbacks.items() if rb.ok]
-        if channels in ("", "auto")
-        else (list(CHANNELS) if channels == "all" else channels.split(","))
+        [ch for ch, rb in readbacks.items() if rb.ok] if expected_set is None else expected_set
     )
     modes = [i.name for i in items if isinstance(i, ModeLine)]
     mode = SINGLE_ENDED if modes and modes[-1] == "single-ended" else DIFFERENTIAL
@@ -597,8 +624,9 @@ def main() -> int:
     ap.add_argument("--host", default="open-fp.local")
     ap.add_argument(
         "--channels",
-        default=",".join(TOE),
-        help="units to test, e.g. L1,L2,R1,R2 (default: the toe carrier) or 'all'",
+        default=None,
+        help="units to test: L or R (a plate's four), all, or names like L1,R2 "
+        "(default: L, the plate L carrier; with --stdin, the units that answered in the log)",
     )
     ap.add_argument(
         "--mode",
@@ -614,7 +642,7 @@ def main() -> int:
     signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))
     try:
         if args.stdin:
-            return run_stdin("auto" if args.channels == ",".join(TOE) else args.channels)
+            return run_stdin(args.channels)
         return run_live(args)
     except KeyboardInterrupt:
         return 130

@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
-"""Live browser view of the four toe cells (bench/ads1220_all on the toe carrier).
+"""Live browser view of the cells on bench/ads1220_all (one carrier per plate, or both).
 
-    .venv/bin/python tools/bench/live_multi.py        # opens http://localhost:7072
+    .venv/bin/python tools/bench/live_multi.py                  # plate L: http://localhost:7072
+    .venv/bin/python tools/bench/live_multi.py --channels R     # plate R: R1-R4
+    .venv/bin/python tools/bench/live_multi.py --channels all   # both plates
 
 Streams `arduino-app-cli monitor` over SSH and pushes each 100 ms window to the page with
-server-sent events. The page shows each cell's load since tare on a plan of the two plates,
-the total, the left/right split, where the load sits across the toe line, and a 30 s chart.
-Counts become kg with one shared counts-per-kg factor: put a known weight on (or stand on the
-plates) and press Calibrate. Standard library only; the chart uses app/assets/vendor/uPlot.
+server-sent events. The page shows each cell's load since tare on a plan of its plate, the
+total, the centre of pressure on each plate (toe/heel and inner/outer), the left/right split
+when both plates are shown, and a 30 s chart. Corner positions come from open_fp.config's
+defaults. Counts become kg with one shared counts-per-kg factor: put a known weight on (or
+stand on the plates) and press Calibrate. Standard library only (plus open_fp.config); the
+chart uses app/assets/vendor/uPlot.
 """
 
 from __future__ import annotations
@@ -21,12 +25,78 @@ import threading
 import webbrowser
 from dataclasses import asdict
 from http.server import ThreadingHTTPServer
+from pathlib import Path
 
 from live_view import Hub, make_handler
-from multi_cell import ChanReadback, ChanVoltage, Window, parse_line
+from multi_cell import (
+    CHANNELS,
+    DEFAULT_CHANNELS,
+    ChanReadback,
+    ChanVoltage,
+    Window,
+    parse_channels,
+    parse_line,
+)
 from single_cell import ModeLine, Monitor, SketchError
 
 KEYS = ("d", "s", "v", "r")  # keystrokes ads1220_all understands (minus the raw dump)
+APP_PYTHON = Path(__file__).resolve().parents[2] / "app" / "python"
+
+
+def title(channels: list[str]) -> str:
+    """'Plate L', 'Both plates', or the channel names for any other set."""
+    for plate in ("L", "R"):
+        if channels == [ch for ch in CHANNELS if ch[0] == plate]:
+            return f"Plate {plate}"
+    if sorted(channels) == sorted(CHANNELS):
+        return "Both plates"
+    return " ".join(channels)
+
+
+def layout(channels: list[str]) -> dict:
+    """What the page draws: every corner of each plate in use, from open_fp.config's geometry.
+
+    Stance frame (mm): +x from plate L toward plate R, +y toward the toe. `on` marks the
+    corners in `channels`; the others are drawn as empty sockets.
+    """
+    if str(APP_PYTHON) not in sys.path:
+        sys.path.insert(0, str(APP_PYTHON))
+    from open_fp.config import CHANNEL_IDS, Config
+
+    cfg = Config()
+    half = cfg.plate_spacing_mm / 2
+    centre = {"L": -half, "R": half}
+    plates = [p for p in ("L", "R") if any(ch[0] == p for ch in channels)]
+    cells = []
+    for ch, (x, y) in zip(CHANNEL_IDS, cfg.positions()):
+        if ch[0] not in plates:
+            continue
+        outward = (x - centre[ch[0]]) * (-1 if ch[0] == "L" else 1)
+        cells.append(
+            {
+                "ch": ch,
+                "plate": ch[0],
+                "x": round(x, 1),
+                "y": round(y, 1),
+                "desc": f"{'toe' if y > 0 else 'heel'}, {'outer' if outward > 0 else 'inner'}",
+                "on": ch in channels,
+            }
+        )
+    name = title(channels)
+    return {
+        "title": name,
+        "total_of": name[0].lower() + name[1:] if name.startswith(("Plate", "Both")) else name,
+        "plates": plates,
+        "centre": {p: round(centre[p], 1) for p in plates},
+        "offset": cfg.cell_offset_mm,
+        "cells": cells,
+    }
+
+
+def render_page(channels: list[str]) -> str:
+    """PAGE with the layout for `channels` filled in."""
+    lay = layout(channels)
+    return PAGE.replace("__TITLE__", lay["title"]).replace("__LAYOUT__", json.dumps(lay))
 
 
 def to_event(item) -> str:
@@ -82,11 +152,12 @@ PAGE = r"""<!doctype html>
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Toe cells live</title>
+<title>__TITLE__ live</title>
 <link rel="stylesheet" href="/uPlot.min.css" />
 <style>
   :root { --bg:#0B0F14; --panel:#121821; --line:#1E2733; --edge:#2A3544; --text:#D7DEE7; --muted:#7A8796;
-          --bad:#E5676B; --L1:#2EC4B6; --L2:#4EA8DE; --R1:#FF9F1C; --R2:#F15BB5; --tot:#EDEFF2; color-scheme: dark; }
+          --bad:#E5676B; --L1:#2EC4B6; --L2:#4EA8DE; --L3:#A78BFA; --L4:#8AC926;
+          --R1:#FF9F1C; --R2:#F15BB5; --R3:#FFD166; --R4:#F4845F; --tot:#EDEFF2; color-scheme: dark; }
   * { box-sizing: border-box; }
   body { margin:0; background:var(--bg); color:var(--text);
          font:14px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -104,11 +175,13 @@ PAGE = r"""<!doctype html>
   .big { font-size:72px; font-weight:250; letter-spacing:-.03em; line-height:1; margin:6px 0 2px; }
   .big small { font-size:24px; color:var(--muted); margin-left:6px; }
   .sub { color:var(--muted); }
+  [hidden] { display:none !important; }
   /* plates */
   .plates { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:12px; }
+  .plates.one { grid-template-columns:minmax(0, 320px); justify-content:center; }
   .plate { position:relative; aspect-ratio: 0.82; border:1px solid var(--edge); border-radius:8px;
            background:repeating-linear-gradient(135deg, #10161E 0 10px, #0E141B 10px 20px); }
-  .plate .name { position:absolute; left:0; right:0; bottom:44%; text-align:center; color:#3A4656;
+  .plate .name { position:absolute; left:0; right:0; top:46%; text-align:center; color:#3A4656;
                  font-size:13px; letter-spacing:.2em; font-weight:700; }
   .cell { position:absolute; width:31%; aspect-ratio:1; border-radius:50%; border:2px solid var(--c);
           display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden;
@@ -118,21 +191,19 @@ PAGE = r"""<!doctype html>
   .cell .v { position:relative; font-size:20px; font-weight:500; }
   .cell .n { position:relative; font-size:10px; color:var(--muted); }
   .cell.off { border-style:dashed; opacity:.45; }
-  .heel { position:absolute; width:18%; aspect-ratio:1; border-radius:50%; border:1px dashed #2A3544;
-          transform:translate(-50%,-50%); }
-  .toe-tag { position:absolute; top:4px; left:0; right:0; text-align:center; font-size:10px; color:var(--muted); letter-spacing:.1em; }
-  /* split + cop */
+  .socket { position:absolute; width:18%; aspect-ratio:1; border-radius:50%; border:1px dashed #2A3544;
+            transform:translate(-50%,-50%); }
+  .edge-tag { position:absolute; left:0; right:0; text-align:center; font-size:10px; color:var(--muted); letter-spacing:.1em; }
+  .edge-tag.toe { top:4px; } .edge-tag.heel { bottom:4px; }
+  .cop { position:absolute; width:16px; height:16px; border-radius:50%; background:var(--tot);
+         transform:translate(-50%,-50%); transition:left .1s linear, top .1s linear; box-shadow:0 0 0 3px #0B0F14; z-index:2; }
+  .cop.idle { opacity:.15; }
+  /* split */
   .split { display:flex; height:30px; border-radius:6px; overflow:hidden; margin-top:8px; border:1px solid var(--edge); }
   .split div { display:flex; align-items:center; padding:0 10px; font-weight:600; font-variant-numeric:tabular-nums;
                transition:flex-grow .1s linear; color:var(--bg); white-space:nowrap; min-width:0; }
   .split .l { background:var(--L2); flex:1 1 0; } .split .r { background:var(--R1); flex:1 1 0; justify-content:flex-end; }
-  .track { position:relative; height:44px; margin-top:8px; }
-  .track .pl { position:absolute; top:14px; height:16px; border:1px solid var(--edge); border-radius:4px; background:#0E141B; }
-  .track .tick { position:absolute; top:10px; width:2px; height:24px; background:var(--c); opacity:.7; transform:translateX(-1px); }
-  .track .cop { position:absolute; top:6px; width:14px; height:32px; border-radius:7px; background:var(--tot);
-                transform:translateX(-7px); transition:left .1s linear; box-shadow:0 0 0 3px #0B0F14; }
-  .track .cop.idle { opacity:.15; }
-  .axis { display:flex; justify-content:space-between; color:var(--muted); font-size:11px; }
+  .coplines div { margin-top:4px; }
   /* controls */
   button { font:inherit; color:var(--text); background:transparent; border:1px solid var(--edge); border-radius:6px;
            min-height:40px; padding:0 12px; cursor:pointer; margin:0 6px 6px 0; }
@@ -156,7 +227,7 @@ PAGE = r"""<!doctype html>
 </head>
 <body>
 <header>
-  <h1>Toe cells live</h1>
+  <h1>__TITLE__ live</h1>
   <span id="link" class="pill"><span class="dot"></span><span id="linktext">connecting…</span></span>
   <span class="pill">mode <b id="mode">?</b></span>
   <span class="pill">rate <b id="rate">–</b> Hz</span>
@@ -164,21 +235,18 @@ PAGE = r"""<!doctype html>
 </header>
 <main>
   <section>
-    <div class="label">Total on the toe cells</div>
+    <div class="label">Total on <span id="totalof"></span></div>
     <div class="big num"><span id="total">–</span><small id="unit">kg</small></div>
     <div class="sub num" id="totalsub">waiting for data…</div>
-    <div class="plates">
-      <div class="plate" id="plateL"><div class="toe-tag">TOE ▲</div><div class="name">LEFT</div></div>
-      <div class="plate" id="plateR"><div class="toe-tag">TOE ▲</div><div class="name">RIGHT</div></div>
-    </div>
+    <div class="plates" id="plates"></div>
   </section>
   <section>
-    <div class="label">Left / right</div>
-    <div class="split"><div class="l" id="splitL">–</div><div class="r" id="splitR">–</div></div>
-    <div class="label" style="margin-top:18px">Centre of load across the toe line</div>
-    <div class="track" id="track"><div class="cop idle" id="cop"></div></div>
-    <div class="axis"><span>L outer</span><span>L inner</span><span>centre</span><span>R inner</span><span>R outer</span></div>
-    <div class="sub num" id="copsub" style="margin-top:4px">–</div>
+    <div id="splitbox" hidden>
+      <div class="label">Left / right</div>
+      <div class="split"><div class="l" id="splitL">–</div><div class="r" id="splitR">–</div></div>
+    </div>
+    <div class="label" style="margin-top:18px">Centre of pressure</div>
+    <div class="sub num coplines" id="coplines">–</div>
 
     <div class="label" style="margin-top:18px">Zero and scale</div>
     <div class="row">
@@ -210,13 +278,11 @@ PAGE = r"""<!doctype html>
 <script src="/uPlot.iife.min.js"></script>
 <script>
 const $ = (id) => document.getElementById(id);
-const CELLS = [  // docs/PROJECT_INIT.md cell table: x in mm from the centre line, plate, plan position
-  { ch: "L1", x: -307.2, plate: "plateL", left: 22, top: 18, desc: "toe, outer" },
-  { ch: "L2", x: -62.4,  plate: "plateL", left: 78, top: 18, desc: "toe, inner" },
-  { ch: "R1", x: 62.4,   plate: "plateR", left: 22, top: 18, desc: "toe, inner" },
-  { ch: "R2", x: 307.2,  plate: "plateR", left: 78, top: 18, desc: "toe, outer" },
-];
-const HEELS = [["plateL", 22], ["plateL", 78], ["plateR", 22], ["plateR", 78]];
+// Filled in by live_multi.py from open_fp.config: stance frame in mm, +x toward plate R, +y toward the toe.
+const LAYOUT = __LAYOUT__;
+const CELLS = LAYOUT.cells.filter((c) => c.on);
+const PLATES = LAYOUT.plates, BOTH = PLATES.length === 2;
+const PLATE_NAME = { L: "LEFT", R: "RIGHT" };
 const COLOR = (ch) => getComputedStyle(document.documentElement).getPropertyValue("--" + ch).trim();
 const N = 300, SETTLE = 5, AVG = 5;
 const DEFAULT_CPK = { differential: 20000, "single-ended": 120 };
@@ -228,20 +294,31 @@ const recent = Object.fromEntries(CELLS.map((c) => [c.ch, []]));
 const noise = {};
 const xs = [], series = Object.fromEntries([...CELLS.map((c) => c.ch), "tot"].map((k) => [k, []]));
 
-// plan view
-for (const c of CELLS) {
-  $(c.plate).insertAdjacentHTML("beforeend",
-    `<div class="cell off" id="cell-${c.ch}" style="--c:var(--${c.ch});left:${c.left}%;top:${c.top}%" title="${c.ch}: ${c.desc}">
+// plan view: corners sit at ±offset from the plate centre, drawn at 22/78 % across and 18/82 % down
+function planLeft(p, x) { return 50 + ((x - LAYOUT.centre[p]) / LAYOUT.offset) * 28; }
+function planTop(y) { return 50 - (y / LAYOUT.offset) * 32; }
+function clamp(v) { return Math.max(3, Math.min(97, v)); }
+$("plates").classList.toggle("one", !BOTH);
+$("totalof").textContent = LAYOUT.total_of;
+for (const p of PLATES) {
+  $("plates").insertAdjacentHTML("beforeend",
+    `<div class="plate" id="plate${p}"><div class="edge-tag toe">TOE ▲</div><div class="name">${PLATE_NAME[p]}</div>` +
+    `<div class="edge-tag heel">HEEL</div><div class="cop idle" id="cop${p}"></div></div>`);
+}
+for (const c of LAYOUT.cells) {
+  const where = `left:${planLeft(c.plate, c.x)}%;top:${planTop(c.y)}%`;
+  if (!c.on) {
+    $("plate" + c.plate).insertAdjacentHTML("beforeend", `<div class="socket" style="${where}" title="${c.ch} (${c.desc}): not in --channels"></div>`);
+    continue;
+  }
+  $("plate" + c.plate).insertAdjacentHTML("beforeend",
+    `<div class="cell off" id="cell-${c.ch}" style="--c:var(--${c.ch});${where}" title="${c.ch}: ${c.desc}">
        <div class="fill"></div><div class="id">${c.ch}</div><div class="v num">–</div><div class="n num"></div></div>`);
   $("units").insertAdjacentHTML("beforeend",
     `<tr id="u-${c.ch}"><td style="color:var(--${c.ch});font-weight:700">${c.ch}</td><td class="rb">–</td><td class="nz">–</td>
        <td data-v="AIN0">–</td><td data-v="AIN1">–</td><td data-v="REF">–</td></tr>`);
-  $("track").insertAdjacentHTML("beforeend", `<div class="tick" style="--c:var(--${c.ch});left:${pos(c.x)}%"></div>`);
 }
-for (const [p, l] of HEELS) $(p).insertAdjacentHTML("beforeend", `<div class="heel" style="left:${l}%;top:82%" title="heel cell: not fitted yet"></div>`);
-$("track").insertAdjacentHTML("afterbegin",
-  `<div class="pl" style="left:${pos(-350)}%;width:${pos(-20) - pos(-350)}%"></div><div class="pl" style="left:${pos(20)}%;width:${pos(350) - pos(20)}%"></div>`);
-function pos(x) { return 3 + ((x + 360) / 720) * 94; }
+$("splitbox").hidden = !BOTH;
 
 $("legend").innerHTML = [...CELLS.map((c) => c.ch), "total"].map((k) =>
   `<span><i style="--c:var(--${k === "total" ? "tot" : k})"></i>${k}</span>`).join("");
@@ -293,6 +370,14 @@ $("cal").onclick = () => {
 document.querySelectorAll("[data-key]").forEach((b) => (b.onclick = () => fetch("/key/" + b.dataset.key, { method: "POST" })));
 function say(msg) { $("log").textContent = msg; setTimeout(() => ($("log").textContent = ""), 5000); }
 
+// Centre of pressure of the cells in `cells`, from positive loads only: { w, x, y } in mm, or null.
+function cop(cells, l) {
+  let w = 0, x = 0, y = 0;
+  for (const c of cells) { const v = Math.max(0, l[c.ch] ?? 0); w += v; x += v * c.x; y += v * c.y; }
+  return w > 0 ? { w, x: x / w, y: y / w } : null;
+}
+function mm(v, pos, neg) { return `${Math.abs(v).toFixed(0)} mm ${v >= 0 ? pos : neg}`; }
+
 function onWindow(e) {
   if (settle > 0) { settle--; return; }
   for (const c of CELLS) {
@@ -323,18 +408,33 @@ function onWindow(e) {
     const row = $("u-" + c.ch);
     row.querySelector(".nz").textContent = (noise[c.ch] ?? 0).toLocaleString();
   }
-  const left = Math.max(0, (l.L1 ?? 0) + (l.L2 ?? 0)), right = Math.max(0, (l.R1 ?? 0) + (l.R2 ?? 0));
-  if (loaded && left + right > 0) {
-    const lp = (100 * left) / (left + right);
-    $("splitL").style.flexGrow = lp; $("splitR").style.flexGrow = 100 - lp;
-    $("splitL").textContent = `L ${lp.toFixed(0)} %`; $("splitR").textContent = `${(100 - lp).toFixed(0)} % R`;
-    const x = CELLS.reduce((s, c) => s + Math.max(0, l[c.ch] ?? 0) * c.x, 0) / (left + right);
-    $("cop").style.left = pos(x) + "%"; $("cop").classList.remove("idle");
-    $("copsub").textContent = `${x >= 0 ? "+" : "−"}${Math.abs(x).toFixed(0)} mm from the centre line`;
-  } else {
-    $("splitL").style.flexGrow = 1; $("splitR").style.flexGrow = 1;
-    $("splitL").textContent = "L –"; $("splitR").textContent = "– R";
-    $("cop").classList.add("idle"); $("copsub").textContent = "put some load on";
+
+  // per plate: where the load sits relative to the plate centre (toe/heel, inner/outer)
+  const lines = [], w = {};
+  for (const p of PLATES) {
+    const k = cop(CELLS.filter((c) => c.plate === p), l), dot = $("cop" + p);
+    w[p] = k ? k.w : 0;
+    if (!loaded || !k) { dot.classList.add("idle"); continue; }
+    dot.classList.remove("idle");
+    dot.style.left = clamp(planLeft(p, k.x)) + "%"; dot.style.top = clamp(planTop(k.y)) + "%";
+    const out = (k.x - LAYOUT.centre[p]) * (p === "L" ? -1 : 1);  // + toward the plate's outer edge
+    lines.push(`Plate ${p}: ${mm(k.y, "toe", "heel")}, ${mm(out, "outer", "inner")} of centre`);
+  }
+  if (loaded && BOTH) {
+    const k = cop(CELLS, l);
+    if (k) lines.push(`Both: ${mm(k.x, "toward R", "toward L")} of the centre line, ${mm(k.y, "toe", "heel")}`);
+  }
+  $("coplines").innerHTML = lines.length ? lines.map((s) => `<div>${s}</div>`).join("") : "put some load on";
+  if (!$("splitbox").hidden) {
+    const left = w.L || 0, right = w.R || 0;
+    if (loaded && left + right > 0) {
+      const lp = (100 * left) / (left + right);
+      $("splitL").style.flexGrow = lp; $("splitR").style.flexGrow = 100 - lp;
+      $("splitL").textContent = `L ${lp.toFixed(0)} %`; $("splitR").textContent = `${(100 - lp).toFixed(0)} % R`;
+    } else {
+      $("splitL").style.flexGrow = 1; $("splitR").style.flexGrow = 1;
+      $("splitL").textContent = "L –"; $("splitR").textContent = "– R";
+    }
   }
 
   if (t0 === null) t0 = e.ms;
@@ -385,7 +485,19 @@ def main() -> int:
     ap.add_argument("--host", default="open-fp.local", help="the UNO Q")
     ap.add_argument("--port", type=int, default=7072)
     ap.add_argument("--no-open", action="store_true", help="don't open a browser")
+    ap.add_argument(
+        "--channels",
+        default=DEFAULT_CHANNELS,
+        help="cells to show: L or R (a plate's four), all, or names like L1,L2,R1,R2 "
+        "(default: L, the plate L carrier)",
+    )
     args = ap.parse_args()
+    try:
+        channels = parse_channels(args.channels)
+    except ValueError as e:
+        print(f"--channels: {e}")
+        return 2
+    page = render_page(channels)
 
     mon = Monitor(args.host, parse=parse_line)
     # On SIGTERM (e.g. pkill), exit through the normal path so the ssh monitor is closed too.
@@ -395,9 +507,9 @@ def main() -> int:
     # Report the mode and every readback for the page, once ssh has attached to the monitor
     # (a key sent before that is lost).
     threading.Timer(3.0, mon.send, args=("r",)).start()
-    server = ThreadingHTTPServer(("127.0.0.1", args.port), make_handler(mon, hub, PAGE, KEYS))
+    server = ThreadingHTTPServer(("127.0.0.1", args.port), make_handler(mon, hub, page, KEYS))
     url = f"http://localhost:{args.port}"
-    print(f"Toe cells live view: {url}  (Ctrl-C to stop)")
+    print(f"{title(channels)} live view ({' '.join(channels)}): {url}  (Ctrl-C to stop)")
     if not args.no_open:
         webbrowser.open(url)
     try:
