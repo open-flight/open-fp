@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Guided multimeter check of an ADC carrier before it's powered (docs/harness.md §4).
 
-    python tools/bench/carrier_check.py                          # toe carrier: L1, L2, R1, R2
+    python tools/bench/carrier_check.py                          # plate L carrier: L1-L4
+    python tools/bench/carrier_check.py --units R                # plate R carrier: R1-R4
     python tools/bench/carrier_check.py --units L1               # one unit fitted so far
     python tools/bench/carrier_check.py --stage bare             # just the cut board and links
 
@@ -29,7 +30,8 @@ from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
 
-CHANNELS = ("L1", "L2", "L3", "L4", "R1", "R2", "R3", "R4")
+from multi_cell import DEFAULT_CHANNELS, parse_channels
+
 CS_PIN = {
     "L1": "D3",
     "L2": "D4",
@@ -40,7 +42,6 @@ CS_PIN = {
     "R3": "D9",
     "R4": "A2",
 }
-TOE = ("L1", "L2", "R1", "R2")
 STAGES = ("bare", "units", "cables", "uno")
 R_EACH = 1_000.0  # R1 = R2, ohms (any matched pair 680 Ω-2 kΩ; set with --resistor)
 R_CELL = 2_000.0  # the cell's E+ to E- (docs/wiring.md: 2 kΩ, 1 kΩ per corner with R1+R2)
@@ -89,9 +90,15 @@ def parallel(r: float, n: int) -> float:
 
 
 def checks_for(
-    units: list[str], stage: str, heel_chained: bool = False, r_each: float = R_EACH
+    units: list[str], stage: str, chained: bool | None = None, r_each: float = R_EACH
 ) -> list[Check]:
-    """Every check up to and including `stage`, in build order."""
+    """Every check up to and including `stage`, in build order.
+
+    `chained`: the plate R carrier hangs off plate L's BUS OUT (default: when `units` span
+    both plates).
+    """
+    if chained is None:
+        chained = len({u[0] for u in units}) > 1
     upto = STAGES[: STAGES.index(stage) + 1]
     n = len(units)
     out: list[Check] = []
@@ -323,11 +330,11 @@ def checks_for(
                 hint="nothing may connect to D10 (SPI NSS) or D0/D1 (console)",
             )
         )
-    if heel_chained:
+    if chained and "uno" in upto:
         out.append(
             Check(
                 "uno",
-                "toe BUS OUT to heel BUS IN, strip by strip (A, B, J, K, L)",
+                "plate L BUS OUT to plate R BUS IN, strip by strip (A, B, J, K, L)",
                 "beep",
                 hint="the chain wires between carriers",
             )
@@ -402,7 +409,12 @@ def main() -> int:
     ap = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    ap.add_argument("--units", default=",".join(TOE), help="units fitted, e.g. L1 or L1,L2,R1,R2")
+    ap.add_argument(
+        "--units",
+        default=DEFAULT_CHANNELS,
+        help="units fitted: L or R (a plate's four), all, or names like L1 or L1,L2 "
+        "(default: L, the plate L carrier)",
+    )
     ap.add_argument(
         "--stage", choices=STAGES, default="uno", help="how far the build has got (default: uno)"
     )
@@ -417,10 +429,10 @@ def main() -> int:
     if not isinstance(r_each, float) or not 100 <= r_each <= 1e5:
         print(f"--resistor {args.resistor!r}: give a value like 680, 1k or 1.5k")
         return 2
-    units = args.units.split(",")
-    bad = [u for u in units if u not in CHANNELS]
-    if bad:
-        print(f"Unknown unit(s) {bad}; use names from {', '.join(CHANNELS)}")
+    try:
+        units = parse_channels(args.units)
+    except ValueError as e:
+        print(f"--units: {e}")
         return 2
     print("Power off: the UNO Q unplugged from USB. Meter on resistance / continuity.")
     try:

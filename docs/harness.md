@@ -114,11 +114,12 @@ A guided version of these checks, stage by stage as you build, asks for each met
 
 ```bash
 .venv/bin/python tools/bench/carrier_check.py --units L1 --stage units   # one unit, breakout + R1/R2 fitted
-.venv/bin/python tools/bench/carrier_check.py --units L1,L2,L3,L4       # plate L carrier, wired to the Q
-.venv/bin/python tools/bench/carrier_check.py --units R1,R2,R3,R4       # plate R carrier
+.venv/bin/python tools/bench/carrier_check.py                           # plate L carrier, wired to the Q
+.venv/bin/python tools/bench/carrier_check.py --units R                 # plate R carrier
+.venv/bin/python tools/bench/carrier_check.py --units all               # both, chained
 ```
 
-Stages: `bare` (cuts and links), `units` (breakouts and R1/R2), `cables` (cells plugged in), `uno` (wired to the Q, which is unplugged from USB). Each stage includes the ones before it.
+Stages: `bare` (cuts and links), `units` (breakouts and R1/R2), `cables` (cells plugged in), `uno` (wired to the Q, which is unplugged from USB, the default). Each stage includes the ones before it. `--units` takes `L` (the default), `R`, `all`, or unit names like `L1,L2`.
 
 With the UNO Q unplugged:
 
@@ -136,9 +137,9 @@ With the UNO Q plugged into the dev machine by **USB-C** (flashing goes over USB
 
 ```bash
 tools/bench/flash.sh bench/ads1220_all          # flash the all-channel bench sketch
-.venv/bin/python tools/bench/multi_cell.py --channels L1,L2,L3,L4   # plate L carrier
-.venv/bin/python tools/bench/multi_cell.py --channels R1,R2,R3,R4   # plate R carrier
-.venv/bin/python tools/bench/multi_cell.py --channels all           # both
+.venv/bin/python tools/bench/multi_cell.py                  # plate L carrier
+.venv/bin/python tools/bench/multi_cell.py --channels R     # plate R carrier
+.venv/bin/python tools/bench/multi_cell.py --channels all   # both
 ```
 
 It runs four checks, each unit in turn, and ends with a PASS/FAIL table and the reason for every failure:
@@ -148,10 +149,12 @@ It runs four checks, each unit in turn, and ends with a PASS/FAIL table and the 
 3. **Baseline, hands off:** each unit must be neither stuck (a working ADS1220 always shows some noise; repeating the same value is the fault seen on the second breakout), noisy, at full scale, nor drifting.
 4. **Press test, one cell at a time:** the unit you press must move, and **only** that unit. If another unit moves instead, the two cables (or two CS wires) are swapped, and the message names them.
 
-Once every unit passes, watch all four cells live in the browser (each cell's load on a plan of the plates, total, left/right split, a 30 s chart, and a one-step calibration with a known weight):
+Once every unit passes, watch the carrier's cells live in the browser (each cell's load on a plan of its plate, the total, where the load sits on each plate, toe to heel and inner to outer, the left/right split with both plates, a 30 s chart, and a one-step calibration with a known weight):
 
 ```bash
-.venv/bin/python tools/bench/live_multi.py      # http://localhost:7072
+.venv/bin/python tools/bench/live_multi.py                  # plate L, http://localhost:7072
+.venv/bin/python tools/bench/live_multi.py --channels R     # plate R
+.venv/bin/python tools/bench/live_multi.py --channels all   # both plates
 ```
 
 Skip the press test with `--no-press`. The sketch paces on L1's DRDY; if L1 is missing it falls back to a 1 ms timer, so the other units can still be tested. `ssh -t arduino@open-fp.local arduino-app-cli monitor` shows the raw output; its keys are listed at the top of `bench/ads1220_all/ads1220_all.ino` (`x` dumps 16 raw reads per unit).
