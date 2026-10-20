@@ -2030,7 +2030,7 @@
     <diylc.misc.Label>
       <name>L20</name>
       <point x="5.2" y="1.1"/>
-      <text>A  AGND | DGND pins; GND rail, never cut. BUS OUT -&gt;</text>
+      <text>A  AGND | DGND pins; GND rail, never cut. BUS OUT -&gt; plate R BUS IN</text>
       <font name="Dialog" size="8" style="1"/>
       <color hex="222222"/>
       <center>false</center>
@@ -2041,7 +2041,7 @@
     <diylc.misc.Label>
       <name>L21</name>
       <point x="5.2" y="1.2"/>
-      <text>B  AVDD | DVDD pins; 3V3 rail, never cut. BUS OUT -&gt;</text>
+      <text>B  AVDD | DVDD pins; 3V3 rail, never cut. BUS OUT -&gt; plate R BUS IN</text>
       <font name="Dialog" size="8" style="1"/>
       <color hex="d64545"/>
       <center>false</center>
@@ -2129,7 +2129,7 @@
     <diylc.misc.Label>
       <name>L29</name>
       <point x="5.2" y="2.0"/>
-      <text>J  SCLK rail. BUS OUT -&gt;</text>
+      <text>J  SCLK rail. BUS OUT -&gt; plate R BUS IN</text>
       <font name="Dialog" size="8" style="1"/>
       <color hex="2f80ed"/>
       <center>false</center>
@@ -2140,7 +2140,7 @@
     <diylc.misc.Label>
       <name>L30</name>
       <point x="5.2" y="2.1"/>
-      <text>K  MOSI rail. BUS OUT -&gt;</text>
+      <text>K  MOSI rail. BUS OUT -&gt; plate R BUS IN</text>
       <font name="Dialog" size="8" style="1"/>
       <color hex="27ae60"/>
       <center>false</center>
@@ -2151,7 +2151,7 @@
     <diylc.misc.Label>
       <name>L31</name>
       <point x="5.2" y="2.2"/>
-      <text>L  MISO rail. BUS OUT -&gt;</text>
+      <text>L  MISO rail. BUS OUT -&gt; plate R BUS IN</text>
       <font name="Dialog" size="8" style="1"/>
       <color hex="9b51e0"/>
       <center>false</center>
@@ -2883,7 +2883,7 @@
     <diylc.misc.Label>
       <name>L70</name>
       <point x="1.0" y="3.6"/>
-      <text>Right-plate carrier: the same board with R1 R2 R3 R4 (CS &lt;- D7, D8, D9, A2); leave BUS OUT empty.</text>
+      <text>To the UNO Q: the 5 bus wires into BUS IN and the CS wires (L1 &lt;- D3, L2 &lt;- D4, L3 &lt;- D5, L4 &lt;- D6), plus L1 DRDY -&gt; D2.</text>
       <font name="Dialog" size="9" style="0"/>
       <color hex="000000"/>
       <center>false</center>
@@ -2894,7 +2894,7 @@
     <diylc.misc.Label>
       <name>L71</name>
       <point x="1.0" y="3.75"/>
-      <text>Each cell has 3 wires; its JST at the cradle joins them to a shielded cable. White E+ -&gt; N, black E- -&gt; O,</text>
+      <text>BUS OUT chains to the plate R carrier's BUS IN, strip to strip (hardware/carrier-stripboard-right.diy).</text>
       <font name="Dialog" size="9" style="0"/>
       <color hex="000000"/>
       <center>false</center>
@@ -2905,7 +2905,7 @@
     <diylc.misc.Label>
       <name>L72</name>
       <point x="1.0" y="3.9"/>
-      <text>red S -&gt; P. Grey is the cable's shield (drain wire), not a cell wire: GND on strip O here, nothing at the cradle.</text>
+      <text>Each cell has 3 wires; its JST at the cradle joins them to a shielded cable. White E+ -&gt; N, black E- -&gt; O,</text>
       <font name="Dialog" size="9" style="0"/>
       <color hex="000000"/>
       <center>false</center>
@@ -2916,7 +2916,7 @@
     <diylc.misc.Label>
       <name>L73</name>
       <point x="1.0" y="4.05"/>
-      <text>Pale circles = cut the strip at that hole (from the copper side; check with a meter).</text>
+      <text>red S -&gt; P. Grey is the cable's shield (drain wire), not a cell wire: GND on strip O here, nothing at the cradle.</text>
       <font name="Dialog" size="9" style="0"/>
       <color hex="000000"/>
       <center>false</center>
@@ -2927,7 +2927,7 @@
     <diylc.misc.Label>
       <name>L74</name>
       <point x="1.0" y="4.2"/>
-      <text>Fit all links before the breakouts: they run underneath. Breakouts pins down, header spacer under.</text>
+      <text>Pale circles = cut the strip at that hole (from the copper side; check with a meter).</text>
       <font name="Dialog" size="9" style="0"/>
       <color hex="000000"/>
       <center>false</center>
@@ -2938,6 +2938,17 @@
     <diylc.misc.Label>
       <name>L75</name>
       <point x="1.0" y="4.35"/>
+      <text>Fit all links before the breakouts: they run underneath. Breakouts pins down, header spacer under.</text>
+      <font name="Dialog" size="9" style="0"/>
+      <color hex="000000"/>
+      <center>false</center>
+      <horizontalAlignment>LEFT</horizontalAlignment>
+      <verticalAlignment>CENTER</verticalAlignment>
+      <orientation>DEFAULT</orientation>
+    </diylc.misc.Label>
+    <diylc.misc.Label>
+      <name>L76</name>
+      <point x="1.0" y="4.5"/>
       <text>Mount with ~3 mm nylon standoffs in strip I or M. Full steps: docs/harness.md.</text>
       <font name="Dialog" size="9" style="0"/>
       <color hex="000000"/>

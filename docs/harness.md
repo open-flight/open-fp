@@ -49,7 +49,7 @@ Each carrier sits on one of the enclosure's end pads, and its four cables enter 
 
 ![Carrier layout on stripboard](img/carrier-stripboard.svg)
 
-The same layout as a [DIY Layout Creator](https://github.com/bancika/diy-layout-creator) project, for editing: [`hardware/carrier-stripboard.diy`](../hardware/carrier-stripboard.diy) (regenerate with `docs/img/make_carrier_diylc.py`; hand edits in DIYLC are lost if you do).
+The same layout as [DIY Layout Creator](https://github.com/bancika/diy-layout-creator) projects, one per carrier, for editing: [`hardware/carrier-stripboard.diy`](../hardware/carrier-stripboard.diy) (plate L: BUS IN from the Q, BUS OUT on to plate R) and [`hardware/carrier-stripboard-right.diy`](../hardware/carrier-stripboard-right.diy) (plate R: BUS IN from plate L's BUS OUT, only the four CS wires to the Q). Regenerate both with `docs/img/make_carrier_diylc.py`; hand edits in DIYLC are lost if you do.
 
 Use single-sided 2.54 mm stripboard, 37 × 17 holes (about 94 × 43 mm). That fits the enclosure between the UNO Q and the lid posts, roughly x = 40–134 mm from centre, overhanging the 90 mm pad a little at each end. Mount it on the pad with short **nylon** standoffs (about 3 mm) through holes in the unused strips I and M. Height is tight: the pad top to the lid is 14.5 mm, and the stack is standoff + 1.6 mm board + ~2.5 mm header spacer + 1.6 mm breakout + the resistors on top, about standoff + 8.5 mm. The pad's inserts sit on a 7.5 mm grid, so only one row of board holes can land on it; drill the board's mounting holes to match the inserts you use. The breakout's pins pair up across the board (AGND|DGND, AVDD|DVDD, …), so with the header columns across the strips:
 
@@ -86,7 +86,7 @@ Build order:
    - each cell cable, threaded through its wall slot first as bare cable: **E+ into (x0+2, N), E− into (x0+2, O), S into (x0+2, P)**. Row Q is spare. Tie each cable to the board or a standoff with a small cable tie so a tug doesn't land on the joints.
    - each cell cable's shield onto strip O
 
-The right-plate carrier is the same board with R1, R2, R3, R4 (CS ← D7, D8, D9, A2); leave its BUS OUT empty.
+The right-plate carrier is the same board with R1, R2, R3, R4 (CS ← D7, D8, D9, A2; no DRDY). Its BUS IN takes five wires from the plate L carrier's BUS OUT, strip to strip (A GND, B 3V3, J SCLK, K MOSI, L MISO); leave its BUS OUT empty.
 
 Don't use a solderless breadboard for the carriers. A swing shakes the floor, and a loose contact on CS or MISO corrupts readings in ways that are hard to track down.
 
