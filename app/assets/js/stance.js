@@ -6,6 +6,9 @@ const PLATE_MM = 304.8;
 const CELL_CAPACITY_N = 50 * 9.80665;
 const ENCLOSURE = { w: 61, h: 295 };
 const TRAIL_S = 3;
+// Live samples arrive in batches (10 frames every 50 ms). Showing only the newest of each batch
+// moves the dot in 20 Hz steps, so samples are played out one by one, this far behind the newest.
+const PLAYOUT_S = 0.07;
 
 const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
@@ -23,14 +26,18 @@ export class StanceView {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.cfg = null;
-    this.live = null;          // latest live frame
-    this.trail = [];           // [t, x, y] combined CoP history
+    this.live = null;          // live frame being shown
+    this.trail = [];           // [t, x, y] combined CoP history, up to the frame shown
+    this.queue = [];           // live frames received but not shown yet
+    this.newest = null;        // { t, at }: newest sample time and when it arrived (s)
+    this.shownT = -Infinity;
     this.replay = null;        // { swing, cursor }
     this.colors = {};
     this.dirty = true;
     new ResizeObserver(() => this.resize()).observe(canvas);
     this.resize();
     const loop = () => {
+      this.advance();
       if (this.dirty) this.draw();
       requestAnimationFrame(loop);
     };
@@ -55,20 +62,43 @@ export class StanceView {
   pushLive(msg) {
     const n = msg.t.length;
     if (!n) return;
-    const i = n - 1;
-    this.live = {
-      fz: { L: msg.fz.L[i], R: msg.fz.R[i] },
-      cop: { L: msg.cop.L[i], R: msg.cop.R[i], C: msg.cop.C[i] },
-      bw: msg.bw_n,
-      forces: msg.forces ? msg.forces[i] : null,
-    };
-    for (let k = 0; k < n; k++) {
-      const c = msg.cop.C[k];
-      if (c) this.trail.push([msg.t[k], c[0], c[1]]);
+    const tNew = msg.t[n - 1];
+    if (tNew < this.shownT - 1) {  // the stream restarted: its clock went backwards
+      this.queue = [];
+      this.trail = [];
+      this.shownT = -Infinity;
     }
-    const tEnd = msg.t[i];
-    while (this.trail.length && tEnd - this.trail[0][0] > TRAIL_S) this.trail.shift();
-    if (!this.replay) this.dirty = true;
+    for (let k = 0; k < n; k++) {
+      this.queue.push({
+        t: msg.t[k],
+        fz: { L: msg.fz.L[k], R: msg.fz.R[k] },
+        cop: { L: msg.cop.L[k], R: msg.cop.R[k], C: msg.cop.C[k] },
+        bw: msg.bw_n,
+        forces: msg.forces ? msg.forces[k] : null,
+      });
+    }
+    while (this.queue.length && tNew - this.queue[0].t > 1) this.queue.shift();
+    this.newest = { t: tNew, at: performance.now() / 1000 };
+  }
+
+  // Once per animation frame: show every queued sample up to PLAYOUT_S behind the newest,
+  // with time running on between batches so the dot moves at the display's rate.
+  advance() {
+    if (this.replay || !this.newest || !this.queue.length) return;
+    const now = performance.now() / 1000;
+    const t = Math.min(this.newest.t, this.newest.t - PLAYOUT_S + (now - this.newest.at));
+    if (t <= this.shownT) return;
+    let last = null;
+    while (this.queue.length && this.queue[0].t <= t) {
+      last = this.queue.shift();
+      const c = last.cop.C;
+      if (c) this.trail.push([last.t, c[0], c[1]]);
+    }
+    if (!last) return;
+    this.live = last;
+    this.shownT = t;
+    while (this.trail.length && last.t - this.trail[0][0] > TRAIL_S) this.trail.shift();
+    this.dirty = true;
   }
 
   showReplay(swing) { this.replay = { swing, cursor: 0 }; this.dirty = true; }

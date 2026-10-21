@@ -89,10 +89,18 @@ def feed(mon: Monitor, core: Core, readbacks: dict[str, bool]) -> None:
 
 
 async def push(core: Core, ui: SimWebUI) -> None:
-    """Emit whatever the core has for the page (it rate-limits itself to 30 Hz)."""
+    """Emit whatever the core has for the page (it rate-limits itself to 30 Hz).
+
+    Only after new frames: they arrive in bursts (one line per 50 ms), and a `live` message
+    with no samples blanks the page's readouts, which flickers.
+    """
+    seen = 0
     while True:
-        for event, payload in core.tick(time.monotonic()):
-            await ui.emit(event, payload)
+        frames = core.pipe.stats.frames
+        if frames != seen:
+            seen = frames
+            for event, payload in core.tick(time.monotonic()):
+                await ui.emit(event, payload)
         await asyncio.sleep(0.01)
 
 
@@ -149,6 +157,14 @@ def main() -> int:
 
     ui = SimWebUI(ROOT / "app" / "assets", lifespan=lifespan)
     register(ui, core)
+
+    @ui.app.middleware("http")
+    async def revalidate(request, call_next):
+        # The page is edited while the bench runs: make the browser re-check app/assets.
+        response = await call_next(request)
+        response.headers["Cache-Control"] = "no-cache"
+        return response
+
     ui.mount_assets()
     print(f"open-fp live plates: http://localhost:{args.port}  (data: {data_dir}; Ctrl-C to stop)")
     print(f"Keep the plates empty for the first {ZERO_AFTER_S:.0f} s while it zeroes.")
