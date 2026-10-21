@@ -25,7 +25,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        sketch: [app/sketch, bench/ads1220_single, bench/ads1220_all, bench/spi_diag]
+        sketch: [app/sketch, bench/ads1220_single, bench/ads1220_all, bench/ads1220_stream, bench/spi_diag]
     steps:
       - uses: actions/checkout@v7
       - uses: arduino/setup-arduino-cli@v2
