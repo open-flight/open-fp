@@ -9,3 +9,4 @@ build/
 app/.cache/
 bench/results/
 .claude/
+bench/live/
