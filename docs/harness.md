@@ -159,6 +159,17 @@ Once every unit passes, watch the carrier's cells live in the browser (each cell
 
 Skip the press test with `--no-press`. The sketch paces on L1's DRDY; if L1 is missing it falls back to a 1 ms timer, so the other units can still be tested. `ssh -t arduino@open-fp.local arduino-app-cli monitor` shows the raw output; its keys are listed at the top of `bench/ads1220_all/ads1220_all.ino` (`x` dumps 16 raw reads per unit).
 
+### Both plates in the app's UI
+
+With all eight passing, the app's own UI can run on the real plates before the production firmware exists. That's the live weight shift (lead/trail split, centre of pressure on each plate), swing capture and the calibration wizard. A bench sketch streams all eight channels as 200 Hz frames over the same SSH monitor. A server on the dev machine feeds them into the app core (`app/python/open_fp`), the same way the simulator feeds synthetic swings:
+
+```bash
+tools/bench/flash.sh bench/ads1220_stream
+.venv/bin/python tools/bench/live_plates.py     # http://localhost:7070
+```
+
+Keep the plates empty for the first 6 s: it zeroes them then (the UI's **Zero** button does it again). Settings, calibration and captured swings live in `bench/live/` (git-ignored). A fresh one gets `signs` of −1, because these cells read lower under load. Until you run the calibration wizard, forces use a nominal gain that is about 20 % off. The lead/trail split and the centre of pressure are ratios, so they're close already. On the first run the stream measured 197 frames/s with no gaps, and about 5 % of frames repeat the one before while the sketch prints.
+
 ## 6. Pitfalls from the first build
 
 Everything below happened on the first carrier (2026-10-11/12), which holds one plate's four corners. Each fault took a while to find, so here is the symptom each one produced, from `multi_cell.py`, and how it was found. Work through faults **one at a time** and re-run the test after each fix: one fault can hide or imitate another.
