@@ -1,4 +1,4 @@
-// Swing library cards and the metrics strip.
+// Swing library cards.
 
 const fmt = (v, d = 0) => (v == null ? null : Number(v).toFixed(d));
 
@@ -44,27 +44,4 @@ export function renderCards(ol, list, currentId) {
   }
   ol.innerHTML = list.map((s) => `<li>${cardHtml(s)}</li>`).join("");
   if (currentId) ol.querySelector(`[data-id="${currentId}"]`)?.setAttribute("aria-current", "true");
-}
-
-const METRICS = [
-  ["Address", (m) => (m.lead_pct_address == null ? null : [`${fmt(m.lead_pct_address)}/${fmt(100 - m.lead_pct_address)}`, "lead/trail"])],
-  ["Max trail", (m) => (m.lead_pct_max_trail == null ? null : [fmt(100 - m.lead_pct_max_trail), "% trail"])],
-  ["Max trail → 50/50", (m) => (m.time_max_trail_to_transition_ms == null ? null : [fmt(m.time_max_trail_to_transition_ms), "ms"])],
-  ["Max lead", (m) => (m.lead_pct_max_lead == null ? null : [fmt(m.lead_pct_max_lead), "% lead"])],
-  ["50/50 → max lead", (m) => (m.time_transition_to_max_lead_ms == null ? null : [fmt(m.time_transition_to_max_lead_ms), "ms"])],
-  ["Lead at impact", (m) => (m.lead_pct_impact == null ? null : [fmt(m.lead_pct_impact), "%"]), "Needs a shot event from the launch monitor"],
-  ["Peak shift rate", (m) => (m.peak_shift_rate_pct_s == null ? null : [fmt(m.peak_shift_rate_pct_s), "%/s"])],
-  ["Peak lead force", (m) => (m.peak_fz_pct_bw?.lead == null ? null : [fmt(m.peak_fz_pct_bw.lead), "%BW"])],
-  ["Lateral CoP range", (m) => (m.lateral_cop_range_mm == null ? null : [fmt(m.lateral_cop_range_mm), "mm"])],
-  ["Peak CoP speed", (m) => (m.peak_lateral_speed_mm_s == null ? null : [fmt(m.peak_lateral_speed_mm_s), "mm/s"])],
-];
-
-export function renderMetrics(dl, swing) {
-  if (!swing) return;
-  dl.innerHTML = METRICS.map(([label, get, why]) => {
-    const v = get(swing.metrics);
-    return v
-      ? `<div><dt>${label}</dt><dd>${v[0]}<small>${v[1]}</small></dd></div>`
-      : `<div><dt>${label}</dt><dd class="na" title="${why ?? ""}">${why ? "no shot event" : "—"}</dd></div>`;
-  }).join("");
 }

@@ -89,6 +89,57 @@ def test_metrics_match_synthetic_truth():
     assert m["trail_cop_y_max_lead_mm"] == pytest.approx(30, abs=5)
 
 
+def test_vertical_force_peak_and_unweighting_match_synthetic_truth():
+    cfg = Config()
+    data, _, events, _ = run(cfg, swing_session(1), seed=1)
+    sw, truth = completed(events)[0], data.truth["swings"][0]
+    m = sw.metrics
+    to_ms = lambda a, b: (truth[a] - truth[b]) * 1000   # noqa: E731
+    assert m["peak_fz_downswing_pct_bw"] == pytest.approx(162, abs=5)
+    assert m["peak_fz_rel_transition_ms"] == pytest.approx(to_ms("peak_fz", "transition"), abs=20)
+    assert m["peak_lead_fz_rel_transition_ms"] is not None
+    assert m["min_fz_pct_bw"] == pytest.approx(85, abs=4)
+    assert m["min_fz_rel_transition_ms"] == pytest.approx(to_ms("min_fz", "transition"), abs=25)
+    assert m["peak_fz_rel_impact_ms"] is None and m["min_fz_rel_impact_ms"] is None
+
+
+def test_vertical_force_timing_relative_to_impact():
+    cfg = Config()
+    data, det, events, _ = run(cfg, swing_session(1), seed=1)
+    truth = data.truth["swings"][0]
+    sw = det.mark_impact(host_time(truth["impact"]))[0].swing
+    assert sw.metrics["peak_fz_rel_impact_ms"] == pytest.approx(
+        (truth["peak_fz"] - truth["impact"]) * 1000, abs=20)
+    assert sw.metrics["min_fz_rel_impact_ms"] < 0
+
+
+def _still_swing(spike_after_finish_s=None):
+    """Hand-made capture: backswing, shift to lead, then still; optional late load spike."""
+    t = np.arange(0, 4.0, 1 / RATE_HZ)
+    lead = np.interp(t, [0, 0.5, 1.3, 1.7, 4.0], [55, 55, 30, 88, 88])
+    total = np.full(len(t), 800.0)
+    total += 400 * np.exp(-0.5 * ((t - 1.6) / 0.05) ** 2)
+    if spike_after_finish_s is not None:
+        total += 1200 * np.exp(-0.5 * ((t - spike_after_finish_s) / 0.05) ** 2)
+    cop_c = np.zeros((len(t), 2))
+    cop_c[:, 0] = np.interp(t, [0, 1.3, 1.7], [0, -100, 150])
+    cop = np.zeros((len(t), 2))
+    a = {"t": t, "lead_pct": lead, "cop_C": cop_c, "cop_L": cop, "cop_R": cop,
+         "fz_L": total * lead / 100, "fz_R": total * (100 - lead) / 100}
+    return a
+
+
+def test_post_finish_load_spike_is_not_the_downswing_peak():
+    from open_fp.swing import analyze
+    cfg = Config()
+    _, clean = analyze(_still_swing(), cfg, 800.0, ms_i=100, trig_i=300)
+    ev, spiky = analyze(_still_swing(spike_after_finish_s=3.5), cfg, 800.0, ms_i=100, trig_i=300)
+    assert ev["finish"] is not None and ev["finish"] < 3.4
+    assert spiky["peak_fz_downswing_pct_bw"] == pytest.approx(clean["peak_fz_downswing_pct_bw"], abs=1)
+    assert spiky["peak_fz_downswing_pct_bw"] == pytest.approx(150, abs=3)
+    assert spiky["peak_fz_rel_transition_ms"] == clean["peak_fz_rel_transition_ms"]
+
+
 def test_bw_captured_at_address():
     cfg = Config()
     data, det, events, _ = run(cfg, swing_session(1), seed=1)

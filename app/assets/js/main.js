@@ -1,7 +1,8 @@
 import { api, connect } from "./socket.js";
 import { StanceView, nearest } from "./stance.js";
 import { EVENT_LABELS, TraceChart } from "./chart.js";
-import { renderCards, renderMetrics } from "./swings.js";
+import { renderCards } from "./swings.js";
+import { MetricsPanel } from "./metrics.js";
 
 const $ = (id) => document.getElementById(id);
 const G = 9.80665;
@@ -9,6 +10,7 @@ const STATE_TEXT = { idle: "Idle", address: "Address", armed: "Armed", swinging:
 
 const stance = new StanceView($("stance"));
 const chart = new TraceChart($("trace"));
+const metrics = new MetricsPanel({ list: $("metrics"), help: $("metric-help"), sets: $("metric-sets"), units: $("metric-units") });
 const app = {
   cfg: null,
   swings: [],
@@ -112,7 +114,7 @@ async function refreshSwings() {
   $("swing-count").textContent = app.swings.length ? `${app.swings.length}` : "";
   if (!app.lastSwing && app.swings.length) {
     app.lastSwing = app.swings[0];
-    if (!app.replay) renderMetrics($("metrics"), app.lastSwing);
+    if (!app.replay) metrics.show(app.lastSwing, app.swings);
   }
 }
 
@@ -123,7 +125,7 @@ function onSwing(summary) {
   $("cards").querySelector(`[data-id="${summary.id}"]`)?.classList.add("fresh");
   $("swing-count").textContent = `${app.swings.length}`;
   if (!app.replay) {
-    renderMetrics($("metrics"), summary);
+    metrics.show(summary, app.swings);
     $("metrics-title").textContent = "Last swing";
   }
   const m = summary.metrics;
@@ -133,7 +135,7 @@ function onSwing(summary) {
 function onSwingUpdated(summary) {
   app.swings = app.swings.map((s) => (s.id === summary.id ? summary : s));
   renderCards($("cards"), app.swings, app.replay?.swing.id);
-  if (app.lastSwing?.id === summary.id && !app.replay) renderMetrics($("metrics"), summary);
+  if (app.lastSwing?.id === summary.id && !app.replay) metrics.show(summary, app.swings);
   if (app.replay?.swing.id === summary.id) openReplay(summary.id);
 }
 
@@ -157,7 +159,7 @@ async function openReplay(id) {
   $("trace-title").textContent = "Vertical force · swing";
   $("metrics-title").textContent = "This swing";
   $("csv").href = api.csvUrl(id);
-  renderMetrics($("metrics"), swing);
+  metrics.show(swing, app.swings);
   renderCards($("cards"), app.swings, id);
   renderChips(swing);
   const start = swing.events.motion_start ?? 0;
@@ -237,7 +239,7 @@ function closeReplay() {
   $("stance-title").textContent = "Stance";
   $("trace-title").textContent = "Vertical force · last 5 s";
   $("metrics-title").textContent = "Last swing";
-  if (app.lastSwing) renderMetrics($("metrics"), app.lastSwing);
+  if (app.lastSwing) metrics.show(app.lastSwing, app.swings);
   renderCards($("cards"), app.swings, null);
 }
 
