@@ -1,5 +1,6 @@
 import pytest
 from carrier_check import OPEN, Check, checks_for, judge, parse_reading, run, summarize
+from multi_cell import DEFAULT_CHANNELS, parse_channels
 
 
 @pytest.mark.parametrize(
@@ -75,3 +76,19 @@ def test_resistor_value_scales_the_expected_readings():
     assert r680.lo < 1360 < r680.hi and r1k5.lo < 3000 < r1k5.hi
     ain1 = _find(checks_for(["L1"], "units", r_each=1500), "AIN1 pin")
     assert ain1.lo < 1500 < ain1.hi
+
+
+def test_plate_r_carrier_checks_its_own_cs_pins():
+    checks = checks_for(parse_channels("R"), "uno")
+    assert _find(checks, "D7 to R1's CS pin").expect == "beep"
+    assert _find(checks, "A2 to R4's CS pin").expect == "beep"
+    assert not any("DRDY" in c.what for c in checks)
+
+
+def test_chain_check_only_when_both_plates_are_wired():
+    assert not any("BUS OUT" in c.what for c in checks_for(parse_channels(DEFAULT_CHANNELS), "uno"))
+    both = checks_for(parse_channels("all"), "uno")
+    assert _find(both, "plate L BUS OUT to plate R BUS IN").expect == "beep"
+    assert not any("BUS OUT" in c.what for c in checks_for(parse_channels("all"), "cables"))
+    supply = _find(checks_for(parse_channels("all"), "units"), "no cells plugged in")
+    assert supply.lo < 250 < supply.hi  # 8 x 2 kΩ in parallel

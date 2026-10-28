@@ -1,4 +1,8 @@
+import io
+
+import pytest
 from multi_cell import (
+    DEFAULT_CHANNELS,
     ChanReadback,
     ChanStats,
     ChanVoltage,
@@ -10,7 +14,9 @@ from multi_cell import (
     check_rate,
     check_voltages,
     choose_mode,
+    parse_channels,
     parse_line,
+    run_stdin,
     summarize,
 )
 from single_cell import DIFFERENTIAL, SINGLE_ENDED, ModeLine, SketchError
@@ -196,3 +202,31 @@ def test_summary_pass_and_fail():
         "L1", [win(i * 250, L1=cs(4195000)) for i in range(8)], SINGLE_ENDED
     )
     assert "PASS: 1 unit(s)" in summarize(ok)
+
+
+# -- channel sets --------------------------------------------------------------------------------
+
+
+def test_channels_default_to_plate_l_and_take_plate_aliases():
+    assert parse_channels(DEFAULT_CHANNELS) == ["L1", "L2", "L3", "L4"]
+    assert parse_channels("r") == ["R1", "R2", "R3", "R4"]
+    assert parse_channels("all") == ["L1", "L2", "L3", "L4", "R1", "R2", "R3", "R4"]
+    assert parse_channels("L1, R2,L1") == ["L1", "R2"]
+    assert parse_channels("L,R1") == ["L1", "L2", "L3", "L4", "R1"]
+
+
+def test_unknown_channel_is_rejected():
+    with pytest.raises(ValueError, match="X9"):
+        parse_channels("L1,X9")
+
+
+def test_stdin_without_channels_expects_the_units_that_answered(monkeypatch, capsys):
+    log = "\n".join(
+        ["R,R1,1,0E,C4,40,00", "R,R2,1,0E,C4,40,00", "R,L1,0,FF,FF,FF,FF", "M,differential"]
+    )
+    monkeypatch.setattr("sys.stdin", io.StringIO(log))
+    assert run_stdin(None) == 0
+    out = capsys.readouterr().out
+    assert "FAIL: R1, R2 (2 of 2 units)" in out and "L1" not in out
+    monkeypatch.setattr("sys.stdin", io.StringIO(log))
+    assert run_stdin("nope") == 2

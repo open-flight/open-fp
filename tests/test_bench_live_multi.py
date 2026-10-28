@@ -6,8 +6,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools" / "bench"))
 
-from live_multi import MultiHub, to_event  # noqa: E402
-from multi_cell import parse_line  # noqa: E402
+from live_multi import MultiHub, layout, render_page, to_event  # noqa: E402
+from multi_cell import DEFAULT_CHANNELS, parse_channels, parse_line  # noqa: E402
 
 
 def test_window_event():
@@ -30,3 +30,31 @@ def test_hub_replays_latest_status_per_channel():
     q = hub.add()
     replay = [json.loads(q.get_nowait()) for _ in range(q.qsize())]
     assert [(e["ch"], e["ok"]) for e in replay] == [("L1", False), ("L2", False)]
+
+
+def test_layout_defaults_to_plate_l_corners_from_the_config():
+    lay = layout(parse_channels(DEFAULT_CHANNELS))
+    assert lay["title"] == "Plate L" and lay["total_of"] == "plate L" and lay["plates"] == ["L"]
+    cells = {c["ch"]: c for c in lay["cells"]}
+    assert list(cells) == ["L1", "L2", "L3", "L4"] and all(c["on"] for c in cells.values())
+    assert (cells["L1"]["x"], cells["L1"]["y"], cells["L1"]["desc"]) == (-307.2, 122.4, "toe, outer")
+    assert (cells["L3"]["x"], cells["L3"]["y"], cells["L3"]["desc"]) == (-62.4, -122.4, "heel, inner")
+    assert lay["centre"] == {"L": -184.8}
+
+
+def test_layout_for_both_plates_and_a_partial_set():
+    both = layout(parse_channels("all"))
+    assert both["title"] == "Both plates" and both["plates"] == ["L", "R"]
+    assert {c["ch"]: c["desc"] for c in both["cells"]}["R2"] == "toe, outer"
+    toes = layout(parse_channels("L1,L2,R1,R2"))
+    assert toes["title"] == "L1 L2 R1 R2"
+    assert [c["ch"] for c in toes["cells"] if not c["on"]] == ["L3", "L4", "R3", "R4"]
+
+
+def test_page_has_the_layout_filled_in():
+    page = render_page(parse_channels("R"))
+    assert "__LAYOUT__" not in page and "__TITLE__" not in page
+    assert "<title>Plate R live</title>" in page
+    start = page.index("const LAYOUT = ") + len("const LAYOUT = ")
+    lay = json.loads(page[start : page.index(";\n", start)])
+    assert [c["ch"] for c in lay["cells"]] == ["R1", "R2", "R3", "R4"]
