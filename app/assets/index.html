@@ -72,8 +72,18 @@
       </section>
 
       <section class="panel metrics-panel" aria-label="Swing metrics">
-        <div class="panel-head"><span class="label" id="metrics-title">Last swing</span></div>
-        <dl class="metrics" id="metrics"><div class="empty">Take a swing. Metrics appear here once it's captured.</div></dl>
+        <div class="panel-head">
+          <span class="label" id="metrics-title">Last swing</span>
+          <span class="metric-controls">
+            <span class="seg small" id="metric-sets" role="group" aria-label="Metric set"></span>
+            <span class="seg small" id="metric-units" role="group" aria-label="Force units">
+              <button type="button" data-units="pct" aria-pressed="true">%BW</button>
+              <button type="button" data-units="n" aria-pressed="false">N</button>
+            </span>
+          </span>
+        </div>
+        <ul class="metrics" id="metrics"></ul>
+        <div class="metric-help" id="metric-help" aria-live="polite" hidden></div>
       </section>
 
       <section class="panel library-panel" aria-label="Swing library">

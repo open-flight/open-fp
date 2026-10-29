@@ -638,7 +638,11 @@ Metrics per swing (all derivable from vertical force):
 | Lateral CoP range and path length | mm |
 | Peak CoP lateral speed and its time | mm/s, ms |
 | Peak vertical force per foot and total | %BW |
-| Peak lead vertical force time relative to impact (if known) | ms |
+| Peak lead vertical force time relative to transition and impact (if known), downswing only | ms |
+| Peak total vertical force in the downswing (max trail → finish) | %BW |
+| Its time relative to transition and impact (if known) | ms |
+| Minimum total vertical force (unweighting), motion start → downswing peak | %BW |
+| Its time relative to transition and impact (if known) | ms |
 
 ### 9.7 Storage (`store.py`)
 - One swing = `data/swings/<id>.json` (metadata + metrics + events) and `<id>.npz` (200 Hz arrays: t, per-channel N, fz, cop, lead_pct).

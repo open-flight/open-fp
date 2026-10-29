@@ -174,17 +174,46 @@ button:focus-visible, .btn:focus-visible, input:focus-visible {
 .balance-panel.empty .bar-lead { background: transparent; }
 
 /* -- metrics -------------------------------------------------------------- */
+.metric-controls { display: inline-flex; flex-wrap: wrap; gap: 8px; }
 .metrics {
+  list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
-  gap: 10px 16px;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 14px 18px;
   margin: 0;
+  padding: 0;
 }
-.metrics div { min-width: 0; }
-.metrics dt { font-size: 12px; color: var(--muted); }
-.metrics dd { margin: 2px 0 0; font-size: 20px; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.metrics dd small { font-size: 12px; color: var(--muted); margin-left: 3px; }
-.metrics dd.na { color: var(--dim); font-size: 14px; padding-top: 6px; }
+.metric { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.metric .name { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.metric .why {
+  width: 22px; height: 22px; min-width: 0; min-height: 0; padding: 0; flex: none;
+  border-radius: 50%; font-size: 12px; line-height: 1; color: var(--muted);
+  position: relative;
+}
+.metric .why::before { content: ""; position: absolute; inset: -11px; }  /* 44 px touch target */
+.metric .why[aria-expanded="true"] { color: var(--bg); background: var(--event); border-color: var(--event); }
+.metric .val { font-size: 22px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.metric .val small { font-size: 12px; color: var(--muted); margin-left: 3px; }
+.metric .val.na { color: var(--dim); font-size: 14px; padding-top: 6px; }
+.range { display: block; overflow: visible; }
+.range line { stroke: var(--line-strong); stroke-width: 1; }
+.range .ref { fill: var(--line-strong); }
+.range .own { fill: color-mix(in srgb, var(--comb) 45%, transparent); }
+.range circle { fill: var(--comb); stroke: var(--panel); stroke-width: 2; }
+.metric .ctx { display: flex; flex-wrap: wrap; gap: 0 10px; font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.metric .ctx .you { color: var(--text); }
+.metric .ctx .n { color: var(--dim); }
+.metric-help {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-left: 2px solid var(--event);
+  background: color-mix(in srgb, var(--event) 8%, transparent);
+  border-radius: 0 var(--r) var(--r) 0;
+  max-width: 72ch;
+}
+.metric-help h3 { margin: 0 0 4px; font-size: 13px; font-weight: 600; }
+.metric-help p { margin: 4px 0 0; }
+.metric-help .src { font-size: 12px; color: var(--muted); }
 .metrics .empty, .cards .empty { color: var(--muted); grid-column: 1 / -1; }
 
 /* -- library -------------------------------------------------------------- */

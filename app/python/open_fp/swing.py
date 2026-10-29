@@ -124,16 +124,16 @@ def analyze(a: dict, cfg: Config, bw_n: float, *, ms_i: int, trig_i: int,
     rate = 1 / np.median(np.diff(t))
     n = len(t)
 
-    def argext(fn, lo, hi):
-        seg = lead[lo:hi]
+    def argext(fn, arr, lo, hi):
+        seg = arr[lo:hi]
         return None if hi <= lo or np.all(np.isnan(seg)) else lo + int(fn(seg))
 
-    mt = argext(np.nanargmin, ms_i, trig_i + 1)
+    mt = argext(np.nanargmin, lead, ms_i, trig_i + 1)
     tr = None
     if mt is not None and lead[mt] < 50:
         up = np.flatnonzero(lead[mt:] >= 50)
         tr = mt + int(up[0]) if len(up) else None
-    ml = argext(np.nanargmax, tr if tr is not None else (mt or ms_i), n)
+    ml = argext(np.nanargmax, lead, tr if tr is not None else (mt or ms_i), n)
 
     speed2d = np.hypot(lateral_speed(t, x), lateral_speed(t, _smooth(cop_c[:, 1])))
     fin = None
@@ -169,6 +169,15 @@ def analyze(a: dict, cfg: Config, bw_n: float, *, ms_i: int, trig_i: int,
     def val(arr, i, d=1):
         return None if i is None else _f(arr[i], d)
 
+    # Vertical force peaks are taken over the downswing only (max trail to finish), so a
+    # step off the plates after the finish can't win. The unweighting minimum is the low
+    # point between motion start and that peak.
+    ds = mt if mt is not None else ms_i
+    total_s, lead_s = _smooth(total), _smooth(fz_lead)
+    pk_fz = argext(np.nanargmax, total_s, ds, end)
+    pk_lead = argext(np.nanargmax, lead_s, ds, end)
+    mn_fz = argext(np.nanargmin, total_s, ms_i, pk_fz if pk_fz is not None else end)
+
     metrics = {
         "lead_pct_address": _f(np.nanmean(lead[pre])),
         "lead_pct_max_trail": val(lead, mt),
@@ -190,7 +199,14 @@ def analyze(a: dict, cfg: Config, bw_n: float, *, ms_i: int, trig_i: int,
             "trail": _f(100 * np.nanmax(fz_trail) / bw_n),
             "total": _f(100 * np.nanmax(total) / bw_n),
         },
-        "peak_lead_fz_rel_impact_ms": ms(int(np.nanargmax(fz_lead)), impact_i),
+        "peak_lead_fz_rel_impact_ms": ms(pk_lead, impact_i),
+        "peak_lead_fz_rel_transition_ms": ms(pk_lead, tr),
+        "peak_fz_downswing_pct_bw": None if pk_fz is None else _f(100 * total_s[pk_fz] / bw_n),
+        "peak_fz_rel_transition_ms": ms(pk_fz, tr),
+        "peak_fz_rel_impact_ms": ms(pk_fz, impact_i),
+        "min_fz_pct_bw": None if mn_fz is None else _f(100 * total_s[mn_fz] / bw_n),
+        "min_fz_rel_transition_ms": ms(mn_fz, tr),
+        "min_fz_rel_impact_ms": ms(mn_fz, impact_i),
     }
     return events, metrics
 

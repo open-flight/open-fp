@@ -115,14 +115,16 @@ def _seg_swing(duration, rng, address_s=2.0, tempo=None, **_):
     t = _times(duration)
     lead = _keyframes(t, [(0, 55), (t_ms, 55), (t_mt, 30), (t_ml, 88), (t_fin, 86)])
     peak_t = t_mt + 0.32 * tempo
-    total = 1.0 + 0.62 * np.exp(-0.5 * ((t - peak_t) / 0.07) ** 2)
+    dip_t = t_mt + 0.10 * tempo               # unweighting just before the push
+    total = (1.0 + 0.62 * np.exp(-0.5 * ((t - peak_t) / 0.07) ** 2)
+             - 0.15 * np.exp(-0.5 * ((t - dip_t) / 0.05) ** 2))
     lead_y = _keyframes(t, [(0, 0), (t_mt, 10), (t_ml, -30), (t_fin, -25)])
     trail_y = _keyframes(t, [(0, 0), (t_mt, -20), (t_ml, 30), (t_fin, 60)])
     zeros = np.zeros_like(t)
     after = t > t_mt
     t_tr = float(t[after][np.argmax(lead[after] >= 50)])
     swing = {"motion_start": t_ms, "max_trail": t_mt, "transition": t_tr, "impact": t_imp,
-             "max_lead": t_ml, "finish": t_fin, "tempo": tempo}
+             "max_lead": t_ml, "finish": t_fin, "peak_fz": peak_t, "min_fz": dip_t, "tempo": tempo}
     return _Seg(lead, total, np.stack([zeros, lead_y], 1), np.stack([zeros, trail_y], 1), [swing])
 
 
