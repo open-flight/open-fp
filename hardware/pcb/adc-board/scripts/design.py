@@ -63,12 +63,18 @@ P = {
                  desc='Capacitor MLCC 10 uF 16 V X5R', pkg='0805'),
     'JST': dict(value='S3B-XH-SM4-TB', mfr='JST', mpn='S3B-XH-SM4-TB(LF)(SN)',
                 desc='JST-XH 3-pin side-entry SMT header 2.5 mm', pkg='SMD'),
-    'H6': dict(value='1x06 SMD male', mfr='Samtec', mpn='TSM-106-01-T-SV-P',
-               desc='Header 1x6 2.54 mm SMT male, pick-and-place pad', pkg='SMD'),
-    'H8': dict(value='1x08 SMD male', mfr='Samtec', mpn='TSM-108-01-T-SV-P',
-               desc='Header 1x8 2.54 mm SMT male, pick-and-place pad', pkg='SMD'),
-    'H10': dict(value='1x10 SMD male', mfr='Samtec', mpn='TSM-110-01-T-SV-P',
-                desc='Header 1x10 2.54 mm SMT male, pick-and-place pad', pkg='SMD'),
+    # Shield headers: the XKB R2 parts PCBWay stocks and fitted on rev A (2026-10-20). R2 puts
+    # pin 1's pad on the left, matching the Pin1Left footprint; R1 is the mirror and won't fit.
+    # The Samtec TSM parts are equivalent but had a 26-28 day lead time.
+    'H6': dict(value='1x06 SMD male', mfr='XKB Connection', mpn='X6511WVS-06H-C60D48R2',
+               desc='Header 1x6 2.54 mm SMT male, pin 1 pad left (R2), pick-and-place pad',
+               pkg='SMD', alt='Samtec TSM-106-01-T-SV-P'),
+    'H8': dict(value='1x08 SMD male', mfr='XKB Connection', mpn='X6511WVS-08H-C60D48R2',
+               desc='Header 1x8 2.54 mm SMT male, pin 1 pad left (R2), pick-and-place pad',
+               pkg='SMD', alt='Samtec TSM-108-01-T-SV-P'),
+    'H10': dict(value='1x10 SMD male', mfr='XKB Connection', mpn='X6511WVS-10H-C60D48R2',
+                desc='Header 1x10 2.54 mm SMT male, pin 1 pad left (R2), pick-and-place pad',
+                pkg='SMD', alt='Samtec TSM-110-01-T-SV-P'),
 }
 
 V33 = '+3V3'

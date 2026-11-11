@@ -921,7 +921,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Description" "Header 1x8 2.54 mm SMT male, pick-and-place pad"
+		(property "Description" "Header 1x8 2.54 mm SMT male, pin 1 pad left (R2), pick-and-place pad"
 			(at 0 0 270)
 			(layer "B.Fab")
 			(hide yes)
@@ -946,7 +946,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Manufacturer" "Samtec"
+		(property "Manufacturer" "XKB Connection"
 			(at 0 0 270)
 			(layer "B.SilkS")
 			(hide yes)
@@ -959,7 +959,7 @@
 				(justify mirror)
 			)
 		)
-		(property "MPN" "TSM-108-01-T-SV-P"
+		(property "MPN" "X6511WVS-08H-C60D48R2"
 			(at 0 0 270)
 			(layer "B.SilkS")
 			(hide yes)
@@ -17275,7 +17275,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Description" "Header 1x10 2.54 mm SMT male, pick-and-place pad"
+		(property "Description" "Header 1x10 2.54 mm SMT male, pin 1 pad left (R2), pick-and-place pad"
 			(at 0 0 270)
 			(layer "B.Fab")
 			(hide yes)
@@ -17300,7 +17300,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Manufacturer" "Samtec"
+		(property "Manufacturer" "XKB Connection"
 			(at 0 0 270)
 			(layer "B.SilkS")
 			(hide yes)
@@ -17313,7 +17313,7 @@
 				(justify mirror)
 			)
 		)
-		(property "MPN" "TSM-110-01-T-SV-P"
+		(property "MPN" "X6511WVS-10H-C60D48R2"
 			(at 0 0 270)
 			(layer "B.SilkS")
 			(hide yes)
@@ -22410,7 +22410,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Description" "Header 1x8 2.54 mm SMT male, pick-and-place pad"
+		(property "Description" "Header 1x8 2.54 mm SMT male, pin 1 pad left (R2), pick-and-place pad"
 			(at 0 0 90)
 			(layer "B.Fab")
 			(hide yes)
@@ -22435,7 +22435,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Manufacturer" "Samtec"
+		(property "Manufacturer" "XKB Connection"
 			(at 0 0 90)
 			(layer "B.SilkS")
 			(hide yes)
@@ -22448,7 +22448,7 @@
 				(justify mirror)
 			)
 		)
-		(property "MPN" "TSM-108-01-T-SV-P"
+		(property "MPN" "X6511WVS-08H-C60D48R2"
 			(at 0 0 90)
 			(layer "B.SilkS")
 			(hide yes)
@@ -24302,7 +24302,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Description" "Header 1x6 2.54 mm SMT male, pick-and-place pad"
+		(property "Description" "Header 1x6 2.54 mm SMT male, pin 1 pad left (R2), pick-and-place pad"
 			(at 0 0 90)
 			(layer "B.Fab")
 			(hide yes)
@@ -24327,7 +24327,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Manufacturer" "Samtec"
+		(property "Manufacturer" "XKB Connection"
 			(at 0 0 90)
 			(layer "B.SilkS")
 			(hide yes)
@@ -24340,7 +24340,7 @@
 				(justify mirror)
 			)
 		)
-		(property "MPN" "TSM-106-01-T-SV-P"
+		(property "MPN" "X6511WVS-06H-C60D48R2"
 			(at 0 0 90)
 			(layer "B.SilkS")
 			(hide yes)
