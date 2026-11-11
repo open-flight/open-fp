@@ -2,16 +2,18 @@
 
 One assembled PCB that replaces the two stripboard ADC carriers, the eight ADS1220 breakouts, the bridge resistors and the whole wire harness. It plugs straight onto the UNO Q like any UNO shield. Each load-cell cable plugs into its own JST-XH socket. PCBWay assembles every part, so you don't solder anything.
 
+**Rev B** (this revision) is the same circuit as rev A in a shorter board: 204.5 mm instead of 284 mm, with an OpenFlight logo on the top silkscreen. The parts, nets, pin map and each channel's layout are unchanged; only where the channels sit along the board moved. Rev A was built and passed bring-up (all 8 ADCs read back, supply and reference checked) on 2026-11-09. Rev B needs the rev B enclosure changes below.
+
 **Firmware doesn't change.** The pin map and the ADC configuration (`0E C4 40 00`: AIN0−AIN1, gain 128, PGA on, 1 kSPS turbo, continuous, external reference REFP0/REFN0) are the same as on the stripboard build.
 
 | | |
 |---|---|
-| Board | 284 × 50 mm (54.7 mm at the header tabs), 2 layers, 1.6 mm FR4, 1 oz |
+| Board | 204.5 × 50 mm (54.7 mm at the header tabs), 2 layers, 1.6 mm FR4, 1 oz |
 | Parts | 8 × ADS1220IPWR (on the board itself, not modules), 8 × JST-XH 3-pin side-entry SMT, 4 SMD shield headers, 0603/0805 passives. **All on the underside.** The top has copper and silkscreen only |
 | Renders | [`renders/`](renders): top, bottom, 3D |
 | Schematic | [`adc-board-schematic.pdf`](adc-board-schematic.pdf) |
 | Order files | [`adc-board-gerbers.zip`](adc-board-gerbers.zip), [`assembly/adc-board-bom.csv`](assembly/adc-board-bom.csv), [`assembly/adc-board-centroid.csv`](assembly/adc-board-centroid.csv) |
-| Checks | ERC 0 errors 0 warnings; DRC 0 errors, 0 unconnected, schematic parity clean (`kicad-cli`, KiCad 10.0.4) |
+| Checks | ERC 0 errors 0 warnings; DRC 0 errors **and 0 warnings**, 0 unconnected, schematic parity clean (`kicad-cli`, KiCad 10.0.4). Against rev A: same 115 footprints, every pad on the same net, every channel's parts at the same offsets and rotations from its JST, shield headers at the same UNO Q positions, BOM byte-identical, 16 keepouts. Gerbers re-read: outline 204.50 × 54.70 mm, 187 plated and 4 mounting holes |
 
 ## Circuit (one channel; there are eight)
 
@@ -42,25 +44,26 @@ The same circuit as the proven breakout build, with the chip on the board:
 ## Layout
 
 - All four shield headers are fitted (1×10, 2× 1×8, 1×6), at the UNO R3 positions (including the 0.16" offset between D7 and D8). The generator checks every pin against the UNO R3 grid.
+- Each end's two channel blocks are packed together: the toe pair starts 7 mm past the shield headers and the heel pair 5.5 mm past them, over the header-free end of the Q (that gap is where the bus leaves the headers; tighter than this, the board will not route) (our lowest underside part, the JST at z 13.9, clears the Q's tallest, the USB-C at z 12.5). The inner channel keeps an 11 mm strip for its plug. The outer channel's plug overhangs the board end.
 - Each channel sits beside its wall slot. From the board centre outwards: the ADC, then the RC network and divider, then the JST, whose mouth points along the board toward the slot. The plug lies flat under the board, in a strip kept free of parts.
 - SPI and the chip selects run in the middle of the board. Over each channel's analog end (AIN pair, divider, RC, JST), keepouts stop tracks on the top layer and along the board edge, so no SPI line runs over or past AIN0/AIN1. The top layer there is solid ground.
-- GND pours on both layers, stitched with about 195 vias. The Gerbers were re-read and rasterized with pygerber 2.4 as a check (outline 284.0 × 54.7 mm, both copper layers).
+- GND pours on both layers, stitched with about 195 vias. The Gerbers were re-read and rasterized with pygerber 2.4 as a check (rev A outline 284.0 × 54.7 mm, both copper layers).
 - Rules: 0.2 mm tracks and clearance (0.4 mm for power). The only exception is tracks entering the ADS1220's 0.65 mm-pitch pins, which may come within 0.15 mm (`adc-board.kicad_dru`). Vias are 0.6/0.3 mm. Copper stays ≥ 0.3 mm from the edge.
 
 ## Channel → connector → slot
 
-Slot x positions are in the enclosure frame (+x = toe). The JST mouth is where the plug goes in. The plug body then runs about 10 mm further toward the slot (**VERIFY**).
+Slot x positions are in the enclosure frame (+x = toe). The JST mouth is where the plug goes in. The plug body then runs about 10 mm further, and the cable turns to its wall slot 15 mm past the mouth (**VERIFY** with a real plug).
 
 | Ch | Ref | CS | Plate corner | Wall | Slot x | ADC at x | JST mouth at x |
 |---|---|---|---|---|---|---|---|
-| L1 | J1, U1 | D3 | toe, outer | +y | +125 | +88 | +110, facing +x |
-| L2 | J2, U2 | D4 | toe, inner | +y | +85 | +48 | +70, facing +x |
-| L3 | J3, U3 | D5 | heel, inner | +y | −85 | −48 | −70, facing −x |
-| L4 | J4, U4 | D6 | heel, outer | +y | −125 | −88 | −110, facing −x |
-| R1 | J5, U5 | D7 | toe, inner | −y | +85 | +48 | +70, facing +x |
-| R2 | J6, U6 | D8 | toe, outer | −y | +125 | +88 | +110, facing +x |
-| R3 | J7, U7 | D9 | heel, outer | −y | −125 | −88 | −110, facing −x |
-| R4 | J8, U8 | A2 | heel, inner | −y | −85 | −48 | −70, facing −x |
+| L1 | J1, U1 | D3 | toe, outer | +y | +124 | +87 | +109, facing +x |
+| L2 | J2, U2 | D4 | toe, inner | +y | +83 | +46 | +68, facing +x |
+| L3 | J3, U3 | D5 | heel, inner | +y | −67.5 | −30.5 | −52.5, facing −x |
+| L4 | J4, U4 | D6 | heel, outer | +y | −108.5 | −71.5 | −93.5, facing −x |
+| R1 | J5, U5 | D7 | toe, inner | −y | +83 | +46 | +68, facing +x |
+| R2 | J6, U6 | D8 | toe, outer | −y | +124 | +87 | +109, facing +x |
+| R3 | J7, U7 | D9 | heel, outer | −y | −108.5 | −71.5 | −93.5, facing −x |
+| R4 | J8, U8 | A2 | heel, inner | −y | −67.5 | −30.5 | −52.5, facing −x |
 
 Each JST is centred 17.8 mm from the board's centreline, on the same side as its wall.
 
@@ -83,16 +86,25 @@ The board sits on the Q's headers, so its height is set by the Q. Nothing fits u
 | 22.3 | lid underside **after the change below** (0.7 mm air gap) |
 | 24.3 | lid top after the change (ceiling 24.5) |
 
-Support: four M2.5 holes at (±54.5, 0) and (±129.5, 0), on the ADC pads' insert grid. Use standoffs **14.5 mm long** (board underside 20.0 − pad top 5.4 = 14.6). Male-female hex standoffs work if the male thread fits the 2.5 mm-deep insert; otherwise use F-F standoffs with a short M2.5 set screw (**VERIFY** the insert depth). There's no room for screw heads on top (0.7 mm gap), so the standoffs only carry the board. The 32 header pins hold it down, and the lid stops it lifting more than 0.7 mm. If you want it clamped, stick a 0.5–0.7 mm rubber or foam dot on the board top over each standoff.
+Support: four M2.5 holes on the centreline at x −90, −58.5, +74 and +105.5 (the inner two in the inner plugs' part-free strips). The enclosure's pads and inserts move to match (rev B changes below). Use standoffs **14.5 mm long** (board underside 20.0 − pad top 5.4 = 14.6). Male-female hex standoffs work if the male thread fits the 2.5 mm-deep insert; otherwise use F-F standoffs with a short M2.5 set screw (**VERIFY** the insert depth). There's no room for screw heads on top (0.7 mm gap), so the standoffs only carry the board. The 32 header pins hold it down, and the lid stops it lifting more than 0.7 mm. If you want it clamped, stick a 0.5–0.7 mm rubber or foam dot on the board top over each standoff.
 
 The USB-C cable to the Q runs along the floor/pads under the board (z 5.4 – ~10). Route it beside the two heel standoffs at y = 0. Nothing else under the board comes below z ≈ 13.9.
 
-## Enclosure changes (applied to the STEP/STL on 2026-10-12, see `docs/VERIFIED.md`)
+## Rev B enclosure changes (**not yet applied** to the STEP/STL)
+
+The rev A changes below still apply. On top of them, for the shorter board:
+
+1. **Cable slots** move to x −108.5, −67.5, +83 and +124, in both long walls (same 6 mm width, z 2.4 … 19.0).
+2. **Standoff pads and inserts** at the four holes above: (−90, 0), (−58.5, 0), (+74, 0) and (+105.5, 0). All four are beyond the Q's end (x < −34.3 or x > +34.3).
+3. **Lid posts** can go anywhere past the board ends (x < −94.5 or x > +110) or outside y ±25.3. The board has no corner notches any more.
+4. The enclosure can shrink to the board plus the outer plugs: about x −106 … +122 inside (the plugs reach about 11 mm past each board end), if nothing else needs the room.
+
+## Rev A enclosure changes (applied to the STEP/STL on 2026-10-12, see `docs/VERIFIED.md`)
 
 1. **Raise the base walls by 2.4 mm:** wall top z 19.9 → **22.3**. Lid posts (±140, ±23) grow by the same amount, so the M2.5 inserts stay at the top. The lid plate stays 2.0 mm thick, so the outer height goes 21.9 → **24.3** (ramps rise 24.5). The Q bosses, ADC pads and inserts stay as they are.
 2. **Cut the lid's locating lip away along both long sides for x −20 … +34** (applied as x −34 … +34, so the lid fits either way round). The board has tabs out to y ±27.35 under the shield headers (x −18 … +32). The SMD header pads need them, because the Q's headers sit only 2.5 mm from its edge. Elsewhere the board stays inside y ±25.0, clear of the lip ring (inner edge ±25.3). After the raise, the lip spans z 20.8 – 22.3 and would hit the tabs (board top 21.6).
 3. **Make the eight cable slots taller:** z 2.4 … 9.4 → **z 2.4 … 19.0**, same 6 mm width, at x ±85 and ±125 in both long walls. The plug and cable leave the JST at about z 15 – 18 (just under the board), 7 mm in from the wall, so a tall slot lets the cable run straight out instead of kinking down to the floor. If you'd rather keep the slots, the cable needs an S-bend of about 8 mm in the last 10 mm (**VERIFY** with a real plug).
-4. Board corner notches (x beyond ±135.5, |y| beyond 18.5) clear the lid posts. Nothing to change there.
+4. Rev A only: board corner notches (x beyond ±135.5, |y| beyond 18.5) cleared the lid posts. Rev B has no notches.
 
 ## What changes for you, compared with the stripboard build
 
@@ -104,7 +116,7 @@ The USB-C cable to the Q runs along the floor/pads under the board (z 5.4 – ~1
 
 ## Ordering at PCBWay
 
-**PCB:** 2 layers, 284 × 54.7 mm, FR-4 TG150, 1.6 mm, 1 oz outer copper, min track/space 6/6 mil (0.15 mm), min hole 0.3 mm, lead-free HASL (or ENIG for a flatter TSSOP land, about +$10), green mask, white silk, quantity **5**. Upload `adc-board-gerbers.zip` (Gerber X2 + separate PTH/NPTH Excellon, origin at the board's lower-left corner).
+**PCB:** 2 layers, 204.5 × 54.7 mm, FR-4 TG150, 1.6 mm, 1 oz outer copper, min track/space 6/6 mil (0.15 mm), min hole 0.3 mm, lead-free HASL (or ENIG for a flatter TSSOP land, about +$10), green mask, white silk, quantity **5**. Upload `adc-board-gerbers.zip` (Gerber X2 + separate PTH/NPTH Excellon, origin at the board's lower-left corner).
 
 **Assembly:** turnkey, quantity **2** (or 3), **single side: bottom** (every part is on the bottom; there are no through-hole parts). Upload `assembly/adc-board-bom.csv` and `assembly/adc-board-centroid.csv`. In the notes:
 
@@ -138,12 +150,14 @@ Mating parts you need (not on the board): 8 × JST XHP-3 housings + 24 × SXH-00
 Everything is generated from [`scripts/design.py`](scripts/design.py), which holds the parts, nets and MPNs. The `.kicad_pro`, `.kicad_sch` and `.kicad_pcb` open and edit as a normal KiCad 10 project. If you edit by hand, don't rerun the generators.
 
 ```sh
-# KiCad 10 (macOS paths are the defaults; override KICAD_CLI / KPY), Java 21+, Freerouting 2.x
+# KiCad 10 (macOS paths are the defaults; override KICAD_CLI / KPY), Java 21+, Freerouting 2.4.1
 hardware/pcb/adc-board/scripts/build.sh /path/to/freerouting.jar   # sch, ERC, netlist check, place, route, DRC
 hardware/pcb/adc-board/scripts/export.sh                           # gerbers, drill, zip, BOM, centroid, renders, PDF
 ```
 
-`build.sh` reruns Freerouting (non-deterministic) until DRC reports zero errors.
+`build.sh` reruns Freerouting until DRC reports zero errors. Use **Freerouting 2.4.1**: on rev B it routes clean on the first try, while 2.2.4 and 2.5.0 leave a few connections unrouted every time (for a given board and settings Freerouting gives the same result, so retries don't help). `FREEROUTING_ARGS` passes extra router options through `scripts/route.py`.
+
+The logo comes from `art/openflight-logo.png` via `scripts/make_logo.py` (needs Pillow), which writes `art/openflight-logo.runs` for `gen_pcb.py`. It is drawn in 0.16 mm pixels, so no printed feature is thinner than PCBWay's 0.15 mm silkscreen minimum.
 
 ## VERIFY before ordering / on arrival
 

@@ -182,7 +182,7 @@ def main():
         col, row = (k - 1) % 4, (k - 1) // 4
         bx, by_ = 14 * g + col * 54 * g, 20 * g + row * 40 * g
         wall = '+y' if side > 0 else '-y'
-        sh.text('Channel %s  (CS %s, slot x=%+d on the %s wall)' % (name, cs, slot, wall),
+        sh.text('Channel %s  (CS %s, slot x=%+g on the %s wall)' % (name, cs, slot, wall),
                 bx, by_ - 2 * g, 2.0)
         sh.place(by['J%d' % k], bx + 6 * g, by_ + 8 * g)
         sh.text('J%d: 1=E+ white, 2=E- black, 3=S red' % k, bx, by_ + 14 * g)

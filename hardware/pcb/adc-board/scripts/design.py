@@ -22,15 +22,17 @@ ROOT_UUID = uid('root-sheet')
 # channel -> (CS net pin on the Q, slot x, wall side +1/-1)
 CHANNELS = [
     # name, CS pin, slot x (enclosure frame), wall side (+1 = +y wall, -1 = -y)
-    ('L1', 'D3', +125, +1),
-    ('L2', 'D4', +85, +1),
-    ('L3', 'D5', -85, +1),
-    ('L4', 'D6', -125, +1),
-    ('R1', 'D7', +85, -1),
-    ('R2', 'D8', +125, -1),
-    ('R3', 'D9', -125, -1),
-    ('R4', 'A2', -85, -1),
+    # Rev B: each cable slot is 15 mm beyond its JST mouth (gen_pcb.py MOUTH_TO_SLOT).
+    ('L1', 'D3', +124.0, +1),
+    ('L2', 'D4', +83.0, +1),
+    ('L3', 'D5', -67.5, +1),
+    ('L4', 'D6', -108.5, +1),
+    ('R1', 'D7', +83.0, -1),
+    ('R2', 'D8', +124.0, -1),
+    ('R3', 'D9', -108.5, -1),
+    ('R4', 'A2', -67.5, -1),
 ]
+REVISION = 'B'
 
 FP_R0603 = 'Resistor_SMD:R_0603_1608Metric'
 FP_C0603 = 'Capacitor_SMD:C_0603_1608Metric'

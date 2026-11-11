@@ -30,10 +30,22 @@ OX, OY = 150.0, 100.0
 HALF_W = 25.0          # board y extent (lid lip inner edge is at +-25.3)
 TAB_W = 27.35          # local tabs under the SMD shield headers (lip notched there)
 TAB_X = (-18.0, 32.0)
-NOTCH_X, NOTCH_Y = 135.5, 18.5   # corner notches clear the lid posts at (+-140, +-23)
-END_X = 142.0
-HOLES = [(-129.5, 0.0), (-54.5, 0.0), (54.5, 0.0), (129.5, 0.0)]   # ADC-pad insert grid
-MOUTH = {85: 70.0, 125: 110.0}   # JST mouth |x| for each slot |x|
+# Rev B packs each end's two channel blocks against the shield headers (toe) or the
+# header-free end of the Q (heel), keeping 6 - 7 mm from the headers so the bus
+# routing has room to leave them, leaving 11 mm for the inner plug, and lets the
+# outer plugs overhang the board ends. A block runs from its JST mouth 28.94 mm
+# inward (decoupling caps) to 0.75 mm outward (JST courtyard). Nothing at the heel
+# end sits lower than the JST (z 13.9), above the Q's tallest part (USB-C, z 12.5).
+MOUTH_TO_SLOT = 15.0   # the cable leaves the plug and turns to its wall slot
+END_TOE, END_HEEL = 110.0, -94.5
+# The inner holes sit in the inner plugs' part-free strips, out of the bus corridor
+# that leaves the shield headers along the centreline.
+HOLES = [(END_HEEL + 4.5, 0.0), (-58.5, 0.0), (74.0, 0.0), (END_TOE - 4.5, 0.0)]
+
+
+def mouth(slot):
+    """JST mouth x (enclosure frame) for a channel's cable slot x."""
+    return slot - math.copysign(MOUTH_TO_SLOT, slot)
 
 
 def mm(v):
@@ -49,11 +61,9 @@ def enc(p):
 
 
 def outline():
-    pts = [(-NOTCH_X, HALF_W), (TAB_X[0], HALF_W), (TAB_X[0], TAB_W), (TAB_X[1], TAB_W),
-           (TAB_X[1], HALF_W), (NOTCH_X, HALF_W), (NOTCH_X, NOTCH_Y), (END_X, NOTCH_Y),
-           (END_X, -NOTCH_Y), (NOTCH_X, -NOTCH_Y), (NOTCH_X, -HALF_W), (TAB_X[1], -HALF_W),
-           (TAB_X[1], -TAB_W), (TAB_X[0], -TAB_W), (TAB_X[0], -HALF_W), (-NOTCH_X, -HALF_W),
-           (-NOTCH_X, -NOTCH_Y), (-END_X, -NOTCH_Y), (-END_X, NOTCH_Y), (-NOTCH_X, NOTCH_Y)]
+    pts = [(END_HEEL, HALF_W), (TAB_X[0], HALF_W), (TAB_X[0], TAB_W), (TAB_X[1], TAB_W),
+           (TAB_X[1], HALF_W), (END_TOE, HALF_W), (END_TOE, -HALF_W), (TAB_X[1], -HALF_W),
+           (TAB_X[1], -TAB_W), (TAB_X[0], -TAB_W), (TAB_X[0], -HALF_W), (END_HEEL, -HALF_W)]
     return pts
 
 
@@ -110,7 +120,7 @@ class Builder:
         ds.m_HoleClearance = mm(0.25)
         ds.m_HoleToHoleMin = mm(0.25)
         # drill/place origin = lower-left corner of the board's bounding box (fab files)
-        ds.SetAuxOrigin(kpt(-END_X, -TAB_W))
+        ds.SetAuxOrigin(kpt(END_HEEL, -TAB_W))
         ns = ds.m_NetSettings
         dflt = ns.GetDefaultNetclass()
         dflt.SetTrackWidth(mm(0.2))
@@ -224,7 +234,7 @@ def main():
     for k, (name, cs, slot, side) in enumerate(design.CHANNELS, start=1):
         s = 1 if slot > 0 else -1
         t = side
-        xm = s * MOUTH[abs(slot)]
+        xm = mouth(slot)
 
         def E(u, v):
             return (xm + s * u, t * v)
@@ -324,14 +334,54 @@ def text(board, s, x, y, size=1.5, layer=pcbnew.F_SilkS, angle=0, thick=0.2, jus
     return t
 
 
+def logo(board, cx, cy, layer=pcbnew.F_SilkS):
+    """The OpenFlight logo from art/openflight-logo.runs (make_logo.py), centred at (cx, cy).
+
+    Each row's pixel runs become rectangles; their union is one filled silkscreen polygon.
+    """
+    with open(os.path.join(OUTDIR, 'art', 'openflight-logo.runs')) as f:
+        head, *rows = f.read().split('\n')
+    pitch, w, h = float(head.split()[0]), int(head.split()[1]), int(head.split()[2])
+    x0, y0 = cx - w * pitch / 2, cy + h * pitch / 2
+    poly = pcbnew.SHAPE_POLY_SET()
+    for r, line in enumerate(rows[:h]):
+        for run in line.split():
+            a, c = (int(v) for v in run.split(':'))
+            rect = pcbnew.SHAPE_POLY_SET()
+            rect.NewOutline()
+            for x, y in ((a, r), (c, r), (c, r + 1), (a, r + 1)):
+                p = kpt(x0 + x * pitch, y0 - y * pitch)
+                rect.Append(p.x, p.y)
+            poly.BooleanAdd(rect)
+    poly.Simplify()
+    # A board polygon is one outline with no holes: fracture the union (holes become
+    # slits into their outline), then add each outline as its own filled shape.
+    poly.Fracture()
+    for i in range(poly.OutlineCount()):
+        part = pcbnew.SHAPE_POLY_SET()
+        part.AddOutline(poly.Outline(i))
+        s = pcbnew.PCB_SHAPE(board)
+        s.SetShape(pcbnew.SHAPE_T_POLY)
+        s.SetPolyShape(part)
+        s.SetFilled(True)
+        s.SetWidth(0)
+        s.SetLayer(layer)
+        board.Add(s)
+
+
 def silkscreen(B, parts):
     b = B.board
     F, Bk = pcbnew.F_SilkS, pcbnew.B_SilkS
-    text(b, 'open-fp ADC board rev A  -  8x ADS1220  -  UNO Q shield', -95, -3.5, 1.5)
-    text(b, 'all parts on the underside', -95, -6.0, 1.2)
-    text(b, 'TOE  +x  >>>', 95, -3.5, 1.8)
-    text(b, '<<<  HEEL  -x', -95, 3.0, 1.8)
-    text(b, 'UNO Q below', 8, 0, 1.5)
+    heel_mid = (HOLES[1][0] + TAB_X[0]) / 2      # top-side centre strip, heel hole to headers
+    # kept inside |y| < 6.5, clear of the channel labels at |y| 7.6 - 9.0
+    text(b, '<<<  HEEL  -x', heel_mid, 5.0, 1.8)
+    text(b, 'open-fp ADC board rev %s' % design.REVISION, heel_mid, 1.5, 1.5)
+    text(b, '8x ADS1220  -  UNO Q shield', heel_mid, -1.2, 1.2)
+    text(b, 'all parts on the underside', heel_mid, -3.6, 1.0, thick=0.15)
+    text(b, 'TOE  +x  >>>', (TAB_X[1] + HOLES[2][0]) / 2, 0.0, 1.8)
+    # the logo takes the middle of the top, over the Q (the top has no parts)
+    logo(b, 7.0, 0.3)
+    text(b, 'UNO Q below', 7.0, -9.0, 1.2)
     text(b, '+y : LEFT plate side', 8, 14, 1.2)
     text(b, '-y : RIGHT plate side', 8, -14, 1.2)
     for k, (name, cs, slot, side) in enumerate(design.CHANNELS, start=1):
@@ -340,14 +390,19 @@ def silkscreen(B, parts):
         jx, jy = enc(J.GetPosition())
         # top side: big channel name, slot, and W/B/R next to each pin (pads are below)
         text(b, name, jx - s * 12, jy - side * 0.2 + side * 0.0, 2.5, F, thick=0.35)
-        text(b, 'slot x=%+d' % slot, jx + s * 9.0, side * 11.5, 1.0, F)
+        # outer plugs overhang the board end, so their labels stay on the board's side
+        outer = abs(mouth(slot)) > 75
+        text(b, 'slot x=%+g' % slot, jx - s * 8.0, side * 7.6, 1.0, F)
         for pin, col in (('1', 'W'), ('2', 'B'), ('3', 'R')):
             px, py = pad_xy(J, pin)
             text(b, col, px - s * 4.0, py, 1.2, F, thick=0.2)
         p1 = pad_xy(J, '1')
         text(b, '1', p1[0] + s * 3.2, p1[1], 1.0, F)
         text(b, 'pin1=E+ W  2=E- B  3=S R', jx - s * 8, side * 9.0, 0.9, F, thick=0.15)
-        # bottom side: channel name in the (part-free) plug corridor, readable from below
+        # bottom side: channel name in the (part-free) plug corridor, readable from below;
+        # only the inner channels have a corridor on the board
+        if outer:
+            continue
         text(b, name, jx + s * 11.5, jy, 2.5, Bk, thick=0.35)
         for pin, col in (('1', 'W'), ('2', 'B'), ('3', 'R')):
             text(b, col, jx + s * 7.2, pad_xy(J, pin)[1], 1.0, Bk, thick=0.15)

@@ -1,8 +1,8 @@
 (export
 	(version "E")
 	(design
-		(source "hardware/pcb/adc-board/adc-board.kicad_sch")
-		(date "2026-10-12T18:05:55")
+		(source "/Users/colemanrollins/code/open-fp/hardware/pcb/adc-board/adc-board.kicad_sch")
+		(date "2026-11-11T09:28:39")
 		(tool "Eeschema 10.0.4")
 		(sheet
 			(number "1")

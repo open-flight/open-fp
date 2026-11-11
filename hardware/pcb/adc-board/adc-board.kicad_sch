@@ -2264,7 +2264,7 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "Channel L1  (CS D3, slot x=+125 on the +y wall)"
+	(text "Channel L1  (CS D3, slot x=+124 on the +y wall)"
 		(exclude_from_sim no)
 		(at 35.56 45.72 0)
 		(effects
@@ -5174,7 +5174,7 @@
 			)
 		)
 	)
-	(text "Channel L2  (CS D4, slot x=+85 on the +y wall)"
+	(text "Channel L2  (CS D4, slot x=+83 on the +y wall)"
 		(exclude_from_sim no)
 		(at 172.72 45.72 0)
 		(effects
@@ -8078,7 +8078,7 @@
 			)
 		)
 	)
-	(text "Channel L3  (CS D5, slot x=-85 on the +y wall)"
+	(text "Channel L3  (CS D5, slot x=-67.5 on the +y wall)"
 		(exclude_from_sim no)
 		(at 309.88 45.72 0)
 		(effects
@@ -10982,7 +10982,7 @@
 			)
 		)
 	)
-	(text "Channel L4  (CS D6, slot x=-125 on the +y wall)"
+	(text "Channel L4  (CS D6, slot x=-108.5 on the +y wall)"
 		(exclude_from_sim no)
 		(at 447.04 45.72 0)
 		(effects
@@ -13886,7 +13886,7 @@
 			)
 		)
 	)
-	(text "Channel R1  (CS D7, slot x=+85 on the -y wall)"
+	(text "Channel R1  (CS D7, slot x=+83 on the -y wall)"
 		(exclude_from_sim no)
 		(at 35.56 147.32 0)
 		(effects
@@ -16790,7 +16790,7 @@
 			)
 		)
 	)
-	(text "Channel R2  (CS D8, slot x=+125 on the -y wall)"
+	(text "Channel R2  (CS D8, slot x=+124 on the -y wall)"
 		(exclude_from_sim no)
 		(at 172.72 147.32 0)
 		(effects
@@ -19694,7 +19694,7 @@
 			)
 		)
 	)
-	(text "Channel R3  (CS D9, slot x=-125 on the -y wall)"
+	(text "Channel R3  (CS D9, slot x=-108.5 on the -y wall)"
 		(exclude_from_sim no)
 		(at 309.88 147.32 0)
 		(effects
@@ -22598,7 +22598,7 @@
 			)
 		)
 	)
-	(text "Channel R4  (CS A2, slot x=-85 on the -y wall)"
+	(text "Channel R4  (CS A2, slot x=-67.5 on the -y wall)"
 		(exclude_from_sim no)
 		(at 447.04 147.32 0)
 		(effects
