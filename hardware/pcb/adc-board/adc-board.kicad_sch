@@ -25567,7 +25567,7 @@
 				(hide yes)
 			)
 		)
-		(property "Manufacturer" "Samtec"
+		(property "Manufacturer" "XKB Connection"
 			(at 81.28 289.56 0)
 			(effects
 				(font
@@ -25576,7 +25576,7 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "TSM-108-01-T-SV-P"
+		(property "MPN" "X6511WVS-08H-C60D48R2"
 			(at 81.28 289.56 0)
 			(effects
 				(font
@@ -25585,7 +25585,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Header 1x8 2.54 mm SMT male, pick-and-place pad"
+		(property "Description" "Header 1x8 2.54 mm SMT male, pin 1 pad left (R2), pick-and-place pad"
 			(at 81.28 289.56 0)
 			(effects
 				(font
@@ -25990,7 +25990,7 @@
 				(hide yes)
 			)
 		)
-		(property "Manufacturer" "Samtec"
+		(property "Manufacturer" "XKB Connection"
 			(at 157.48 289.56 0)
 			(effects
 				(font
@@ -25999,7 +25999,7 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "TSM-106-01-T-SV-P"
+		(property "MPN" "X6511WVS-06H-C60D48R2"
 			(at 157.48 289.56 0)
 			(effects
 				(font
@@ -26008,7 +26008,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Header 1x6 2.54 mm SMT male, pick-and-place pad"
+		(property "Description" "Header 1x6 2.54 mm SMT male, pin 1 pad left (R2), pick-and-place pad"
 			(at 157.48 289.56 0)
 			(effects
 				(font
@@ -26194,7 +26194,7 @@
 				(hide yes)
 			)
 		)
-		(property "Manufacturer" "Samtec"
+		(property "Manufacturer" "XKB Connection"
 			(at 233.68 289.56 0)
 			(effects
 				(font
@@ -26203,7 +26203,7 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "TSM-108-01-T-SV-P"
+		(property "MPN" "X6511WVS-08H-C60D48R2"
 			(at 233.68 289.56 0)
 			(effects
 				(font
@@ -26212,7 +26212,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Header 1x8 2.54 mm SMT male, pick-and-place pad"
+		(property "Description" "Header 1x8 2.54 mm SMT male, pin 1 pad left (R2), pick-and-place pad"
 			(at 233.68 289.56 0)
 			(effects
 				(font
@@ -26464,7 +26464,7 @@
 				(hide yes)
 			)
 		)
-		(property "Manufacturer" "Samtec"
+		(property "Manufacturer" "XKB Connection"
 			(at 309.88 289.56 0)
 			(effects
 				(font
@@ -26473,7 +26473,7 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "TSM-110-01-T-SV-P"
+		(property "MPN" "X6511WVS-10H-C60D48R2"
 			(at 309.88 289.56 0)
 			(effects
 				(font
@@ -26482,7 +26482,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Header 1x10 2.54 mm SMT male, pick-and-place pad"
+		(property "Description" "Header 1x10 2.54 mm SMT male, pin 1 pad left (R2), pick-and-place pad"
 			(at 309.88 289.56 0)
 			(effects
 				(font

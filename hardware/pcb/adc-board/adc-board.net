@@ -2,7 +2,7 @@
 	(version "E")
 	(design
 		(source "/Users/colemanrollins/code/open-fp/hardware/pcb/adc-board/adc-board.kicad_sch")
-		(date "2026-11-11T09:28:39")
+		(date "2026-11-11T10:09:16")
 		(tool "Eeschema 10.0.4")
 		(sheet
 			(number "1")
@@ -4438,19 +4438,19 @@
 			(ref "J9")
 			(value "1x08 SMD male")
 			(footprint "Connector_PinHeader_2.54mm:PinHeader_1x08_P2.54mm_Vertical_SMD_Pin1Left")
-			(description "Header 1x8 2.54 mm SMT male, pick-and-place pad")
+			(description "Header 1x8 2.54 mm SMT male, pin 1 pad left (R2), pick-and-place pad")
 			(fields
 				(field
-					(name "Manufacturer") "Samtec")
+					(name "Manufacturer") "XKB Connection")
 				(field
-					(name "MPN") "TSM-108-01-T-SV-P")
+					(name "MPN") "X6511WVS-08H-C60D48R2")
 				(field
 					(name "Footprint") "Connector_PinHeader_2.54mm:PinHeader_1x08_P2.54mm_Vertical_SMD_Pin1Left")
 				(field
 					(name "Datasheet")
 				)
 				(field
-					(name "Description") "Header 1x8 2.54 mm SMT male, pick-and-place pad")
+					(name "Description") "Header 1x8 2.54 mm SMT male, pin 1 pad left (R2), pick-and-place pad")
 			)
 			(libsource
 				(lib "Connector_Generic")
@@ -4459,11 +4459,11 @@
 			)
 			(property
 				(name "Manufacturer")
-				(value "Samtec")
+				(value "XKB Connection")
 			)
 			(property
 				(name "MPN")
-				(value "TSM-108-01-T-SV-P")
+				(value "X6511WVS-08H-C60D48R2")
 			)
 			(property
 				(name "Sheetname")
@@ -4522,19 +4522,19 @@
 			(ref "J10")
 			(value "1x06 SMD male")
 			(footprint "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical_SMD_Pin1Left")
-			(description "Header 1x6 2.54 mm SMT male, pick-and-place pad")
+			(description "Header 1x6 2.54 mm SMT male, pin 1 pad left (R2), pick-and-place pad")
 			(fields
 				(field
-					(name "Manufacturer") "Samtec")
+					(name "Manufacturer") "XKB Connection")
 				(field
-					(name "MPN") "TSM-106-01-T-SV-P")
+					(name "MPN") "X6511WVS-06H-C60D48R2")
 				(field
 					(name "Footprint") "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical_SMD_Pin1Left")
 				(field
 					(name "Datasheet")
 				)
 				(field
-					(name "Description") "Header 1x6 2.54 mm SMT male, pick-and-place pad")
+					(name "Description") "Header 1x6 2.54 mm SMT male, pin 1 pad left (R2), pick-and-place pad")
 			)
 			(libsource
 				(lib "Connector_Generic")
@@ -4543,11 +4543,11 @@
 			)
 			(property
 				(name "Manufacturer")
-				(value "Samtec")
+				(value "XKB Connection")
 			)
 			(property
 				(name "MPN")
-				(value "TSM-106-01-T-SV-P")
+				(value "X6511WVS-06H-C60D48R2")
 			)
 			(property
 				(name "Sheetname")
@@ -4600,19 +4600,19 @@
 			(ref "J11")
 			(value "1x08 SMD male")
 			(footprint "Connector_PinHeader_2.54mm:PinHeader_1x08_P2.54mm_Vertical_SMD_Pin1Left")
-			(description "Header 1x8 2.54 mm SMT male, pick-and-place pad")
+			(description "Header 1x8 2.54 mm SMT male, pin 1 pad left (R2), pick-and-place pad")
 			(fields
 				(field
-					(name "Manufacturer") "Samtec")
+					(name "Manufacturer") "XKB Connection")
 				(field
-					(name "MPN") "TSM-108-01-T-SV-P")
+					(name "MPN") "X6511WVS-08H-C60D48R2")
 				(field
 					(name "Footprint") "Connector_PinHeader_2.54mm:PinHeader_1x08_P2.54mm_Vertical_SMD_Pin1Left")
 				(field
 					(name "Datasheet")
 				)
 				(field
-					(name "Description") "Header 1x8 2.54 mm SMT male, pick-and-place pad")
+					(name "Description") "Header 1x8 2.54 mm SMT male, pin 1 pad left (R2), pick-and-place pad")
 			)
 			(libsource
 				(lib "Connector_Generic")
@@ -4621,11 +4621,11 @@
 			)
 			(property
 				(name "Manufacturer")
-				(value "Samtec")
+				(value "XKB Connection")
 			)
 			(property
 				(name "MPN")
-				(value "TSM-108-01-T-SV-P")
+				(value "X6511WVS-08H-C60D48R2")
 			)
 			(property
 				(name "Sheetname")
@@ -4684,19 +4684,19 @@
 			(ref "J12")
 			(value "1x10 SMD male")
 			(footprint "Connector_PinHeader_2.54mm:PinHeader_1x10_P2.54mm_Vertical_SMD_Pin1Left")
-			(description "Header 1x10 2.54 mm SMT male, pick-and-place pad")
+			(description "Header 1x10 2.54 mm SMT male, pin 1 pad left (R2), pick-and-place pad")
 			(fields
 				(field
-					(name "Manufacturer") "Samtec")
+					(name "Manufacturer") "XKB Connection")
 				(field
-					(name "MPN") "TSM-110-01-T-SV-P")
+					(name "MPN") "X6511WVS-10H-C60D48R2")
 				(field
 					(name "Footprint") "Connector_PinHeader_2.54mm:PinHeader_1x10_P2.54mm_Vertical_SMD_Pin1Left")
 				(field
 					(name "Datasheet")
 				)
 				(field
-					(name "Description") "Header 1x10 2.54 mm SMT male, pick-and-place pad")
+					(name "Description") "Header 1x10 2.54 mm SMT male, pin 1 pad left (R2), pick-and-place pad")
 			)
 			(libsource
 				(lib "Connector_Generic")
@@ -4705,11 +4705,11 @@
 			)
 			(property
 				(name "Manufacturer")
-				(value "Samtec")
+				(value "XKB Connection")
 			)
 			(property
 				(name "MPN")
-				(value "TSM-110-01-T-SV-P")
+				(value "X6511WVS-10H-C60D48R2")
 			)
 			(property
 				(name "Sheetname")

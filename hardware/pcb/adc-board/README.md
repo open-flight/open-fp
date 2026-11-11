@@ -124,10 +124,10 @@ Checked with [`hardware/cad/src/check_adc_fit.py`](../../cad/src/check_adc_fit.p
 **Assembly:** turnkey, quantity **2** (or 3), **single side: bottom** (every part is on the bottom; there are no through-hole parts). Upload `assembly/adc-board-bom.csv` and `assembly/adc-board-centroid.csv`. In the notes:
 
 - "All components on the bottom side. Centroid file is KiCad's, viewed from the top. Please send the placement review (DFM) before production."
-- "Samtec TSM headers: please use the -P (pick-and-place pad) version, or an equivalent 2.54 mm SMT male header with 0.64 mm square posts, 2.54 mm body, posts ≥ 5.8 mm, tails alternating."
+- "Shield headers J9–J12: XKB X6511WVS-xxH-C60D48**R2** (pin 1 pad on the left), the same parts as order T-2Y12W1042560A. Not the R1 type. Please confirm in the DFM placement review."
 - "U1–U8 pin 1: dot on silkscreen/fab. J1–J8: JST S3B-XH-SM4-TB(LF)(SN), mouth facing the board end."
 
-Rough cost (prices vary): PCBs about $30–60 for 5. Parts about $110–140 per board (8 × ADS1220 ≈ $55–75, 16 Susumu 0.1 % ≈ $10–15, 4 Samtec TSM ≈ $15–25, JSTs ≈ $5, passives ≈ $3). Assembly setup plus labour about $50–90 for 2 boards. Expect **about $350–450 for 2 assembled boards** plus shipping.
+Actual rev A cost (PCBWay order T-2Y12W1042560A, October 2026, 2 assembled boards): parts $70.20, assembly $29.00, PCBs $40.50, so $139.70 before shipping. Lead time was 16–18 days once the headers were swapped. With freight, bank fee, duty and the DHL duties-paid fee it came to $234.10 delivered to the US (duty and tax were $62.31). Rev B's board is about 28 % smaller, so the PCB line should come down a little.
 
 ### BOM (12 lines; the full file is `assembly/adc-board-bom.csv`)
 
@@ -142,9 +142,11 @@ Rough cost (prices vary): PCBs about $30–60 for 5. Parts about $110–140 per 
 | C?05, C?06 | 16 | 1 nF C0G 50 V 0603 | Murata GRM1885C1H102JA01D |
 | C?07, C1 | 9 | 10 µF X5R 16 V 0805 | Murata GRM21BR61C106KE15L |
 | J1–J8 | 8 | JST-XH 3-pin side-entry SMT | JST S3B-XH-SM4-TB(LF)(SN) |
-| J12 | 1 | 1×10 SMT male header | Samtec TSM-110-01-T-SV-P |
-| J9, J11 | 2 | 1×8 SMT male header | Samtec TSM-108-01-T-SV-P |
-| J10 | 1 | 1×6 SMT male header | Samtec TSM-106-01-T-SV-P |
+| J12 | 1 | 1×10 SMT male header, pin 1 pad left | XKB X6511WVS-10H-C60D48R2 (alt. Samtec TSM-110-01-T-SV-P) |
+| J9, J11 | 2 | 1×8 SMT male header, pin 1 pad left | XKB X6511WVS-08H-C60D48R2 (alt. Samtec TSM-108-01-T-SV-P) |
+| J10 | 1 | 1×6 SMT male header, pin 1 pad left | XKB X6511WVS-06H-C60D48R2 (alt. Samtec TSM-106-01-T-SV-P) |
+
+The headers were Samtec TSM on the first quote. PCBWay had no stock (26–28 day lead time) and fitted the XKB **R2** parts instead, which rev A was built with and passed bring-up on. R2 has pin 1's pad on the left, matching the `Pin1Left` footprint; R1 is the mirror image and would be wrong.
 
 Mating parts you need (not on the board): 8 × JST XHP-3 housings + 24 × SXH-001T-P0.6 crimp terminals (in the XH kit you already have).
 
@@ -165,7 +167,7 @@ The logo comes from `art/openflight-logo.png` via `scripts/make_logo.py` (needs 
 ## VERIFY before ordering / on arrival
 
 1. **UNO Q female header height.** This assumes 8.5 mm (tops at z 17.5). Measure it. Every z above depends on it.
-2. **Samtec TSM-1xx-01-T-SV-P:** body 2.54 mm, post length ≥ 5.8 mm, and the land pattern. KiCad's `PinHeader_1x..._Vertical_SMD_Pin1Left` uses alternating 2.51 × 1.0 mm pads at ±1.655 mm; check it against Samtec's drawing. PCBWay may suggest an equivalent part.
+2. **Shield headers:** confirmed on rev A. The XKB X6511WVS-…-C60D48R2 parts fit the `PinHeader_1x..._Vertical_SMD_Pin1Left` footprint and mate with the UNO Q. If PCBWay proposes another substitute, it must have pin 1's pad on the left, a 2.54 mm body and posts ≥ 5.8 mm.
 3. **JST S3B-XH-SM4-TB:** mouth on the side away from the signal pads (toward the MP tabs), body height ~6 mm, and how far the mated XHP-3 plug and its crimps stick out (~10 mm assumed). KiCad has no 3D model for this part, so the renders don't show it.
 4. **Cable route from plug to slot.** Do it with a real plug and cable. The slots are already tall (rev A change 3).
 5. **Noise, chip-on-board vs breakout module.** It should be equal or better: same die, decoupling at the pins, plus an RC filter. Confirm with `tools/bench/single_cell.py` and the 4-cell live view before calibrating.
