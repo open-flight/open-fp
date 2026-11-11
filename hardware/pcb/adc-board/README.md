@@ -2,7 +2,7 @@
 
 One assembled PCB that replaces the two stripboard ADC carriers, the eight ADS1220 breakouts, the bridge resistors and the whole wire harness. It plugs straight onto the UNO Q like any UNO shield. Each load-cell cable plugs into its own JST-XH socket. PCBWay assembles every part, so you don't solder anything.
 
-**Rev B** (this revision) is the same circuit as rev A in a shorter board: 204.5 mm instead of 284 mm, with an OpenFlight logo on the top silkscreen. The parts, nets, pin map and each channel's layout are unchanged; only where the channels sit along the board moved. Rev A was built and passed bring-up (all 8 ADCs read back, supply and reference checked) on 2026-11-09. Rev B needs the rev B enclosure changes below.
+**Rev B** (this revision) is the same circuit as rev A in a shorter board: 204.5 mm instead of 284 mm, with an OpenFlight logo on the top silkscreen. The parts, nets, pin map and each channel's layout are unchanged; only where the channels sit along the board moved. Rev A was built and passed bring-up (all 8 ADCs read back, supply and reference checked) on 2026-11-09. The enclosure in `hardware/cad` is now rev B to match (see below).
 
 **Firmware doesn't change.** The pin map and the ADC configuration (`0E C4 40 00`: AIN0−AIN1, gain 128, PGA on, 1 kSPS turbo, continuous, external reference REFP0/REFN0) are the same as on the stripboard build.
 
@@ -86,18 +86,21 @@ The board sits on the Q's headers, so its height is set by the Q. Nothing fits u
 | 22.3 | lid underside **after the change below** (0.7 mm air gap) |
 | 24.3 | lid top after the change (ceiling 24.5) |
 
-Support: four M2.5 holes on the centreline at x −90, −58.5, +74 and +105.5 (the inner two in the inner plugs' part-free strips). The enclosure's pads and inserts move to match (rev B changes below). Use standoffs **14.5 mm long** (board underside 20.0 − pad top 5.4 = 14.6). Male-female hex standoffs work if the male thread fits the 2.5 mm-deep insert; otherwise use F-F standoffs with a short M2.5 set screw (**VERIFY** the insert depth). There's no room for screw heads on top (0.7 mm gap), so the standoffs only carry the board. The 32 header pins hold it down, and the lid stops it lifting more than 0.7 mm. If you want it clamped, stick a 0.5–0.7 mm rubber or foam dot on the board top over each standoff.
+Support: four M2.5 holes on the centreline at x −90, −58.5, +74 and +105.5 (the inner two in the inner plugs' part-free strips). The enclosure has a pad and insert under each (rev B changes below). Use standoffs **14.5 mm long** (board underside 20.0 − pad top 5.4 = 14.6). Male-female hex standoffs work if the male thread fits the 2.5 mm-deep insert; otherwise use F-F standoffs with a short M2.5 set screw (**VERIFY** the insert depth). There's no room for screw heads on top (0.7 mm gap), so the standoffs only carry the board. The 32 header pins hold it down, and the lid stops it lifting more than 0.7 mm. If you want it clamped, stick a 0.5–0.7 mm rubber or foam dot on the board top over each standoff.
 
 The USB-C cable to the Q runs along the floor/pads under the board (z 5.4 – ~10). Route it beside the two heel standoffs at y = 0. Nothing else under the board comes below z ≈ 13.9.
 
-## Rev B enclosure changes (**not yet applied** to the STEP/STL)
+## Rev B enclosure changes (applied 2026-11-11, see `docs/VERIFIED.md`)
 
-The rev A changes below still apply. On top of them, for the shorter board:
+The enclosure is now generated from [`hardware/cad/src/centre_enclosure.py`](../../cad/src/centre_enclosure.py) (`REV_B`); the rev A changes below still apply. On top of them, for the shorter board:
 
-1. **Cable slots** move to x −108.5, −67.5, +83 and +124, in both long walls (same 6 mm width, z 2.4 … 19.0).
-2. **Standoff pads and inserts** at the four holes above: (−90, 0), (−58.5, 0), (+74, 0) and (+105.5, 0). All four are beyond the Q's end (x < −34.3 or x > +34.3).
-3. **Lid posts** can go anywhere past the board ends (x < −94.5 or x > +110) or outside y ±25.3. The board has no corner notches any more.
-4. The enclosure can shrink to the board plus the outer plugs: about x −106 … +122 inside (the plugs reach about 11 mm past each board end), if nothing else needs the room.
+1. **Cable slots** at x −108.5, −67.5, +83 and +124, in both long walls (same 6 mm width, z 2.4 … 19.0).
+2. **Standoff pads** (Ø9, top z 5.4) with an M2.5 insert hole (Ø3.5 × 2.5 mm) under each board hole: (−90, 0), (−58.5, 0), (+74, 0) and (+105.5, 0). The two 90 × 50 mm pads and their 7.5 mm insert grid are gone. **Install 4 ADC inserts.**
+3. **Lid posts** at x −117.5 and +133, y ±23: 2 mm past the outer slots' edges, so the outer cables turn to their slots clear of them. Still 5 mm in from the end and long walls, as in rev A.
+4. **Shorter:** the cavity is x −122.5 … +138 (was ±145), so the outside is **265.3 × 60.8 mm** (was 294.8; width and height unchanged) and spans x −124.9 … +140.4, no longer centred on x = 0. The ~x −106 … +122 first estimated here is too short: the outer slots alone reach x −111.5 and +127, and the lid posts have to sit past them. A shorter box would need the lid posts beside the board ends on the centreline (|y| < 9, between the plugs), which would block the USB-C cable at the heel.
+5. Unchanged: UNO Q bosses, the USB-C slot (heel end wall, y ±7, z 6.4 … 14.4, now 88 mm from the Q's edge instead of 111), the rev A wall raise and lid lip cut, the lid's vents on the same 12 mm grid (x −96 … +108 now).
+
+Checked with [`hardware/cad/src/check_adc_fit.py`](../../cad/src/check_adc_fit.py), which reads the board outline and holes from `adc-board.kicad_pcb`: all four holes land on pad inserts, and the board, the underside-part zone (z 13.9 – 20), the UNO Q stack, the standoffs, all eight plugs (10 × 10 mm past each JST mouth) and 4 mm cable runs from each plug to its slot clear the base and the fitted lid (0.00 mm³ overlap). Overlay: [`hardware/cad/renders/centre-enclosure-adc-fit.png`](../../cad/renders/centre-enclosure-adc-fit.png). Rev A's [stripboard carriers](../../../docs/harness.md) don't fit rev B (no pad grid); `centre_enclosure.py --rev a` regenerates the rev A enclosure for them.
 
 ## Rev A enclosure changes (applied to the STEP/STL on 2026-10-12, see `docs/VERIFIED.md`)
 
@@ -166,7 +169,7 @@ The logo comes from `art/openflight-logo.png` via `scripts/make_logo.py` (needs 
 1. **UNO Q female header height.** This assumes 8.5 mm (tops at z 17.5). Measure it. Every z above depends on it.
 2. **Shield headers:** confirmed on rev A. The XKB X6511WVS-…-C60D48R2 parts fit the `PinHeader_1x..._Vertical_SMD_Pin1Left` footprint and mate with the UNO Q. If PCBWay proposes another substitute, it must have pin 1's pad on the left, a 2.54 mm body and posts ≥ 5.8 mm.
 3. **JST S3B-XH-SM4-TB:** mouth on the side away from the signal pads (toward the MP tabs), body height ~6 mm, and how far the mated XHP-3 plug and its crimps stick out (~10 mm assumed). KiCad has no 3D model for this part, so the renders don't show it.
-4. **Cable route from plug to slot.** Do it with a real plug and cable. Ideally make the slots taller first (change 3).
+4. **Cable route from plug to slot.** Do it with a real plug and cable. The slots are already tall (rev A change 3).
 5. **Noise, chip-on-board vs breakout module.** It should be equal or better: same die, decoupling at the pins, plus an RC filter. Confirm with `tools/bench/single_cell.py` and the 4-cell live view before calibrating.
 6. **Standoff length** (14.5 mm) and the insert depth (2.5 mm).
 7. **Lid fit:** 0.7 mm between the board top and the raised lid. The board has no top-side parts and no through-hole pins, but check the board isn't bowed.
