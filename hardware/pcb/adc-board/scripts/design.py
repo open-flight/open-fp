@@ -22,15 +22,17 @@ ROOT_UUID = uid('root-sheet')
 # channel -> (CS net pin on the Q, slot x, wall side +1/-1)
 CHANNELS = [
     # name, CS pin, slot x (enclosure frame), wall side (+1 = +y wall, -1 = -y)
-    ('L1', 'D3', +125, +1),
-    ('L2', 'D4', +85, +1),
-    ('L3', 'D5', -85, +1),
-    ('L4', 'D6', -125, +1),
-    ('R1', 'D7', +85, -1),
-    ('R2', 'D8', +125, -1),
-    ('R3', 'D9', -125, -1),
-    ('R4', 'A2', -85, -1),
+    # Rev B: each cable slot is 15 mm beyond its JST mouth (gen_pcb.py MOUTH_TO_SLOT).
+    ('L1', 'D3', +124.0, +1),
+    ('L2', 'D4', +83.0, +1),
+    ('L3', 'D5', -67.5, +1),
+    ('L4', 'D6', -108.5, +1),
+    ('R1', 'D7', +83.0, -1),
+    ('R2', 'D8', +124.0, -1),
+    ('R3', 'D9', -108.5, -1),
+    ('R4', 'A2', -67.5, -1),
 ]
+REVISION = 'B'
 
 FP_R0603 = 'Resistor_SMD:R_0603_1608Metric'
 FP_C0603 = 'Capacitor_SMD:C_0603_1608Metric'
@@ -61,12 +63,18 @@ P = {
                  desc='Capacitor MLCC 10 uF 16 V X5R', pkg='0805'),
     'JST': dict(value='S3B-XH-SM4-TB', mfr='JST', mpn='S3B-XH-SM4-TB(LF)(SN)',
                 desc='JST-XH 3-pin side-entry SMT header 2.5 mm', pkg='SMD'),
-    'H6': dict(value='1x06 SMD male', mfr='Samtec', mpn='TSM-106-01-T-SV-P',
-               desc='Header 1x6 2.54 mm SMT male, pick-and-place pad', pkg='SMD'),
-    'H8': dict(value='1x08 SMD male', mfr='Samtec', mpn='TSM-108-01-T-SV-P',
-               desc='Header 1x8 2.54 mm SMT male, pick-and-place pad', pkg='SMD'),
-    'H10': dict(value='1x10 SMD male', mfr='Samtec', mpn='TSM-110-01-T-SV-P',
-                desc='Header 1x10 2.54 mm SMT male, pick-and-place pad', pkg='SMD'),
+    # Shield headers: the XKB R2 parts PCBWay stocks and fitted on rev A (2026-10-20). R2 puts
+    # pin 1's pad on the left, matching the Pin1Left footprint; R1 is the mirror and won't fit.
+    # The Samtec TSM parts are equivalent but had a 26-28 day lead time.
+    'H6': dict(value='1x06 SMD male', mfr='XKB Connection', mpn='X6511WVS-06H-C60D48R2',
+               desc='Header 1x6 2.54 mm SMT male, pin 1 pad left (R2), pick-and-place pad',
+               pkg='SMD', alt='Samtec TSM-106-01-T-SV-P'),
+    'H8': dict(value='1x08 SMD male', mfr='XKB Connection', mpn='X6511WVS-08H-C60D48R2',
+               desc='Header 1x8 2.54 mm SMT male, pin 1 pad left (R2), pick-and-place pad',
+               pkg='SMD', alt='Samtec TSM-108-01-T-SV-P'),
+    'H10': dict(value='1x10 SMD male', mfr='XKB Connection', mpn='X6511WVS-10H-C60D48R2',
+                desc='Header 1x10 2.54 mm SMT male, pin 1 pad left (R2), pick-and-place pad',
+                pkg='SMD', alt='Samtec TSM-110-01-T-SV-P'),
 }
 
 V33 = '+3V3'

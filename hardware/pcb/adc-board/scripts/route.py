@@ -36,8 +36,11 @@ def route(jar, passes):
     dsn, ses = os.path.join(WORK, 'adc-board.dsn'), os.path.join(WORK, 'adc-board.ses')
     assert pcbnew.ExportSpecctraDSN(b, dsn), 'DSN export failed'
     shrink_boundary(dsn, 150)   # keep routing >= 0.3 mm from the edge (DRC rule)
+    # FREEROUTING_ARGS: extra router options, e.g. "-oit 0.5" (Freerouting 2.x is
+    # deterministic for a given board and options, so retries alone don't change it)
+    extra = os.environ.get('FREEROUTING_ARGS', '').split()
     subprocess.check_call([JAVA, '-jar', jar, '-de', dsn, '-do', ses, '-mp', str(passes),
-                           '--gui.enabled=false'])
+                           '--gui.enabled=false'] + extra)
     assert pcbnew.ImportSpecctraSES(b, ses), 'SES import failed'
     return b
 
